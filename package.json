@@ -1,0 +1,24 @@
+{
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "name": "shoppay",
+  "description": "A large e-commarce application with all advanced features.",
+  "version": "1.0.0",
+  "main": "server.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Elsharabasy73/shoppay.git"
+  },
+  "author": "Elsharabasy73",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Elsharabasy73/shoppay/issues"
+  },
+  "homepage": "https://github.com/Elsharabasy73/shoppay#readme"
+}
