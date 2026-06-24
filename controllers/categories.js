@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const asyncHandler = require("express-async-handler");
 
 const CategoryModel = require("../models/categories.js");
+const AppError = require("../utils/apiError.js");
 
 //@desc Create a new category
 //@route POST /api/v1/categories
@@ -36,7 +37,7 @@ exports.getCategory = asyncHandler(async (req, res, next) => {
 
   // Handle not found
   if (!category) {
-    return res.status(404).json({ message: "Category not found" });
+    return next(new AppError("Category not found", 404));
   }
 
   // Return the category
@@ -46,7 +47,7 @@ exports.getCategory = asyncHandler(async (req, res, next) => {
 //@desc Update a category
 //@route PUT /api/v1/categories/:id
 //@access Private
-exports.updateCategory = asyncHandler(async (req, res) => {
+exports.updateCategory = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const { name } = req.body;
 
@@ -57,7 +58,7 @@ exports.updateCategory = asyncHandler(async (req, res) => {
   );
 
   if (!updatedCategory) {
-    return res.status(404).json({ message: "Category not found" });
+    return next(new AppError("Category not found", 404));
   }
 
   res.status(200).json(updatedCategory);
@@ -66,13 +67,13 @@ exports.updateCategory = asyncHandler(async (req, res) => {
 //@desc Delete a category
 //@route DELETE /api/v1/categories/:id
 //@access Private
-exports.deleteCategory = asyncHandler(async (req, res) => {
+exports.deleteCategory = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
 
   const deletedCategory = await CategoryModel.findByIdAndDelete(id);
 
   if (!deletedCategory) {
-    return res.status(404).json({ message: "Category not found" });
+    return next(new AppError("Category not found", 404));
   }
 
   res.status(200).json({ message: "Category deleted successfully" });
