@@ -49,6 +49,8 @@ connectDB();
 // Handle rejections outside express
 process.on("unhandledRejection", (err) => {
   console.log(`Unhandled Rejection: ${err.name} | ${err.message}`);
+  // Close server so that it doesn't accept new requests and exit process
+  // after making sure all existing requests are handled
   server.close(() => {
     console.log("Shutting down server due to unhandled promise rejection");
     process.exit(1);
