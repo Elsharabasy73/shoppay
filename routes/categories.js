@@ -10,16 +10,23 @@ const {
   deleteCategory,
 } = require("../controllers/categories");
 
+const {
+  getCategoryValidator,
+  createCategoryValidator,
+  updateCategoryValidator,
+  deleteCategoryValidator,
+} = require("../utils/validators/categoryValidators");
+
 //router.route('/')get().post(createCategory);
-router.post("/", createCategory);
+router.post("/", createCategoryValidator, createCategory);
 router.get("/", getCategories);
 // router.get("/:id", getCategory);
 // router.put("/:id", updateCategory);
 // router.delete("/:id", deleteCategory);
 router
   .route("/:id")
-  .get(getCategory)
-  .put(updateCategory)
-  .delete(deleteCategory);
+  .get(getCategoryValidator, getCategory)
+  .put(updateCategoryValidator, updateCategory)
+  .delete(deleteCategoryValidator, deleteCategory);
 
 module.exports = router;
