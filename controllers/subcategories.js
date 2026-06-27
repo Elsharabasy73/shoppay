@@ -4,6 +4,13 @@ const asyncHandler = require("express-async-handler");
 const SubcategoryModel = require("../models/subCategoryModel");
 const AppError = require("../utils/apiError");
 
+exports.setCategoryIdToBody = (req, res, next) => {
+  if (!req.body.category) {
+    req.body.category = req.params.categoryId; // Assign categoryId from params if not provided in body
+  }
+  next();
+};
+
 //@desc Create a new subcategory
 //@route POST /api/v1/subcategories
 //@access Private
@@ -19,6 +26,15 @@ exports.createSubcategory = asyncHandler(async (req, res) => {
   res.send(doc);
 });
 
+// nested route
+// GET /api/v1/categories/:categoryId/subcategories
+exports.createFilterObject = (req, res, next) => {
+  let filterObject = {};
+  if (req.params.categoryId) filterObject = { category: req.params.categoryId };
+  req.filterObject = filterObject;
+  next();
+};
+
 //@desc Get all subcategories
 //@route GET /api/v1/subcategories
 //@access Public
@@ -26,7 +42,8 @@ exports.getSubcategories = asyncHandler(async (req, res, next) => {
   const page = parseInt(req.query.page, 10) || 1;
   const limit = parseInt(req.query.limit, 10) || 5;
   const skip = (page - 1) * limit;
-  const subcategories = await SubcategoryModel.find({})
+
+  const subcategories = await SubcategoryModel.find(req.filterObject)
     .populate("category")
     .skip(skip)
     .limit(limit);

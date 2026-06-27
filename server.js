@@ -4,10 +4,14 @@ const dotenv = require("dotenv");
 const morgan = require("morgan");
 
 dotenv.config({ path: "config.env" });
+
 const connectDB = require("./config/database");
-const categoriesRouter = require("./routes/categories");
 const AppError = require("./utils/apiError");
 const globalErrorHandler = require("./middlewares/globalErrorHandler");
+
+const categoriesRouter = require("./routes/categories");
+const subcategoriesRouter = require("./routes/subcategories");
+const brandsRouter = require("./routes/brands");
 
 const app = express();
 
@@ -25,6 +29,8 @@ app.get("/", (req, res) => {
 
 // Routes
 app.use("/api/v1/categories", categoriesRouter);
+app.use("/api/v1/subCategories", subcategoriesRouter);
+app.use("/api/v1/brands", brandsRouter);
 
 // Handle 404 errors for undefined routes
 app.all("*", (req, res, next) => {
