@@ -15,7 +15,7 @@ exports.setCategoryAndBrandToBody = (req, res, next) => {
 
 // create filter object for listing (supports nested routes)
 exports.createFilterObject = (req, res, next) => {
-  let filterObject = {};
+  const filterObject = {};
   if (req.params.categoryId) filterObject.category = req.params.categoryId;
   if (req.params.brandId) filterObject.brand = req.params.brandId;
   req.filterObject = filterObject;
@@ -63,18 +63,57 @@ exports.createProduct = asyncHandler(async (req, res) => {
 //@route GET /api/v1/products
 //@access Public
 exports.getProducts = asyncHandler(async (req, res, next) => {
+  // 1) Filtering
+  // eslint-disable-next-line node/no-unsupported-features/es-syntax
+  const queryStringObj = { ...req.query };
+  const excludesFields = ["page", "sort", "limit", "fields", "keyword"];
+  excludesFields.forEach((field) => delete queryStringObj[field]);
+
+  // Apply filtration using [gte, gt, lte, lt]
+  let queryStr = JSON.stringify(queryStringObj);
+  queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
+
+  // 2) Pagination
   const page = parseInt(req.query.page, 10) || 1;
-  const limit = parseInt(req.query.limit, 10) || 10;
+  const limit = parseInt(req.query.limit, 10) * 1 || 5;
   const skip = (page - 1) * limit;
 
-  const products = await ProductModel.find(req.filterObject || {})
+  // Build query
+  let mongooseQuery = ProductModel.find(JSON.parse(queryStr))
+    .skip(skip)
+    .limit(limit)
     .populate("category")
     .populate("subCategories")
-    .populate("brand")
-    .skip(skip)
-    .limit(limit);
+    .populate("brand");
 
-  res.status(200).json({ page: page, data: products });
+  // 3) Sorting
+  if (req.query.sort) {
+    const sortBy = req.query.sort.split(",").join(" ");
+    mongooseQuery = mongooseQuery.sort(sortBy);
+  } else {
+    mongooseQuery = mongooseQuery.sort("-createdAt");
+  }
+
+  // 4) Fields selection
+  if (req.query.fields) {
+    const fields = req.query.fields.split(",").join(" ");
+    mongooseQuery = mongooseQuery.select(fields);
+  }
+
+  // 5) Search
+  if (req.query.keyword) {
+    mongooseQuery = mongooseQuery.find({
+      $or: [
+        { title: { $regex: req.query.keyword, $options: "i" } },
+        { description: { $regex: req.query.keyword, $options: "i" } },
+      ],
+    });
+  }
+
+  // Execute query
+  const products = await mongooseQuery;
+
+  res.status(200).json({ page, data: products });
 });
 
 //@desc Get a single product by ID
