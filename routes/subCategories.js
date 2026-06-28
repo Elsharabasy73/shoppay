@@ -10,7 +10,7 @@ const {
   getSubcategory,
   updateSubcategory,
   deleteSubcategory,
-} = require("../controllers/subcategories");
+} = require("../controllers/subCategories");
 
 const {
   getSubcategoryValidator,

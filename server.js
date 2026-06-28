@@ -10,8 +10,9 @@ const AppError = require("./utils/apiError");
 const globalErrorHandler = require("./middlewares/globalErrorHandler");
 
 const categoriesRouter = require("./routes/categories");
-const subcategoriesRouter = require("./routes/subcategories");
+const subCategoriesRouter = require("./routes/subCategories");
 const brandsRouter = require("./routes/brands");
+const productsRouter = require("./routes/products");
 
 const app = express();
 
@@ -29,8 +30,9 @@ app.get("/", (req, res) => {
 
 // Routes
 app.use("/api/v1/categories", categoriesRouter);
-app.use("/api/v1/subCategories", subcategoriesRouter);
+app.use("/api/v1/subCategories", subCategoriesRouter);
 app.use("/api/v1/brands", brandsRouter);
+app.use("/api/v1/products", productsRouter);
 
 // Handle 404 errors for undefined routes
 app.all("*", (req, res, next) => {

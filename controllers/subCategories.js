@@ -12,7 +12,7 @@ exports.setCategoryIdToBody = (req, res, next) => {
 };
 
 //@desc Create a new subcategory
-//@route POST /api/v1/subcategories
+//@route POST /api/v1/subCategories
 //@access Private
 exports.createSubcategory = asyncHandler(async (req, res) => {
   const { name, category } = req.body;
@@ -27,7 +27,7 @@ exports.createSubcategory = asyncHandler(async (req, res) => {
 });
 
 // nested route
-// GET /api/v1/categories/:categoryId/subcategories
+// GET /api/v1/categories/:categoryId/subCategories
 exports.createFilterObject = (req, res, next) => {
   let filterObject = {};
   if (req.params.categoryId) filterObject = { category: req.params.categoryId };
@@ -35,23 +35,23 @@ exports.createFilterObject = (req, res, next) => {
   next();
 };
 
-//@desc Get all subcategories
-//@route GET /api/v1/subcategories
+//@desc Get all subCategories
+//@route GET /api/v1/subCategories
 //@access Public
 exports.getSubcategories = asyncHandler(async (req, res, next) => {
   const page = parseInt(req.query.page, 10) || 1;
   const limit = parseInt(req.query.limit, 10) || 5;
   const skip = (page - 1) * limit;
 
-  const subcategories = await SubcategoryModel.find(req.filterObject)
+  const subCategories = await SubcategoryModel.find(req.filterObject)
     .populate("category")
     .skip(skip)
     .limit(limit);
-  res.status(200).json({ page: page, data: subcategories });
+  res.status(200).json({ page: page, data: subCategories });
 });
 
 //@desc Get a single subcategory by ID
-//@route GET /api/v1/subcategories/:id
+//@route GET /api/v1/subCategories/:id
 //@access Public
 exports.getSubcategory = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
@@ -67,8 +67,8 @@ exports.getSubcategory = asyncHandler(async (req, res, next) => {
   res.status(200).json(subcategory);
 });
 
-//@desc Get subcategories by category
-//@route GET /api/v1/categories/:categoryId/subcategories
+//@desc Get subCategories by category
+//@route GET /api/v1/categories/:categoryId/subCategories
 //@access Public
 exports.getSubcategoriesByCategory = asyncHandler(async (req, res, next) => {
   const { categoryId } = req.params;
@@ -76,16 +76,16 @@ exports.getSubcategoriesByCategory = asyncHandler(async (req, res, next) => {
   const limit = parseInt(req.query.limit, 10) || 5;
   const skip = (page - 1) * limit;
 
-  const subcategories = await SubcategoryModel.find({ category: categoryId })
+  const subCategories = await SubcategoryModel.find({ category: categoryId })
     .populate("category")
     .skip(skip)
     .limit(limit);
 
-  res.status(200).json({ page: page, data: subcategories });
+  res.status(200).json({ page: page, data: subCategories });
 });
 
 //@desc Update a subcategory
-//@route PUT /api/v1/subcategories/:id
+//@route PUT /api/v1/subCategories/:id
 //@access Private
 exports.updateSubcategory = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
@@ -105,7 +105,7 @@ exports.updateSubcategory = asyncHandler(async (req, res, next) => {
 });
 
 //@desc Delete a subcategory
-//@route DELETE /api/v1/subcategories/:id
+//@route DELETE /api/v1/subCategories/:id
 //@access Private
 exports.deleteSubcategory = asyncHandler(async (req, res, next) => {
   const { id } = req.params;

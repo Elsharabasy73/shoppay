@@ -1,7 +1,7 @@
 const slugify = require("slugify");
 const asyncHandler = require("express-async-handler");
 
-const BrandModel = require("../models/brandsModel");
+const BrandModel = require("../models/brandModel");
 const AppError = require("../utils/apiError");
 
 //@desc Create a new brand
