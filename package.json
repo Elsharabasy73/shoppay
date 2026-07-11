@@ -1,43 +1,39 @@
 {
-  "dependencies": {
-    "axios": "^1.8.1",
-    "colors": "^1.4.0",
-    "dotenv": "^16.4.7",
-    "express": "^4.21.2",
-    "express-async-handler": "^1.2.0",
-    "express-validator": "^7.3.2",
-    "mongoose": "^8.12.1",
-    "morgan": "^1.10.0",
-    "nodemon": "^3.1.14",
-    "slugify": "^1.6.6"
-  },
-  "scripts": {
-    "start:prod": "NODE_ENV=production node server.js",
-    "start:dev": " NODE_ENV=development nodemon server.js"
-  },
-  "name": "shoppay",
-  "description": "A large e-commarce application with all advanced features.",
+  "name": "nodejs-ecommerce-api-v1",
   "version": "1.0.0",
-  "main": "server.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Elsharabasy73/shoppay.git"
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start:dev": "nodemon server.js",
+    "start:prod": "NODE_ENV=production node server.js"
   },
-  "author": "Elsharabasy73",
+  "keywords": [],
+  "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Elsharabasy73/shoppay/issues"
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "colors": "^1.4.0",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-async-handler": "^1.2.0",
+    "express-validator": "^6.14.0",
+    "mongoose": "^6.0.13",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.4",
+    "sharp": "^0.29.3",
+    "slugify": "^1.6.3",
+    "uuid": "^8.3.2"
   },
-  "homepage": "https://github.com/Elsharabasy73/shoppay#readme",
   "devDependencies": {
-    "eslint": "^8.57.1",
+    "eslint": "^8.5.0",
     "eslint-config-airbnb": "^19.0.4",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-prettier": "^5.5.6",
-    "eslint-plugin-react": "^7.37.5",
-    "prettier": "^3.8.4"
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.28.0",
+    "nodemon": "^2.0.15",
+    "prettier": "^2.5.1"
   }
 }

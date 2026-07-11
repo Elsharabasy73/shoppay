@@ -1,24 +1,25 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-const SubCategorySchema = new mongoose.Schema(
+const subCategorySchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: [true, "SubCategory required."],
-      unique: [true, "SubCategory unique."],
-      minLength: [3, "SubCategory name is too short."],
-      maxLength: [32, "SubCategory name is too long."],
+      trim: true,
+      unique: [true, 'SubCategory must be unique'],
+      minlength: [2, 'To short SubCategory name'],
+      maxlength: [32, 'To long SubCategory name'],
     },
     slug: {
       type: String,
       lowercase: true,
     },
     category: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Category",
-      required: [true, "SubCategory must belong to a category."],
+      type: mongoose.Schema.ObjectId,
+      ref: 'Category',
+      required: [true, 'SubCategory must be belong to parent category'],
     },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
-module.exports = mongoose.model("SubCategory", SubCategorySchema);
+
+module.exports = mongoose.model('SubCategory', subCategorySchema);

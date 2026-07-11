@@ -1,90 +1,107 @@
-const mongoose = require("mongoose");
-const slugify = require("slugify");
+const mongoose = require('mongoose');
 
 const productSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      required: [true, "Product title is required"],
+      required: true,
       trim: true,
-      unique: [true, "Product title must be unique"],
-      minLength: [3, "Product title must be at least 3 characters long"],
-      maxLength: [100, "Product title must be at most 100 characters long"],
+      minlength: [3, 'Too short product title'],
+      maxlength: [100, 'Too long product title'],
     },
     slug: {
       type: String,
+      required: true,
       lowercase: true,
     },
     description: {
       type: String,
-      required: [true, "Product description is required"],
-      minLength: [
-        20,
-        "Product description must be at least 20 characters long",
-      ],
+      required: [true, 'Product description is required'],
+      minlength: [20, 'Too short product description'],
     },
     quantity: {
       type: Number,
-      required: [true, "Product quantity is required"],
-      min: [0, "Product quantity cannot be negative"],
+      required: [true, 'Product quantity is required'],
     },
     sold: {
       type: Number,
       default: 0,
-      min: [0, "Product sold cannot be negative"],
     },
     price: {
       type: Number,
-      required: [true, "Product price is required"],
-      min: [0, "Product price cannot be negative"],
+      required: [true, 'Product price is required'],
+      trim: true,
+      max: [200000, 'Too long product price'],
     },
     priceAfterDiscount: {
       type: Number,
-      validate: {
-        validator: function (value) {
-          return value < this.price;
-        },
-        message:
-          "Price after discount ({VALUE}) should be less than the original price",
-      },
     },
     colors: [String],
+
     imageCover: {
       type: String,
-      required: [true, "Product image cover is required"],
+      required: [true, 'Product Image cover is required'],
     },
     images: [String],
     category: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Category",
-      required: [true, "Product category is required"],
+      type: mongoose.Schema.ObjectId,
+      ref: 'Category',
+      required: [true, 'Product must be belong to category'],
     },
-    subCategories: [
+    subcategories: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "SubCategory",
+        type: mongoose.Schema.ObjectId,
+        ref: 'SubCategory',
       },
     ],
     brand: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Brand",
+      type: mongoose.Schema.ObjectId,
+      ref: 'Brand',
     },
     ratingsAverage: {
       type: Number,
-      min: [1, "Rating must be at least 1.0"],
-      max: [5, "Rating must be at most 5.0"],
+      min: [1, 'Rating must be above or equal 1.0'],
+      max: [5, 'Rating must be below or equal 5.0'],
     },
     ratingsQuantity: {
       type: Number,
       default: 0,
     },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
-productSchema.pre("save", function (next) {
-  this.slug = slugify(this.title, { lower: true });
+// Mongoose query middleware
+productSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'category',
+    select: 'name -_id',
+  });
   next();
 });
 
-module.exports = mongoose.model("Product", productSchema);
+const setImageURL = (doc) => {
+  if (doc.imageCover) {
+    const imageUrl = `${process.env.BASE_URL}/products/${doc.imageCover}`;
+    doc.imageCover = imageUrl;
+  }
+  if (doc.images) {
+    const imagesList = [];
+    doc.images.forEach((image) => {
+      const imageUrl = `${process.env.BASE_URL}/products/${image}`;
+      imagesList.push(imageUrl);
+    });
+    doc.images = imagesList;
+  }
+};
+// findOne, findAll and update
+productSchema.post('init', (doc) => {
+  setImageURL(doc);
+});
+
+// create
+productSchema.post('save', (doc) => {
+  setImageURL(doc);
+});
+
+module.exports = mongoose.model('Product', productSchema);
