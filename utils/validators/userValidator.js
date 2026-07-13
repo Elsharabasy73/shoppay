@@ -1,4 +1,5 @@
 const slugify = require("slugify");
+const bcrypt = require("bcryptjs");
 const { check, body } = require("express-validator");
 const validatorMiddleware = require("../../middlewares/validatorMiddleware");
 const User = require("../../models/userModel");
@@ -85,10 +86,60 @@ exports.updateUserValidator = [
     .withMessage("Password is required")
     .isLength({ min: 6 })
     .withMessage("Password must be at least 6 characters"),
+  check("role")
+    .optional()
+    .isIn(["user", "admin"])
+    .withMessage("Invalid role value"),
+  check("profileImg").optional(),
+  check("phone")
+    .optional()
+    .isMobilePhone(["ar-EG", "ar-SA"]) //egypt and saudi arabia
+    .withMessage("Invalid phone number"),
   validatorMiddleware,
 ];
 
 exports.deleteUserValidator = [
   check("id").isMongoId().withMessage("Invalid User id format"),
+  validatorMiddleware,
+];
+
+exports.changeUserPasswordValidator = [
+  check("id").isMongoId().withMessage("Invalid User id format"),
+  check("currentPassword")
+    .notEmpty()
+    .withMessage("currentPassword is required")
+    .isLength({ min: 6 })
+    .withMessage("Password must be at least 6 characters"),
+
+  check("passwordConfirm")
+    .notEmpty()
+    .withMessage("passwordConfirm is required")
+    .isLength({ min: 6 })
+    .withMessage("Password must be at least 6 characters"),
+
+  check("password")
+    .notEmpty()
+    .withMessage("password is required")
+    .isLength({ min: 6 })
+    .withMessage("Password must be at least 6 characters")
+    .custom(async (val, { req }) => {
+      console.log(req.body);
+      const user = await User.findById(req.params.id);
+      if (!user) {
+        throw new Error("There is no user for this id");
+      }
+      const isCorrectPassword = await bcrypt.compare(
+        req.body.currentPassword,
+        user.password,
+      );
+
+      if (!isCorrectPassword) {
+        throw new Error("Passord Confirmation incorrect.");
+      }
+
+      if (val !== req.body.passwordConfirm) {
+        throw new Error("Password don't match the confirmation password.");
+      }
+    }),
   validatorMiddleware,
 ];
