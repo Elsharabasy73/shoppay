@@ -9,7 +9,7 @@ const {
   deleteSubCategory,
   setCategoryIdToBody,
   createFilterObj,
-} = require('../services/subCategoryService');
+} = require('../controllers/subCategoryController');
 const {
   createSubCategoryValidator,
   getSubCategoryValidator,

@@ -10,7 +10,7 @@ const {
   updateUser,
   deleteUser,
   changeUserPassword,
-} = require("../services/userService");
+} = require("../controllers/userController");
 
 const {
   getUserValidator,

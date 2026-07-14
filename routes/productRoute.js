@@ -15,7 +15,7 @@ const {
   deleteProduct,
   uploadProductImages,
   resizeProductImages,
-} = require("../services/productService");
+} = require("../controllers/productController");
 
 const router = express.Router();
 

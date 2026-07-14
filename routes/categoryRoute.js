@@ -17,7 +17,7 @@ const {
   deleteCategory,
   uploadCategoryImage,
   resizeImage,
-} = require("../services/categoryService");
+} = require("../controllers/categoryController");
 
 const subcategoriesRoute = require("./subCategoryRoute");
 
