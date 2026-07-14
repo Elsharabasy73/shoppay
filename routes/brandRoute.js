@@ -1,4 +1,5 @@
 const express = require('express');
+const { protect, allowTo } = require('../middlewares/authMiddleware');
 const {
   getBrandValidator,
   createBrandValidator,
@@ -21,11 +22,30 @@ const router = express.Router();
 router
   .route('/')
   .get(getBrands)
-  .post(uploadBrandImage, resizeImage, createBrandValidator, createBrand);
+  .post(
+    protect,
+    allowTo(['admin', 'manager']),
+    uploadBrandImage,
+    resizeImage,
+    createBrandValidator,
+    createBrand,
+  );
 router
   .route('/:id')
   .get(getBrandValidator, getBrand)
-  .put(uploadBrandImage, resizeImage, updateBrandValidator, updateBrand)
-  .delete(deleteBrandValidator, deleteBrand);
+  .put(
+    protect,
+    allowTo(['admin', 'manager']),
+    uploadBrandImage,
+    resizeImage,
+    updateBrandValidator,
+    updateBrand,
+  )
+  .delete(
+    protect,
+    allowTo(['admin', 'manager']),
+    deleteBrandValidator,
+    deleteBrand,
+  );
 
 module.exports = router;

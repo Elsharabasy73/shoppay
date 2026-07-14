@@ -1,7 +1,7 @@
 const sharp = require("sharp");
 const { v4: uuidv4 } = require("uuid");
 const asyncHandler = require("express-async-handler");
-const bcrypt = require('bcryptjs');
+const bcrypt = require("bcryptjs");
 
 const { uploadSingleImage } = require("../middlewares/uploadImageMiddleware");
 const factory = require("./handlersFactory");
@@ -29,37 +29,39 @@ exports.resizeImage = asyncHandler(async (req, res, next) => {
 
 // @desc    Get list of users
 // @route   GET /api/v1/users
-// @access  private
+// @access  public
 exports.getUsers = factory.getAll(User);
 
 // @desc    Get specific user by id
 // @route   GET /api/v1/users/:id
-// @access  private
+// @access  public
 exports.getUser = factory.getOne(User);
 
 // @desc    Create user
 // @route   POST  /api/v1/users
-// @access  Private
+// @access  Private/Admin
 exports.createUser = factory.createOne(User);
 
 // @desc    Update specific user
 // @route   PUT /api/v1/users/:id
-// @access  Private
+// @access  Private/Admin
 exports.updateUser = factory.updateOne(User);
 
 // @desc    change user password
 // @route   PUT /api/v1/users/changePassword/:id
-// @access  Private
+// @access  Private/Admin
 exports.changeUserPassword = asyncHandler(async (req, res, next) => {
   const hashed = await bcrypt.hash(req.body.password, 12);
   const user = await User.findByIdAndUpdate(
     req.params.id,
-    { password: hashed },
+    { password: hashed, passwordChangedAt: Date.now() },
     { new: true },
   );
 
   if (!user) {
-    return res.status(404).json({ message: `No user for this id ${req.params.id}` });
+    return res
+      .status(404)
+      .json({ message: `No user for this id ${req.params.id}` });
   }
 
   res.status(200).json({ data: user });

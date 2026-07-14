@@ -1,4 +1,5 @@
 const express = require("express");
+const { protect, allowTo } = require("../middlewares/authMiddleware");
 
 const {
   uploadBrandImage,
@@ -20,6 +21,8 @@ const {
 } = require("../utils/validators/userValidator");
 
 const router = express.Router();
+
+router.use(protect, allowTo(["admin"]));
 
 router
   .route("/")

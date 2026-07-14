@@ -1,4 +1,5 @@
 const express = require("express");
+const { protect, allowTo } = require("../middlewares/authMiddleware");
 const {
   getProductValidator,
   createProductValidator,
@@ -25,6 +26,8 @@ router
     next();
   }, getProducts)
   .post(
+    protect,
+    allowTo(["admin", "manager"]),
     uploadProductImages,
     resizeProductImages,
     createProductValidator,
@@ -34,11 +37,18 @@ router
   .route("/:id")
   .get(getProductValidator, getProduct)
   .put(
+    protect,
+    allowTo(["admin", "manager"]),
     uploadProductImages,
     resizeProductImages,
     updateProductValidator,
     updateProduct,
   )
-  .delete(deleteProductValidator, deleteProduct);
+  .delete(
+    protect,
+    allowTo(["admin", "manager"]),
+    deleteProductValidator,
+    deleteProduct,
+  );
 
 module.exports = router;
