@@ -1,8 +1,10 @@
 const asyncHandler = require("express-async-handler");
+const bycrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const ApiError = require("../utils/apiError");
 
 const User = require("../models/userModel");
+const generateOtp = require("../utils/generateOTP");
 
 //@desc    Login user
 //@route   POST /api/v1/auth/signup
@@ -33,4 +35,22 @@ exports.login = asyncHandler(async (req, res) => {
   const token = user.generateAuthToken(user._id);
   //return user
   res.status(200).json({ data: user, token });
+});
+
+exports.forgotPassword = asyncHandler(async (req, res) => {
+  const user = await User.findOne({ email: req.body.email });
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+  const otp = generateOtp();
+  user.passwordResetCode = bycrypt(otp);
+  // Set passwordResetExpires to 1 hour from now
+  user.passwordResetExpires = Date.now() + 3600000;
+  user.passwordResetVerified = false;
+  await user.save();
+  // Send email with otp
+
+  res
+    .status(200)
+    .json({ message: `Password reset link sent to ${user.email}` });
 });
