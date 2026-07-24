@@ -10,6 +10,7 @@ const {
   updateUser,
   deleteUser,
   changeUserPassword,
+  getLoggedInUser,
 } = require("../controllers/userController");
 
 const {
@@ -22,12 +23,15 @@ const {
 
 const router = express.Router();
 
+router.get("/getMe", protect, getLoggedInUser, getUser);
+
 router.use(protect, allowTo(["admin"]));
 
 router
   .route("/")
   .get(getUsers)
   .post(uploadBrandImage, resizeImage, createUserValidator, createUser);
+
 router
   .route("/:id")
   .get(getUserValidator, getUser)
