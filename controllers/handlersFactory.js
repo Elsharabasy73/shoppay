@@ -33,10 +33,14 @@ exports.createOne = (Model) =>
     res.status(201).json({ data: newDoc });
   });
 
-exports.getOne = (Model) =>
+exports.getOne = (Model, populateOpts) =>
   asyncHandler(async (req, res, next) => {
     const { id } = req.params;
-    const document = await Model.findById(id);
+    let query = Model.findById(id);
+    if (populateOpts) {
+      query = query.populate(populateOpts);
+    }
+    const document = await query;
     if (!document) {
       return next(new ApiError(`No document for this id ${id}`, 404));
     }
@@ -45,15 +49,15 @@ exports.getOne = (Model) =>
 
 exports.getAll = (Model, modelName = "") =>
   asyncHandler(async (req, res) => {
-    // let filter = {};
+    let filter = {};
 
-    // if (req.filterObj) {
-    //   filter = req.filterObj;
-    //   console.log("filter", filter);
-    // }
+    if (req.filterObj) {
+      filter = req.filterObj;
+      console.log("filter", filter);
+    }
     // Build query
     const documentsCounts = await Model.countDocuments();
-    const apiFeatures = new ApiFeatures(Model.find(), req.query)
+    const apiFeatures = new ApiFeatures(Model.find(filter), req.query)
       .paginate(documentsCounts)
       .filter()
       .search(modelName)

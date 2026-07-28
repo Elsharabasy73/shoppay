@@ -28,7 +28,7 @@ exports.login = asyncHandler(async (req, res) => {
   //check if user exists
   const user = await User.findOne({ email: req.body.email });
   //check if password is correct
-  if (!user || !user.comparePassword(req.body.password)) {
+  if (!user || !(await user.comparePassword(req.body.password))) {
     return res.status(401).json({ message: "Invalid email or password" });
   }
   //generate jwt token

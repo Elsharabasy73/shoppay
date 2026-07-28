@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
-const Product = require("../models/productModel");
-const User = require("../models/userModel");
+const Product = require("./productModel");
+const User = require("./userModel");
 
 const reviewSchema = new mongoose.Schema(
   {
@@ -43,7 +43,7 @@ const reviewSchema = new mongoose.Schema(
 );
 
 // Prevent duplicated reviews from the same user for the same product.
-reviewSchema.index({ user: 1, product: 1 }, { unique: true });
+reviewSchema.index({ product: 1, user: 1 }, { unique: true });
 
 // Auto-populate review author data on find queries.
 reviewSchema.pre(/^find/, function (next) {
@@ -79,21 +79,21 @@ reviewSchema.statics.calcAverageRatingsAndQuantity = async function (
   }
 };
 
-reviewSchema.post("save", async function () {
-  await this.constructor.calcAverageRatingsAndQuantity(this.product);
-});
+// reviewSchema.post("save", async function () {
+//   await this.constructor.calcAverageRatingsAndQuantity(this.product);
+// });
 
-reviewSchema.pre(/^findOneAnd/, async function (next) {
-  this.reviewDoc = await this.findOne();
-  next();
-});
+// reviewSchema.pre(/^findOneAnd/, async function (next) {
+//   this.reviewDoc = await this.model.findOne(this.getQuery());
+//   next();
+// });
 
-reviewSchema.post(/^findOneAnd/, async function () {
-  if (this.reviewDoc) {
-    await this.reviewDoc.constructor.calcAverageRatingsAndQuantity(
-      this.reviewDoc.product,
-    );
-  }
-});
+// reviewSchema.post(/^findOneAnd/, async function () {
+//   if (this.reviewDoc) {
+//     await this.reviewDoc.constructor.calcAverageRatingsAndQuantity(
+//       this.reviewDoc.product,
+//     );
+//   }
+// });
 
 module.exports = mongoose.model("Review", reviewSchema);

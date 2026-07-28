@@ -34,7 +34,7 @@ exports.protect = asyncHandler(async (req, res, next) => {
   }
   //check if use changed password after creation of token
   if (req.user.passwordChangedAt / 1000 > decoded.iat) {
-    return next(new ApiError("Token expired", 401));
+    return next(new ApiError("Token expired change password", 401));
   }
   next();
 });
