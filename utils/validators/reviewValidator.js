@@ -79,7 +79,10 @@ exports.deleteReviewValidator = [
           user: req.user._id,
           product: req.body.product,
         }).then((review) => {
-          if (review && review.user.toString() !== req.user._id.toString()) {
+          if (
+            review &&
+            review.user._id.toString() !== req.user._id.toString()
+          ) {
             return Promise.reject(
               new Error("You can't update other user review"),
             );

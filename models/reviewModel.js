@@ -95,17 +95,10 @@ reviewSchema.post("save", async function () {
   await this.constructor.calcAverageRatingsAndQuantity(this.product);
 });
 
-// Recalculate average rating and count for a product after findOneAndUpdate findOneAndDelete.
-reviewSchema.pre(/^findOneAnd/, async function (next) {
-  this.reviewDoc = await this.model.findOne(this.getQuery());
-  next();
-});
-
-reviewSchema.post(/^findOneAnd/, async function () {
-  if (this.reviewDoc) {
-    await this.reviewDoc.constructor.calcAverageRatingsAndQuantity(
-      this.reviewDoc.product,
-    );
+// Recalculate average rating and count for a product after findOneAndUpdate/findOneAndDelete.
+reviewSchema.post(/^findOneAnd/, async (doc) => {
+  if (doc) {
+    await doc.constructor.calcAverageRatingsAndQuantity(doc.product);
   }
 });
 
