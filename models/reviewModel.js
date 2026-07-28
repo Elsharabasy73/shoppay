@@ -55,45 +55,58 @@ reviewSchema.pre(/^find/, function (next) {
 reviewSchema.statics.calcAverageRatingsAndQuantity = async function (
   productId,
 ) {
-  const stats = await this.aggregate([
-    { $match: { product: productId } },
+  const results = await this.aggregate([
+    {
+      $match: { product: productId },
+    },
     {
       $group: {
         _id: "$product",
-        avgRatings: { $avg: "$rating" },
-        ratingsQuantity: { $sum: 1 },
+        avrageRating: { $avg: "$rating" },
+        ratingCount: { $sum: 1 },
       },
     },
   ]);
-
-  if (stats.length > 0) {
-    await Product.findByIdAndUpdate(productId, {
-      ratingsAverage: stats[0].avgRatings,
-      ratingsQuantity: stats[0].ratingsQuantity,
-    });
+  // Update the product with the new average rating and count.
+  if (results.length > 0) {
+    await Product.updateOne(
+      { _id: productId },
+      {
+        $set: {
+          ratingsAverage: results[0].avrageRating,
+          ratingsQuantity: results[0].ratingCount,
+        },
+      },
+    );
   } else {
-    await Product.findByIdAndUpdate(productId, {
-      ratingsAverage: 3,
-      ratingsQuantity: 0,
-    });
+    await Product.updateOne(
+      { _id: productId },
+      {
+        $set: {
+          ratingsAverage: 0,
+          ratingsQuantity: 0,
+        },
+      },
+    );
   }
 };
 
-// reviewSchema.post("save", async function () {
-//   await this.constructor.calcAverageRatingsAndQuantity(this.product);
-// });
+reviewSchema.post("save", async function () {
+  await this.constructor.calcAverageRatingsAndQuantity(this.product);
+});
 
-// reviewSchema.pre(/^findOneAnd/, async function (next) {
-//   this.reviewDoc = await this.model.findOne(this.getQuery());
-//   next();
-// });
+// Recalculate average rating and count for a product after findOneAndUpdate findOneAndDelete.
+reviewSchema.pre(/^findOneAnd/, async function (next) {
+  this.reviewDoc = await this.model.findOne(this.getQuery());
+  next();
+});
 
-// reviewSchema.post(/^findOneAnd/, async function () {
-//   if (this.reviewDoc) {
-//     await this.reviewDoc.constructor.calcAverageRatingsAndQuantity(
-//       this.reviewDoc.product,
-//     );
-//   }
-// });
+reviewSchema.post(/^findOneAnd/, async function () {
+  if (this.reviewDoc) {
+    await this.reviewDoc.constructor.calcAverageRatingsAndQuantity(
+      this.reviewDoc.product,
+    );
+  }
+});
 
 module.exports = mongoose.model("Review", reviewSchema);

@@ -25,10 +25,7 @@ router.use("/:productId/reviews", reviewRouter);
 
 router
   .route("/")
-  .get((req, res, next) => {
-    console.log("req1", req.filterObj);
-    next();
-  }, getProducts)
+  .get(getProducts)
   .post(
     protect,
     allowTo(["admin", "manager"]),
