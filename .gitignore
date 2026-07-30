@@ -4,3 +4,5 @@ uploads
 CLAUDE.md
 .claude/settings.local.json
 .claude/setting.local.json
+.claude
+.vscode
