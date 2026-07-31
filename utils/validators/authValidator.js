@@ -39,10 +39,6 @@ exports.signupValidator = [
     .notEmpty()
     .withMessage("Password confirmation is required")
     .custom((val, { req }) => {
-      console.log(req.body);
-      console.log(val);
-      console.log(req.body.password);
-      console.log(val !== req.body.password);
       if (val !== req.body.password) {
         throw new Error("Passwords do not match");
       }

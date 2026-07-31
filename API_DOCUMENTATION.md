@@ -58,6 +58,22 @@ All endpoints are prefixed with `/api` and respond with JSON. Errors are returne
 
 ---
 
+## Cart
+All cart endpoints require a logged-in user token.
+
+| Method | Endpoint | Description | Request Body |
+|--------|----------|-------------|--------------|
+| GET | `/cart` | Get the logged-in user's cart. | – |
+| POST | `/cart` | Add a product to the cart. Matching product/color lines are merged. | `{ "productId": "MongoId", "quantity?": 1, "color?": "string" }` |
+| DELETE | `/cart` | Clear the logged-in user's cart. | – |
+| PUT | `/cart/:itemId` | Update a cart item's quantity. | `{ "quantity": 2 }` |
+| DELETE | `/cart/:itemId` | Remove one cart item. | – |
+| PUT | `/cart/applyCoupon` | Apply a valid, unexpired coupon to the cart. | `{ "coupon": "string" }` |
+
+Product prices and the cart owner are derived by the server. Item quantities cannot exceed the product's current stock.
+
+---
+
 ## Common Error Format
 ```json
 {

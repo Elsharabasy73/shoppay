@@ -124,7 +124,6 @@ exports.changeUserPasswordValidator = [
     .isLength({ min: 6 })
     .withMessage("Password must be at least 6 characters")
     .custom(async (val, { req }) => {
-      console.log(req.body);
       const user = await User.findById(req.params.id);
       if (!user) {
         throw new Error("There is no user for this id");
