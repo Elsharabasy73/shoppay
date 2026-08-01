@@ -71,6 +71,9 @@ orderSchema.pre(/^find/, function (next) {
   this.populate({
     path: "user",
     select: "name email phone profileImg",
+  }).populate({
+    path: "cartItems.product",
+    select: "title price imageCover",
   });
   next();
 });

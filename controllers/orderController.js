@@ -75,3 +75,43 @@ exports.filterOrdersForLoggedUser = asyncHandler(async (req, res, next) => {
 });
 
 exports.getOrders = factory.getAll(Order);
+
+// @desc    update order to paid
+// @route   PUT /api/v1/orders/:id
+// @access  Private/user-manager-admin
+exports.updateOrderToPaid = asyncHandler(async (req, res, next) => {
+  const order = await Order.findById(req.params.id);
+  if (!order) {
+    return next(new ApiError("Order not found", 404));
+  }
+  if (order.isPaid) {
+    return next(new ApiError("Order already paid", 400));
+  }
+  order.isPaid = true;
+  await order.save();
+
+  res.status(200).json({
+    message: "Order paid successfully",
+    data: order,
+  });
+});
+
+// // @desc    update order to delivered
+// // @route   PUT /api/v1/orders/:id
+// // @access  Private/user-manager-admin
+exports.updateOrderToDelivered = asyncHandler(async (req, res, next) => {
+  const order = await Order.findById(req.params.id);
+  if (!order) {
+    return next(new ApiError("Order not found", 404));
+  }
+  if (order.isDelivered) {
+    return next(new ApiError("Order already delivered", 400));
+  }
+  order.isDelivered = true;
+  await order.save();
+
+  res.status(200).json({
+    message: "Order delivered successfully",
+    data: order,
+  });
+});
