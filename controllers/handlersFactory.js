@@ -53,7 +53,6 @@ exports.getAll = (Model, modelName = "") =>
 
     if (req.filterObj) {
       filter = req.filterObj;
-      console.log("filter", filter);
     }
     // Build query
     const documentsCounts = await Model.countDocuments();

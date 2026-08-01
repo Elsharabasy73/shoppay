@@ -1,7 +1,8 @@
-const mongoose = require("mongoose");
+const asyncHandler = require("express-async-handler");
 const { body, check } = require("express-validator");
 
 const validatorMiddleware = require("../../middlewares/validatorMiddleware");
+const ApiError = require("../apiError");
 const Cart = require("../../models/cartModel");
 const Coupon = require("../../models/couponModel");
 const Product = require("../../models/productModel");
@@ -14,50 +15,125 @@ const getProductId = (cartItem) => {
     : cartItem.product.toString();
 };
 
-// Validate and normalize the request before addProductToCart runs.
+// Load the logged-in user's cart before the controller runs.
+const loadLoggedUserCart = asyncHandler(async (req, res, next) => {
+  const cart = await Cart.findOne({ user: req.user._id });
+
+  if (!cart) {
+    return next(new ApiError("Cart not found", 404));
+  }
+
+  req.cart = cart;
+  next();
+});
+
+// Load the requested embedded cart item.
+const loadCartItem = (req, res, next) => {
+  const cartItem = req.cart.cartItems.id(req.params.itemId);
+
+  if (!cartItem) {
+    return next(new ApiError("Cart item not found", 404));
+  }
+
+  req.cartItem = cartItem;
+  next();
+};
+
+// Validate the product and stock before adding it to the cart.
+const validateProductToAdd = asyncHandler(async (req, res, next) => {
+  const product = await Product.findById(req.body.productId);
+
+  if (!product) {
+    return next(new ApiError("Product not found", 404));
+  }
+
+  if (
+    req.body.color &&
+    product.colors.length > 0 &&
+    !product.colors.includes(req.body.color)
+  ) {
+    return next(
+      new ApiError("Selected color is not available for this product", 400),
+    );
+  }
+
+  const cart = await Cart.findOne({ user: req.user._id });
+  const productQuantityInCart = cart
+    ? cart.cartItems.reduce(
+        (total, item) =>
+          getProductId(item) === product._id.toString()
+            ? total + item.quantity
+            : total,
+        0,
+      )
+    : 0;
+
+  if (productQuantityInCart + req.body.quantity > product.quantity) {
+    return next(
+      new ApiError(`Only ${product.quantity} items available in stock`, 400),
+    );
+  }
+
+  req.product = product;
+  req.cart = cart;
+  next();
+});
+
+// Validate the cart item product and its requested quantity.
+const validateCartItemQuantity = asyncHandler(async (req, res, next) => {
+  const product = await Product.findById(getProductId(req.cartItem));
+
+  if (!product) {
+    return next(new ApiError("Product not found", 404));
+  }
+
+  const otherVariantsQuantity = req.cart.cartItems.reduce(
+    (total, item) =>
+      item._id.toString() !== req.cartItem._id.toString() &&
+      item.product &&
+      getProductId(item) === product._id.toString()
+        ? total + item.quantity
+        : total,
+    0,
+  );
+
+  if (otherVariantsQuantity + req.body.quantity > product.quantity) {
+    return next(
+      new ApiError(`Only ${product.quantity} items available in stock`, 400),
+    );
+  }
+
+  req.product = product;
+  next();
+});
+
+// Load a valid coupon before applying it to the cart.
+const loadCoupon = asyncHandler(async (req, res, next) => {
+  const coupon = await Coupon.findOne({
+    name: req.body.coupon,
+    expire: { $gt: Date.now() },
+  });
+
+  if (!coupon) {
+    return next(new ApiError("Coupon is invalid or expired", 400));
+  }
+
+  req.coupon = coupon;
+  next();
+});
+
 exports.addProductToCartValidator = [
   check("productId")
     .notEmpty()
     .withMessage("Product id is required")
     .isMongoId()
-    .withMessage("Invalid product id format")
-    .bail()
-    .custom(async (val, { req }) => {
-      // Store the product so the next validators can reuse it.
-      req.product = await Product.findById(val);
-      return true;
-    }),
+    .withMessage("Invalid product id format"),
   body("quantity")
     // If quantity is omitted, add one product by default.
-    .customSanitizer((quantity) =>
-      quantity === undefined ? 1 : quantity,
-    )
+    .customSanitizer((quantity) => (quantity === undefined ? 1 : quantity))
     .isInt({ min: 1 })
     .withMessage("Quantity must be a positive integer")
-    .toInt()
-    .custom(async (quantity, { req }) => {
-      if (!req.product) return true;
-
-      // Count this product across every color already in the cart.
-      const cart = await Cart.findOne({ user: req.user._id });
-      const productQuantityInCart = cart
-        ? cart.cartItems.reduce(
-            (total, item) =>
-              getProductId(item) === req.product._id.toString()
-                ? total + item.quantity
-                : total,
-            0,
-          )
-        : 0;
-
-      if (productQuantityInCart + quantity > req.product.quantity) {
-        throw new Error(
-          `Only ${req.product.quantity} items available in stock`,
-        );
-      }
-
-      return true;
-    }),
+    .toInt(),
   body("color")
     // Keep color undefined when the request does not select one.
     .customSanitizer((color) => color || undefined)
@@ -66,27 +142,22 @@ exports.addProductToCartValidator = [
     .withMessage("Color must be a string")
     .trim()
     .notEmpty()
-    .withMessage("Color cannot be empty")
-    .custom((color, { req }) => {
-      if (
-        req.product &&
-        req.product.colors.length > 0 &&
-        !req.product.colors.includes(color)
-      ) {
-        throw new Error("Selected color is not available for this product");
-      }
-
-      return true;
-    }),
+    .withMessage("Color cannot be empty"),
   validatorMiddleware,
+  validateProductToAdd,
 ];
 
-exports.cartItemIdValidator = [
+exports.getLoggedUserCartValidator = [loadLoggedUserCart];
+
+exports.removeSpecificCartItemValidator = [
   check("itemId").isMongoId().withMessage("Invalid cart item id format"),
   validatorMiddleware,
+  loadLoggedUserCart,
+  loadCartItem,
 ];
 
-// Validate an exact quantity update and include other colors in the stock check.
+exports.clearCartValidator = [loadLoggedUserCart];
+
 exports.updateCartItemQuantityValidator = [
   check("itemId").isMongoId().withMessage("Invalid cart item id format"),
   body("quantity")
@@ -94,57 +165,21 @@ exports.updateCartItemQuantityValidator = [
     .withMessage("Quantity is required")
     .isInt({ min: 1 })
     .withMessage("Quantity must be a positive integer")
-    .toInt()
-    .custom(async (quantity, { req }) => {
-      if (!mongoose.isValidObjectId(req.params.itemId)) return true;
-
-      const cart = await Cart.findOne({ user: req.user._id });
-      if (!cart) return true;
-
-      const cartItem = cart.cartItems.id(req.params.itemId);
-      if (!cartItem) return true;
-
-      const product = await Product.findById(getProductId(cartItem));
-      if (!product) return true;
-
-      const otherVariantsQuantity = cart.cartItems.reduce(
-        (total, item) =>
-          item._id.toString() !== cartItem._id.toString() &&
-          getProductId(item) === product._id.toString()
-            ? total + item.quantity
-            : total,
-        0,
-      );
-
-      if (otherVariantsQuantity + quantity > product.quantity) {
-        throw new Error(`Only ${product.quantity} items available in stock`);
-      }
-
-      return true;
-    }),
+    .toInt(),
   validatorMiddleware,
+  loadLoggedUserCart,
+  loadCartItem,
+  validateCartItemQuantity,
 ];
 
-// Verify the coupon before the controller calculates the discounted total.
 exports.applyCouponValidator = [
   body("coupon")
     .notEmpty()
     .withMessage("Coupon name is required")
     .isString()
     .withMessage("Coupon name must be a string")
-    .trim()
-    .custom(async (couponName, { req }) => {
-      const coupon = await Coupon.findOne({
-        name: couponName,
-        expire: { $gt: Date.now() },
-      });
-
-      if (!coupon) {
-        throw new Error("Coupon is invalid or expired");
-      }
-
-      req.coupon = coupon;
-      return true;
-    }),
+    .trim(),
   validatorMiddleware,
+  loadCoupon,
+  loadLoggedUserCart,
 ];

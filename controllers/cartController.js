@@ -1,9 +1,6 @@
 const asyncHandler = require("express-async-handler");
 
-const ApiError = require("../utils/apiError");
 const Cart = require("../models/cartModel");
-const Coupon = require("../models/couponModel");
-const Product = require("../models/productModel");
 
 // Return the product ID whether Mongoose populated the product or left it as an ID.
 const getProductId = (cartItem) => {
@@ -27,13 +24,11 @@ const calculateCartTotalPrice = (cart) => {
 // @desc    Add product to cart
 // @route   POST /api/v1/cart
 // @access  Private/user
-exports.addProductToCart = asyncHandler(async (req, res, next) => {
-  // The validator already normalized quantity/color and checked the stock.
-  const product = await Product.findById(req.body.productId);
+exports.addProductToCart = asyncHandler(async (req, res) => {
+  const { product } = req;
+  let { cart } = req;
 
   // Each user has one cart. Create it when the user adds their first item.
-  let cart = await Cart.findOne({ user: req.user._id });
-
   if (!cart) {
     cart = await Cart.create({
       user: req.user._id,
@@ -82,138 +77,62 @@ exports.addProductToCart = asyncHandler(async (req, res, next) => {
 // @desc    Get logged user cart
 // @route   GET /api/v1/cart
 // @access  Private/user
-exports.getLoggedUserCart = asyncHandler(async (req, res, next) => {
-  const cart = await Cart.findOne({ user: req.user._id });
-
-  if (!cart) {
-    return next(new ApiError("Cart not found", 404));
-  }
-
+exports.getLoggedUserCart = asyncHandler(async (req, res) => {
   res.status(200).json({
-    results: cart.cartItems.length,
-    data: cart,
+    results: req.cart.cartItems.length,
+    data: req.cart,
   });
 });
 
 // @desc    Remove specific cart item
 // @route   DELETE /api/v1/cart/:itemId
 // @access  Private/user
-exports.removeSpecificCartItem = asyncHandler(async (req, res, next) => {
-  const cart = await Cart.findOne({ user: req.user._id });
-
-  if (!cart) {
-    return next(new ApiError("Cart not found", 404));
-  }
-
-  // Find the item inside the cart's embedded cartItems array.
-  const cartItem = cart.cartItems.id(req.params.itemId);
-
-  if (!cartItem) {
-    return next(new ApiError("Cart item not found", 404));
-  }
-
-  // Remove the item, then calculate the total using the remaining items.
-  cart.cartItems.pull(req.params.itemId);
-  calculateCartTotalPrice(cart);
-  await cart.save();
+exports.removeSpecificCartItem = asyncHandler(async (req, res) => {
+  req.cart.cartItems.pull(req.cartItem._id);
+  calculateCartTotalPrice(req.cart);
+  await req.cart.save();
 
   res.status(200).json({
     message: "Cart item removed successfully",
-    data: cart,
+    data: req.cart,
   });
 });
 
 // @desc    Clear logged user cart
 // @route   DELETE /api/v1/cart
 // @access  Private/user
-exports.clearCart = asyncHandler(async (req, res, next) => {
-  const cart = await Cart.findOneAndDelete({ user: req.user._id });
-
-  if (!cart) {
-    return next(new ApiError("Cart not found", 404));
-  }
-
+exports.clearCart = asyncHandler(async (req, res) => {
+  await req.cart.deleteOne();
   res.status(204).send();
 });
 
 // @desc    Update cart item quantity
 // @route   PUT /api/v1/cart/:itemId
 // @access  Private/user
-exports.updateCartItemQuantity = asyncHandler(async (req, res, next) => {
-  const cart = await Cart.findOne({ user: req.user._id });
-
-  if (!cart) {
-    return next(new ApiError("Cart not found", 404));
-  }
-
-  // Find the embedded item that the user wants to update.
-  const cartItem = cart.cartItems.id(req.params.itemId);
-
-  if (!cartItem) {
-    return next(new ApiError("Cart item not found", 404));
-  }
-
-  // Read the current product price before saving the new quantity.
-  const product = await Product.findById(getProductId(cartItem));
-
-  if (!product) {
-    return next(new ApiError("Product not found", 404));
-  }
-
-  const otherVariantsQuantity = cart.cartItems.reduce(
-    (total, item) =>
-      item._id.toString() !== cartItem._id.toString() &&
-      item.product &&
-      getProductId(item) === product._id.toString()
-        ? total + item.quantity
-        : total,
-    0,
-  );
-
-  if (otherVariantsQuantity + req.body.quantity > product.quantity) {
-    return next(
-      new ApiError(`Only ${product.quantity} items available in stock`, 400),
-    );
-  }
-
-  cartItem.quantity = req.body.quantity;
-  cartItem.price = product.priceAfterDiscount || product.price;
-  calculateCartTotalPrice(cart);
-  await cart.save();
+exports.updateCartItemQuantity = asyncHandler(async (req, res) => {
+  req.cartItem.quantity = req.body.quantity;
+  req.cartItem.price = req.product.priceAfterDiscount || req.product.price;
+  calculateCartTotalPrice(req.cart);
+  await req.cart.save();
 
   res.status(200).json({
     message: "Cart item quantity updated successfully",
-    data: cart,
+    data: req.cart,
   });
 });
 
 // @desc    Apply coupon to logged user cart
 // @route   PUT /api/v1/cart/applyCoupon
 // @access  Private/user
-exports.applyCoupon = asyncHandler(async (req, res, next) => {
-  const coupon = await Coupon.findOne({
-    name: req.body.coupon,
-    expire: { $gt: Date.now() },
-  });
-
-  if (!coupon) {
-    return next(new ApiError("Coupon is invalid or expired", 400));
-  }
-
-  const cart = await Cart.findOne({ user: req.user._id });
-
-  if (!cart) {
-    return next(new ApiError("Cart not found", 404));
-  }
-
-  const discount = (cart.totalPrice * coupon.discount) / 100;
-  cart.totalPriceAfterDiscount = Number(
-    (cart.totalPrice - discount).toFixed(2),
+exports.applyCoupon = asyncHandler(async (req, res) => {
+  const discount = (req.cart.totalPrice * req.coupon.discount) / 100;
+  req.cart.totalPriceAfterDiscount = Number(
+    (req.cart.totalPrice - discount).toFixed(2),
   );
-  await cart.save();
+  await req.cart.save();
 
   res.status(200).json({
     message: "Coupon applied successfully",
-    data: cart,
+    data: req.cart,
   });
 });

@@ -11,7 +11,9 @@ const {
 const { protect, allowTo } = require("../middlewares/authMiddleware");
 const {
   addProductToCartValidator,
-  cartItemIdValidator,
+  getLoggedUserCartValidator,
+  removeSpecificCartItemValidator,
+  clearCartValidator,
   updateCartItemQuantityValidator,
   applyCouponValidator,
 } = require("../utils/validators/cartValidator");
@@ -22,15 +24,15 @@ router.use(protect, allowTo(["user"]));
 
 router
   .route("/")
-  .get(getLoggedUserCart)
+  .get(getLoggedUserCartValidator, getLoggedUserCart)
   .post(addProductToCartValidator, addProductToCart)
-  .delete(clearCart);
+  .delete(clearCartValidator, clearCart);
 
 router.put("/applyCoupon", applyCouponValidator, applyCoupon);
 
 router
   .route("/:itemId")
   .put(updateCartItemQuantityValidator, updateCartItemQuantity)
-  .delete(cartItemIdValidator, removeSpecificCartItem);
+  .delete(removeSpecificCartItemValidator, removeSpecificCartItem);
 
 module.exports = router;
