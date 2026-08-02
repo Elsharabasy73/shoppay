@@ -88,6 +88,7 @@ exports.updateOrderToPaid = asyncHandler(async (req, res, next) => {
     return next(new ApiError("Order already paid", 400));
   }
   order.isPaid = true;
+  order.paidAt = new Date();
   await order.save();
 
   res.status(200).json({
@@ -108,6 +109,7 @@ exports.updateOrderToDelivered = asyncHandler(async (req, res, next) => {
     return next(new ApiError("Order already delivered", 400));
   }
   order.isDelivered = true;
+  order.deliveredAt = new Date();
   await order.save();
 
   res.status(200).json({
