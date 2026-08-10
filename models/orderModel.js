@@ -58,6 +58,21 @@ const orderSchema = new mongoose.Schema(
       default: false,
     },
     paidAt: Date,
+    paymob: {
+      intentionId: String,
+      orderId: Number,
+      transactionId: Number,
+      amountCents: Number,
+      currency: String,
+      status: {
+        type: String,
+        enum: ["not_started", "pending", "paid", "failed"],
+        default: "not_started",
+      },
+      specialReference: String,
+      initiatedAt: Date,
+      lastWebhookAt: Date,
+    },
     isDelivered: {
       type: Boolean,
       default: false,
@@ -65,6 +80,12 @@ const orderSchema = new mongoose.Schema(
     deliveredAt: Date,
   },
   { timestamps: true },
+);
+
+orderSchema.index({ "paymob.orderId": 1 }, { sparse: true, unique: true });
+orderSchema.index(
+  { "paymob.transactionId": 1 },
+  { sparse: true, unique: true },
 );
 
 orderSchema.pre(/^find/, function (next) {

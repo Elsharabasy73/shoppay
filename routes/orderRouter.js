@@ -4,20 +4,20 @@ const {
   createCashOrder,
   filterOrdersForLoggedUser,
   getOrders,
-  updateOrderToPaid,
   updateOrderToDelivered,
 } = require("../controllers/orderController");
+const { createPaymobPayment } = require("../controllers/paymobController");
 
 const router = express.Router();
 
 const { protect, allowTo } = require("../middlewares/authMiddleware");
 
-router.use(protect, allowTo("user"));
+router.use(protect, allowTo(["user"]));
 
 router.route("/:cartId").post(createCashOrder);
 router.get("/", filterOrdersForLoggedUser, getOrders);
 
-router.put("/:id/pay", updateOrderToPaid);
+router.post("/:id/paymob", createPaymobPayment);
 router.put("/:id/deliver", updateOrderToDelivered);
 
 module.exports = router;
