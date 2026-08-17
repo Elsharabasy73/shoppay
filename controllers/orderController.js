@@ -128,7 +128,8 @@ exports.checkoutSession = asyncHandler(async (req, res, next) => {
     return next(new ApiError("Cart not found", 404));
   }
 
-  const totalPrice = cart.totalPriceAfterDiscount;
+  const totalPrice = cart.totalPrice || cart.totalPriceAfterDiscount;
+  console.log("here1", Math.round(totalPrice * 100));
   const session = await stripe.checkout.sessions.create({
     line_items: [
       {

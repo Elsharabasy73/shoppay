@@ -9,6 +9,7 @@ const User = require("../models/userModel");
 //@access  Private
 exports.protect = asyncHandler(async (req, res, next) => {
   //check if bearer token is provided
+
   let token;
   if (
     req.headers.authorization &&
