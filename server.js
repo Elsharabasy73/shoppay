@@ -3,6 +3,7 @@ const path = require("path");
 const express = require("express");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
+const cors = require("cors");
 
 dotenv.config({ path: "config.env" });
 const ApiError = require("./utils/apiError");
@@ -18,6 +19,7 @@ dbConnection();
 const app = express();
 
 // Middlewares
+app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "uploads")));
 
@@ -33,6 +35,7 @@ mountRoutes(app);
 
 //test route
 app.get("/test", (req, res) => {
+  console.log("test");
   res.json({ message: "Hello World" });
 });
 
