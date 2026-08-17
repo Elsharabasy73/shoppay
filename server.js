@@ -29,7 +29,7 @@ if (process.env.NODE_ENV === "development") {
 }
 
 app.post(
-  "/webhook",
+  "/webhook-checkout",
   express.raw({ type: "application/json" }),
   webhookCheckout,
 );
