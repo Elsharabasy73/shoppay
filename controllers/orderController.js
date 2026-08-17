@@ -1,11 +1,14 @@
 const asyncHandler = require("express-async-handler");
 const stripe = require("stripe")(process.env.STRIPE_SECRET);
+const dotenv = require("dotenv");
 
 const ApiError = require("../utils/apiError");
 const Cart = require("../models/cartModel");
 const Order = require("../models/orderModel");
 const Product = require("../models/productModel");
 const factory = require("./handlersFactory");
+
+dotenv.config({ path: "config.env" });
 
 // @desc    Create cash order
 // @route   POST /api/v1/orders/:cartId
@@ -162,4 +165,25 @@ exports.checkoutSession = asyncHandler(async (req, res, next) => {
     message: "Checkout session created successfully",
     data: session,
   });
+});
+
+exports.webhookCheckout = asyncHandler(async (req, res, next) => {
+  let event;
+  if (process.env.STRIPE_WEBHOOK_SECRET) {
+    // Get the signature sent by Stripe
+    const signature = req.headers["stripe-signature"];
+    try {
+      event = stripe.webhooks.constructEvent(
+        req.body,
+        signature,
+        process.env.STRIPE_WEBHOOK_SECRET,
+      );
+    } catch (err) {
+      console.log(`⚠️ Webhook signature verification failed.`, err.message);
+      return res.sendStatus(400);
+    }
+    if (event.type === "checkout.session.completed") {
+      console.log(`create stripe order here ${event.data.object.id}`);
+    }
+  }
 });

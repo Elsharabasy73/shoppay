@@ -9,6 +9,7 @@ const ApiError = require("./utils/apiError");
 const globalError = require("./middlewares/errorMiddleware");
 const dbConnection = require("./config/database");
 const mountRoutes = require("./routes");
+const { webhookCheckout } = require("./controllers/orderController");
 
 // Connect with db
 dbConnection();
@@ -24,6 +25,8 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
   console.log(`mode: ${process.env.NODE_ENV}`);
 }
+
+app.post("/webhook", express.raw({ type: "application/json" }));
 
 // Mount Routes
 mountRoutes(app);
