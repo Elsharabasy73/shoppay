@@ -18,6 +18,13 @@ dbConnection();
 // express app
 const app = express();
 
+//Stripe webhook
+app.post(
+  "/webhook-checkout",
+  express.raw({ type: "application/json" }),
+  webhookCheckout,
+);
+
 // Middlewares
 app.use(cors());
 app.use(express.json());
@@ -27,12 +34,6 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
   console.log(`mode: ${process.env.NODE_ENV}`);
 }
-
-app.post(
-  "/webhook-checkout",
-  express.raw({ type: "application/json" }),
-  webhookCheckout,
-);
 
 // Mount Routes
 mountRoutes(app);

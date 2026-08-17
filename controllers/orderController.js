@@ -7,6 +7,7 @@ const Cart = require("../models/cartModel");
 const Order = require("../models/orderModel");
 const Product = require("../models/productModel");
 const factory = require("./handlersFactory");
+const User = require("../models/userModel");
 
 dotenv.config({ path: "config.env" });
 
@@ -166,6 +167,43 @@ exports.checkoutSession = asyncHandler(async (req, res, next) => {
   });
 });
 
+const createCardOrder = async (session) => {
+  const cartId = session.client_reference_id;
+  const shippingAddress = session.metadata;
+  const orderPrice = session.amount_total / 100;
+
+  const cart = await Cart.findById(cartId);
+  const customer = await User.findOne({ email: session.customer_email });
+
+  const order = await Order.create({
+    user: customer._id,
+    cartItems: cart.cartItems,
+    shippingAddress,
+    taxPrice: 0,
+    shippingPrice: 0,
+    totalOrderPrice: orderPrice,
+    ispaid: true,
+    paidAt: new Date(),
+    paymentMethodType: "card",
+  });
+  const bulkOperations = cart.cartItems.map((item) => ({
+    updateOne: {
+      filter: { _id: item.product },
+      update: {
+        $inc: {
+          quantity: -item.quantity,
+          sold: item.quantity,
+        },
+      },
+    },
+  }));
+
+  await Product.bulkWrite(bulkOperations);
+  return await Cart.findByIdAndDelete(cart._id);
+};
+// @desc    create card order
+// @route   POST /api/v1/orders/paymob
+// @access  Private/user
 exports.webhookCheckout = asyncHandler(async (req, res, next) => {
   let event;
   console.log("webhookCheckout starting...");
@@ -184,6 +222,10 @@ exports.webhookCheckout = asyncHandler(async (req, res, next) => {
   }
   if (event.type === "checkout.session.completed") {
     console.log(`create stripe order here ${event.data.object.id}`);
+    createCardOrder(event.data.object);
   }
-  // }
+  res.status(201).json({
+    message: "Order created successfully Using Stripe webhook",
+    recieved: true,
+  });
 });
