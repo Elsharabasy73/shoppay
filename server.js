@@ -28,7 +28,11 @@ if (process.env.NODE_ENV === "development") {
   console.log(`mode: ${process.env.NODE_ENV}`);
 }
 
-app.post("/webhook", express.raw({ type: "application/json" }));
+app.post(
+  "/webhook",
+  express.raw({ type: "application/json" }),
+  webhookCheckout,
+);
 
 // Mount Routes
 mountRoutes(app);
