@@ -5,6 +5,7 @@ const {
   filterOrdersForLoggedUser,
   getOrders,
   updateOrderToDelivered,
+  checkoutSession,
 } = require("../controllers/orderController");
 const { createPaymobPayment } = require("../controllers/paymobController");
 
@@ -19,5 +20,8 @@ router.get("/", filterOrdersForLoggedUser, getOrders);
 
 router.post("/:id/paymob", createPaymobPayment);
 router.put("/:id/deliver", updateOrderToDelivered);
+
+//stripe payment
+router.get("/checkout-session/:cartId", checkoutSession);
 
 module.exports = router;

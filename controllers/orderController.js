@@ -1,4 +1,5 @@
 const asyncHandler = require("express-async-handler");
+const stripe = require("stripe")(process.env.STRIPE_SECRET);
 
 const ApiError = require("../utils/apiError");
 const Cart = require("../models/cartModel");
@@ -97,9 +98,9 @@ exports.updateOrderToPaid = asyncHandler(async (req, res, next) => {
   });
 });
 
-// // @desc    update order to delivered
-// // @route   PUT /api/v1/orders/:id
-// // @access  Private/user-manager-admin
+// @desc    update order to delivered
+// @route   PUT /api/v1/orders/:id
+// @access  Private/user-manager-admin
 exports.updateOrderToDelivered = asyncHandler(async (req, res, next) => {
   const order = await Order.findById(req.params.id);
   if (!order) {
@@ -115,5 +116,49 @@ exports.updateOrderToDelivered = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     message: "Order delivered successfully",
     data: order,
+  });
+});
+
+// @desc    get checkout session for stripe and send it as response
+// @route   GET /api/v1/orders/checkout-session/:cartId
+// @access  Private/user
+exports.checkoutSession = asyncHandler(async (req, res, next) => {
+  const cart = await Cart.findById(req.params.cartId);
+  if (!cart) {
+    return next(new ApiError("Cart not found", 404));
+  }
+
+  const totalPrice = cart.totalPriceAfterDiscount;
+  const session = await stripe.checkout.sessions.create({
+    line_items: [
+      {
+        price_data: {
+          currency: "usd",
+          product_data: {
+            name: req.user.name,
+            description: "description",
+            images: ["images/1.png", "images/2.png"],
+          },
+          unit_amount: Math.round(totalPrice * 100), // price in cents, must be integer
+        },
+        quantity: 1,
+      },
+    ],
+    mode: "payment",
+    success_url: `${req.protocol}://${req.hostname}/orders`,
+    cancel_url: `${req.protocol}://${req.hostname}/cart`,
+    payment_method_types: ["card"],
+    customer_email: req.user.email,
+    client_reference_id: req.params.cartId,
+    metadata: {
+      cartId: cart._id,
+      // totalPrice: totalPrice,
+    },
+    // Provide a name (for example, hosted_web_0001) to label this Checkout integration and measure its conversion independently
+    integration_identifier: `integrationidentifier`,
+  });
+  res.status(200).json({
+    message: "Checkout session created successfully",
+    data: session,
   });
 });
