@@ -5,6 +5,14 @@ const dotenv = require("dotenv");
 const morgan = require("morgan");
 const cors = require("cors");
 const rateLimiter = require("express-rate-limit");
+//prevent http param pollution
+const hpp = require("hpp");
+//prevent mongodb injection
+//ex: emai: "$gt:''""
+const mongosanitize = require("express-mongo-sanitize");
+//prevent xss(cross site scripting)
+//ex: name:"<script>alert('xss')</script>"
+const xss = require("xss-clean");
 
 dotenv.config({ path: "config.env" });
 const ApiError = require("./utils/apiError");
@@ -18,6 +26,17 @@ dbConnection();
 
 // express app
 const app = express();
+
+//hpp
+app.use(
+  hpp({
+    whitelist: ["price", "quantity", "name", "images", "title", "price"],
+  }),
+);
+
+//sanitize input data
+app.use(mongosanitize());
+app.use(xss());
 
 //Stripe webhook
 app.post(
