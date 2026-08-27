@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcryptjs");
 
 const User = require("../models/userModel");
+const client = require("../config/redis");
 const generateOtp = require("../utils/generateOTP");
 const sendEmail = require("../utils/sendEmail");
 const ApiError = require("../utils/apiError");
@@ -11,11 +12,28 @@ const ApiError = require("../utils/apiError");
 //@access  Public
 exports.signup = asyncHandler(async (req, res) => {
   //create user
+  const otp = generateOtp();
   const user = await User.create({
     name: req.body.name,
     email: req.body.email,
     password: req.body.password,
+    otp,
   });
+  // SET
+  const result = await client.set(
+    `user:${user._id}`,
+    JSON.stringify({ otp, name: "Ahmed", attempts: 0 }),
+    { EX: 600 },
+  );
+
+  console.log(result, `${req.body.email}`); // "OK" on success
+  if (result !== "OK") throw new Error("Redis SET failed");
+
+  //log all redis content
+  const allKeys = await client.keys("*");
+  console.log("---------------------allKeys--------------------");
+  console.log(allKeys);
+  console.log("---------------------allKeys--------------------");
   //geterate jwt token
   const token = user.generateAuthToken(user._id);
   res.status(201).json({ data: user, token });

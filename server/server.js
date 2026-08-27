@@ -18,6 +18,7 @@ dotenv.config({ path: "config.env" });
 const ApiError = require("./utils/apiError");
 const globalError = require("./middlewares/errorMiddleware");
 const dbConnection = require("./config/database");
+const client = require("./config/redis");
 const mountRoutes = require("./routes");
 const { webhookCheckout } = require("./controllers/orderController");
 
@@ -26,6 +27,14 @@ dbConnection();
 
 // express app
 const app = express();
+
+async function connectRedis() {
+  if (client.isOpen) return;
+  await client.connect();
+  console.log("Connected to Redis");
+}
+
+connectRedis();
 
 //hpp
 app.use(
@@ -46,7 +55,14 @@ app.post(
 );
 
 // Middlewares
-app.use(cors());
+// CORS_ORIGIN is a comma-separated allowlist; leave it unset in development.
+app.use(
+  cors({
+    origin: process.env.CORS_ORIGIN
+      ? process.env.CORS_ORIGIN.split(",").map((origin) => origin.trim())
+      : true,
+  }),
+);
 app.use(express.json({ limit: "20kb" }));
 app.use(express.static(path.join(__dirname, "uploads")));
 

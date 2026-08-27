@@ -20,6 +20,7 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
     },
     phone: String,
+    otp: String,
     profileImg: String,
 
     password: {
