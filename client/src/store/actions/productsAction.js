@@ -185,8 +185,8 @@ export const updateProducts = (id, data) => async (dispatch) => {
 
     } catch (e) {
         dispatch({
-            type: GET_ERROR,
-            payload: "Error " + e,
+            type: UPDATE_PRODUCTS,
+            payload: e.response,
         })
     }
 }

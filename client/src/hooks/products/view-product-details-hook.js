@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from "react-redux";
-import { getOneProduct, getProductLike, getProductYouLike } from '../../store/actions/productsAction';
+import { getOneProduct, getProductLike } from '../../store/actions/productsAction';
 import mobile from '../../assets/images/mobile.png'
 import { getOneCategory } from '../../store/actions/categoryAction';
 import { getOneBrand } from '../../store/actions/brandAction';
@@ -8,8 +8,8 @@ const ViewProductsDetalisHook = (prodID) => {
 
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(getOneProduct(prodID))
-    }, [])
+        if (prodID) dispatch(getOneProduct(prodID))
+    }, [prodID])
 
     const oneProducts = useSelector((state) => state.allproducts.oneProduct)
     const oneCategory = useSelector((state) => state.allCategory.oneCategory)
@@ -23,14 +23,21 @@ const ViewProductsDetalisHook = (prodID) => {
         item = []
 
     useEffect(() => {
-        if (item.category)
-            dispatch(getOneCategory(item.category))
-        if (item.brand)
-            dispatch(getOneBrand(item.brand))
-        if (item.category)
-            dispatch(getProductLike(item.category))
-
-    }, [item])
+        const categoryId = item?.category?._id || item?.category;
+        const brandId = item?.brand?._id || item?.brand;
+        if (categoryId && typeof categoryId === 'string' && categoryId.match(/^[0-9a-fA-F]{24}$/)) {
+            dispatch(getOneCategory(categoryId))
+            dispatch(getProductLike(categoryId))
+        } else if (categoryId && typeof categoryId === 'object' && categoryId._id) {
+            dispatch(getOneCategory(categoryId._id))
+            dispatch(getProductLike(categoryId._id))
+        }
+        if (brandId && typeof brandId === 'string' && brandId.match(/^[0-9a-fA-F]{24}$/)) {
+            dispatch(getOneBrand(brandId))
+        } else if (brandId && typeof brandId === 'object' && brandId._id) {
+            dispatch(getOneBrand(brandId._id))
+        }
+    }, [item._id || item.id])
 
 
     //to view images gallery

@@ -70,14 +70,14 @@ const AdminEditProducts = () => {
                     />
                     <select
                         name="cat"
-                        value={CatID}
+                        value={CatID || "0"}
                         onChange={onSeletCategory}
                         className="select input-form-area mt-3 px-2 ">
                         <option value="0">التصنيف الرئيسي</option>
                         {
-                            category.data ? (category.data.map((item) => {
+                            category && category.data ? (category.data.map((item) => {
                                 return (
-                                    <option value={item._id}>{item.name}</option>
+                                    <option key={item._id} value={item._id}>{item.name}</option>
                                 )
                             })) : null
 
@@ -87,7 +87,7 @@ const AdminEditProducts = () => {
                     <Multiselect
                         className="mt-2 text-end"
                         placeholder="التصنيف الفرعي"
-                        options={options}
+                        options={options || []}
                         onSelect={onSelect}
                         onRemove={onRemove}
                         displayValue="name"
@@ -95,14 +95,14 @@ const AdminEditProducts = () => {
                     />
                     <select
                         name="brand"
-                        value={BrandID}
+                        value={BrandID || "0"}
                         onChange={onSeletBrand}
                         className="select input-form-area mt-3 px-2 ">
                         <option value="0">اختر ماركة</option>
                         {
-                            brand.data ? (brand.data.map((item) => {
+                            brand && brand.data ? (brand.data.map((item) => {
                                 return (
-                                    <option value={item._id}>{item.name}</option>
+                                    <option key={item._id} value={item._id}>{item.name}</option>
                                 )
                             })) : null
 
@@ -111,7 +111,7 @@ const AdminEditProducts = () => {
                     <div className="text-form mt-3 "> الالوان المتاحه للمنتج</div>
                     <div className="mt-1 d-flex">
                         {
-                            colors.length >= 1 ? (
+                            colors && colors.length >= 1 ? (
                                 colors.map((color, index) => {
                                     return (
                                         <div key={index}

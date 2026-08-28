@@ -36,11 +36,16 @@ exports.resizeProductImages = asyncHandler(async (req, res, next) => {
     await Promise.all(
       req.files.images.map(async (img, index) => {
         const imageName = `product-${uuidv4()}-${Date.now()}-${index + 1}.jpg`;
-        const stored = await processAndUploadImage(img.buffer, imageName, "products", {
-          width: 2000,
-          height: 1333,
-          quality: 95,
-        });
+        const stored = await processAndUploadImage(
+          img.buffer,
+          imageName,
+          "products",
+          {
+            width: 2000,
+            height: 1333,
+            quality: 95,
+          },
+        );
         // Save image into our db
         req.body.images.push(stored);
       }),
@@ -63,7 +68,12 @@ exports.getProduct = factory.getOne(Product, "reviews");
 // @desc    Create product
 // @route   POST  /api/v1/products
 // @access  Private
-exports.createProduct = factory.createOne(Product);
+exports.createProduct = asyncHandler(async (req, res, next) => {
+  console.log("createProduct");
+  const newDoc = await Product.create(req.body);
+  console.log("createProduct2");
+  res.status(201).json({ data: newDoc });
+});
 // @desc    Update specific product
 // @route   PUT /api/v1/products/:id
 // @access  Private
@@ -76,7 +86,9 @@ exports.deleteProduct = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const document = await Product.findByIdAndDelete(id);
   if (!document) {
-    return next(new (require("../utils/apiError"))(`No document for this id ${id}`, 404));
+    return next(
+      new (require("../utils/apiError"))(`No document for this id ${id}`, 404),
+    );
   }
   const { deleteImage, deleteImages } = require("../utils/imageStorage");
   // Delete cover + all gallery images (handles local and cloudinary via STORAGE)

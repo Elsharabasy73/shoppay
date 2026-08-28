@@ -49,6 +49,10 @@ exports.createProductValidator = [
 
   check('colors')
     .optional()
+    .customSanitizer((val) => {
+      if (!val) return val;
+      return Array.isArray(val) ? val : [val];
+    })
     .isArray()
     .withMessage('availableColors should be array of string'),
   check('imageCover').notEmpty().withMessage('Product imageCover is required'),
@@ -73,25 +77,35 @@ exports.createProductValidator = [
 
   check('subcategories')
     .optional()
-    .isMongoId()
-    .withMessage('Invalid ID formate')
-    .custom((subcategoriesIds) =>
-      SubCategory.find({ _id: { $exists: true, $in: subcategoriesIds } }).then(
+    .customSanitizer((val) => {
+      if (!val) return val;
+      return Array.isArray(val) ? val : [val];
+    })
+    .isArray()
+    .withMessage('subcategories should be array of ids')
+    .custom((subcategoriesIds) => {
+      if (!Array.isArray(subcategoriesIds)) return true;
+      for (const id of subcategoriesIds) {
+        if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+          return Promise.reject(new Error(`Invalid ID formate`));
+        }
+      }
+      return SubCategory.find({ _id: { $exists: true, $in: subcategoriesIds } }).then(
         (result) => {
           if (result.length < 1 || result.length !== subcategoriesIds.length) {
             return Promise.reject(new Error(`Invalid subcategories Ids`));
           }
         }
-      )
-    )
-    .custom((val, { req }) =>
-      SubCategory.find({ category: req.body.category }).then(
+      );
+    })
+    .custom((val, { req }) => {
+      if (!Array.isArray(val)) return true;
+      return SubCategory.find({ category: req.body.category }).then(
         (subcategories) => {
           const subCategoriesIdsInDB = [];
           subcategories.forEach((subCategory) => {
             subCategoriesIdsInDB.push(subCategory._id.toString());
           });
-          // check if subcategories ids in db include subcategories in req.body (true)
           const checker = (target, arr) => target.every((v) => arr.includes(v));
           if (!checker(val, subCategoriesIdsInDB)) {
             return Promise.reject(
@@ -99,8 +113,8 @@ exports.createProductValidator = [
             );
           }
         }
-      )
-    ),
+      );
+    }),
 
   check('brand').optional().isMongoId().withMessage('Invalid ID formate'),
   check('ratingsAverage')

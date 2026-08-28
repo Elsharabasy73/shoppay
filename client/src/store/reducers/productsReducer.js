@@ -27,6 +27,7 @@ const productsReducer = (state = inital, action) => {
             }
         case GET_PRODUCT_DETALIS:
             return {
+                ...state,
                 oneProduct: action.payload,
                 loading: false,
             }
@@ -50,16 +51,19 @@ const productsReducer = (state = inital, action) => {
             }
         case GET_ERROR:
             return {
+                ...state,
                 loading: true,
                 products: action.payload,
             }
         case GET_ALL_PRODUCTS_CATEGORY:
             return {
+                ...state,
                 loading: true,
                 allProductCat: action.payload,
             }
         case GET_ALL_PRODUCTS_BRAND:
             return {
+                ...state,
                 loading: true,
                 allProductBrand: action.payload,
             }

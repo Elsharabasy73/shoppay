@@ -34,7 +34,7 @@ const ProductText = () => {
       <Row>
         <Col md="8" className="mt-1 d-flex">
           {
-            item.availableColors ? (item.availableColors.map((color, index) => {
+            (item.colors || item.availableColors) ? ((item.colors || item.availableColors).map((color, index) => {
               return (<div
                 key={index}
                 onClick={() => colorClick(index, color)}
