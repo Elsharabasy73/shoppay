@@ -9,7 +9,7 @@ const EditRateHook = (review) => {
 
     const [loading, setLoading] = useState(true)
 
-    const [newRateText, setNewRateText] = useState(review.review);
+    const [newRateText, setNewRateText] = useState(review.comment || review.review);
     const [newRateValue, setNewRateValue] = useState(review.rating);
 
     const [showEdit, setShowEdit] = useState(false);
@@ -25,9 +25,14 @@ const EditRateHook = (review) => {
 
     const handelEdit = async () => {
         setLoading(true)
+        // backend updateReviewValidator requires product/user as MongoId, send them to pass validation
+        const productId = review.product?._id || review.product || review.productId
+        const userId = review.user?._id || review.user
         await dispatch(updateReviewOnProduct(review._id, {
-            review: newRateText,
-            rating: newRateValue
+            comment: newRateText,
+            rating: newRateValue,
+            product: productId,
+            user: userId,
         }))
         setLoading(false)
         handleCloseEdit();

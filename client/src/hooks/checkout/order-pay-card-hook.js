@@ -35,14 +35,27 @@ const OrderPayCardHook = (addressDetalis) => {
     const resOrderCard = useSelector(state => state.checkoutReducer.createOrderCard)
     useEffect(() => {
         if (loading === false) {
-            if (resOrderCard && resOrderCard.status === "success") {
-                //notify("تم انشاء طلبك بنجاح", "success")
-                console.log(resOrderCard.session.url)
-                if (resOrderCard.session.url) {
-                    window.open(resOrderCard.session.url)
-                }
+            // server returns 200 { message: "Checkout session created successfully", data: session } via useGetDataToken -> payload = { message, data: session }
+            // handle all shapes: payload.data.url or payload.session.url
+            const session = resOrderCard?.data || resOrderCard?.session || resOrderCard?.data?.session
+            const url = session?.url || resOrderCard?.data?.url || resOrderCard?.session?.url
+            const isSuccess = !!(url || resOrderCard?.status === 200 || resOrderCard?.status === "success" || resOrderCard?.message?.includes("Checkout"))
+            if (isSuccess && url) {
+                console.log(url)
+                window.open(url, "_blank")
+            } else if (isSuccess && !url) {
+                // session created but url missing (edge)
+                notify("تم انشاء جلسة الدفع بنجاح", "success")
+                console.log(resOrderCard)
             } else {
-                notify("فشل فى اكمال الطلب من فضلك حاول مره اخرى", "warn")
+                // keep error details if available
+                const msg = resOrderCard?.data?.message || resOrderCard?.message
+                if (resOrderCard?.status === 404 || msg?.includes("Cart not found")) {
+                    notify("العربة غير موجودة", "error")
+                } else {
+                    notify("فشل فى اكمال الطلب من فضلك حاول مره اخرى", "warn")
+                }
+                console.log(resOrderCard)
             }
         }
     }, [loading])

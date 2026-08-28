@@ -8,7 +8,6 @@ const User = require("../models/userModel");
 // @access  Private/user
 exports.getLoggedUserWishList = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.user.id).populate("wishList");
-  console.log(user);
   res.status(200).json({
     results: user.wishList.length,
     data: user.wishList,

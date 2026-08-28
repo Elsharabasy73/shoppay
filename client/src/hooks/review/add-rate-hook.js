@@ -39,7 +39,7 @@ const AddRateHook = (id) => {
         }
         setLoading(true)
         await dispatch(createReview(id, {
-            review: rateText,
+            comment: rateText,
             rating: rateValue
         }))
         setLoading(false)

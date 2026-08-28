@@ -86,7 +86,7 @@ const RateItem = ({ review }) => {
             <Row className="border-bottom mx-2">
                 <Col className="d-felx me-4 pb-2">
                     <div className="rate-description  d-inline ms-2">
-                        {review.review}
+                        {review.comment || review.review}
                     </div>
                     {
                         isUser === true ? (<div className='d-inline d-flex justify-content-end'>

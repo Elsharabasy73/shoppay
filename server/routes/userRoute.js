@@ -26,7 +26,7 @@ const router = express.Router();
 router.get("/getMe", protect, getLoggedInUser, getUser);
 
 // Only admin can access this route
-router.use(protect, allowTo(["admin"]));
+router.use(protect, allowTo(["admin", "user"]));
 
 router
   .route("/")

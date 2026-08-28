@@ -75,11 +75,19 @@ exports.filterOrdersForLoggedUser = asyncHandler(async (req, res, next) => {
   let filter = {};
   if (req.user.role === "user") filter = { user: req.user._id };
   req.filterObj = filter;
-
+  console.log("filterObj",req.filterObj);
   next();
 });
 
+// @desc    Get  orders
+// @route   GET /api/v1/orders  
+// @access  Private/user-manager-admin
 exports.getOrders = factory.getAll(Order);
+
+// @desc    Get  spacific order
+// @route   GET /api/v1/orders/:id  
+// @access  Private/user-manager-admin
+exports.getOrder = factory.getOne(Order);
 
 // @desc    update order to paid
 // @route   PUT /api/v1/orders/:id
@@ -132,7 +140,8 @@ exports.checkoutSession = asyncHandler(async (req, res, next) => {
     return next(new ApiError("Cart not found", 404));
   }
 
-  const totalPrice = cart.totalPrice || cart.totalPriceAfterDiscount;
+  const totalPrice = cart.totalPriceAfterDiscount || cart.totalPrice;
+  console.log("cart.",cart);
   const session = await stripe.checkout.sessions.create({
     line_items: [
       {
