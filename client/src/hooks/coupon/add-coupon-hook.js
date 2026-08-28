@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { addCoupon, getAllCoupon } from '../../store/actions/couponAction';
 import notify from '../../utils/notify';
+import { validateCoupon, getErrorMessage } from '../../utils/validation';
 
 const AddCouponHook = () => {
     const dispatch = useDispatch()
@@ -27,8 +28,13 @@ const AddCouponHook = () => {
     }
 
     const onSubmit = async () => {
-        if (coupnName === "" || couponDate === "" || couponValue <= 0) {
+        if (coupnName === "" || couponDate === "" || couponValue === "" || couponValue <= 0) {
             notify("من فضلك اكمل البيانات", "warn")
+            return
+        }
+        const errMsg = validateCoupon({ name: coupnName, expire: couponDate, discount: couponValue });
+        if (errMsg) {
+            notify(errMsg, "warn")
             return
         }
 
@@ -46,21 +52,28 @@ const AddCouponHook = () => {
     useEffect(() => {
         if (loading === false && res) {
             const status = res.status
-            const msg = res.data?.message || res.message || ""
+            const msg = getErrorMessage(res) || ""
             const isSuccess = status === 201 || status === 200 || msg.toLowerCase().includes("success") || msg.includes("created")
             const isDuplicate = status === 400 || msg.toLowerCase().includes("duplicate") || msg.includes("موجود") || res.data?.errors?.[0]?.msg?.toLowerCase().includes("duplicate")
             const isAuth = status === 403 || status === 401
             if (isSuccess) {
                 notify("تمت اضافة الكوبون بنجاح", "success")
+                // only clear on success
+                setCoupnName('')
+                setCouponDate('')
+                setCouponValue('')
                 setTimeout(() => window.location.reload(), 800)
             } else if (isDuplicate) {
                 notify("هذا الكوبون موجود من قبل ", "error")
+                // keep inputs
             } else if (isAuth) {
                 notify("انت غير مسموح لك بالاضافة", "error")
+            } else if (res.data?.errors && Array.isArray(res.data.errors)) {
+                res.data.errors.forEach(e => notify(e.msg, "error"))
             } else if (msg) {
                 notify(msg, "error")
-            } else if (res.data?.errors) {
-                notify(res.data.errors[0].msg, "error")
+            } else {
+                notify("هناك مشكله فى عملية الاضافة", "error")
             }
         }
     }, [loading])

@@ -8,8 +8,9 @@ import favon from "../../assets/images/fav-on.png";
 const ProductCardHook = (item, favProd) => {
     const dispatch = useDispatch();
     const [favImg, setFavImg] = useState(favoff)
+    const getFavId = (f) => (typeof f === 'string' ? f : f?._id || f?.id || f)
     const safeFavProd = Array.isArray(favProd) ? favProd : [];
-    let Fav = safeFavProd.some(fitem => fitem === item._id);
+    let Fav = safeFavProd.some(fitem => getFavId(fitem) === item._id);
     const [loadingAdd, setLoadingAdd] = useState(true)
     const [loadingRemove, setLoadingRemove] = useState(true)
     const [isFav, setIsFav] = useState(Fav)
@@ -17,10 +18,23 @@ const ProductCardHook = (item, favProd) => {
 
     useEffect(() => {
         const list = Array.isArray(favProd) ? favProd : [];
-        setIsFav(list.some(fitem => fitem === item._id))
+        setIsFav(list.some(fitem => getFavId(fitem) === item._id))
     }, [favProd])
 
+    const canUseUserResources = () => {
+        try {
+            const token = localStorage.getItem("token")
+            if (!token) return false
+            const u = JSON.parse(localStorage.getItem("user") || "null")
+            return u && u.role === "user"
+        } catch { return false }
+    }
+
     const handelFav = () => {
+        if (!canUseUserResources()) {
+            notify("هذه الخاصية متاحة للمستخدمين فقط", "warn")
+            return
+        }
         if (isFav) {
             removeToWishListData();
         } else {

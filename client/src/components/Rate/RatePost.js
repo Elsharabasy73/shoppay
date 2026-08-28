@@ -15,29 +15,48 @@ const RatePost = () => {
   if (user)
     name = user.name
 
+  const canRate = (() => {
+    try {
+      if (!user) return false
+      return user.role === "user"
+    } catch { return false }
+  })()
+
   const setting = {
-    size: 20,
+    size: 30,
     count: 5,
     color: "#979797",
     activeColor: "#ffc107",
-    value: 7.5,
+    value: rateValue,
     a11y: true,
-    isHalf: true,
-    emptyIcon: <i className="far fa-star" />,
-    halfIcon: <i className="fa fa-star-half-alt" />,
-    filledIcon: <i className="fa fa-star" />,
+    isHalf: false,
+    edit: canRate,
+    char: "★",
+    emptyIcon: <span>☆</span>,
+    halfIcon: <span>★</span>,
+    filledIcon: <span>★</span>,
     onChange: newValue => {
-      OnChangeRateValue(newValue);
+      if (canRate) OnChangeRateValue(newValue);
     }
   };
   return (
     <div>
       <Row className="mt-3 ">
-        <Col sm="12" className="me-5  d-flex">
-          <div className="rate-name  d-inline ms-3 mt-1 ">{name}</div>
-          <ReactStars {...setting} />
+        <Col sm="12" className="me-5 d-flex align-items-center flex-wrap">
+          <div className="rate-name d-inline ms-3 mt-1">{name}</div>
+          <div className="d-flex align-items-center">
+            <ReactStars {...setting} />
+            <span className="ms-2" style={{ fontSize: "12px", color: "#979797" }}>
+              {rateValue ? `${rateValue}/5` : "اختر التقييم"}
+            </span>
+          </div>
         </Col>
       </Row>
+      {!canRate && user && user.role !== "user" ? (
+        <Row><Col className="me-5 mt-2" style={{ color: "#979797", fontSize: "12px" }}>التقييم متاح للمستخدمين فقط</Col></Row>
+      ) : !user ? (
+        <Row><Col className="me-5 mt-2" style={{ color: "#979797", fontSize: "12px" }}>سجل دخول لتتمكن من التقييم</Col></Row>
+      ) : null}
       <Row className="border-bottom mx-2">
         <Col className="d-felx me-4 pb-2">
           <textarea

@@ -11,7 +11,7 @@ import AdminAddProductsHook from '../../hooks/products/add-products-hook';
 
 const AdminAddProducts = () => {
 
-    const [onChangeDesName, onChangeQty, onChangeColor, onChangePriceAfter, onChangePriceBefor, onChangeProdName, showColor, category, brand, priceAftr, images, setImages, onSelect, onRemove, options, handelChangeComplete, removeColor, onSeletCategory, handelSubmit, onSeletBrand, colors, priceBefore, qty, prodDescription, prodName] =
+    const [onChangeDesName, onChangeQty, onChangeColor, onChangePriceAfter, onChangePriceBefor, onChangeProdName, showColor, category, brand, priceAftr, images, setImages, onSelect, onRemove, options, handelChangeComplete, removeColor, onSeletCategory, handelSubmit, onSeletBrand, colors, priceBefore, qty, prodDescription, prodName, CatID, BrandID, seletedSubID] =
         AdminAddProductsHook();
         
     return (
@@ -67,6 +67,7 @@ const AdminAddProducts = () => {
                     />
                     <select
                         name="cat"
+                        value={CatID || "0"}
                         onChange={onSeletCategory}
                         className="select input-form-area mt-3 px-2 ">
                         <option value="0">التصنيف الرئيسي</option>
@@ -84,6 +85,7 @@ const AdminAddProducts = () => {
                         className="mt-2 text-end"
                         placeholder="التصنيف الفرعي"
                         options={options}
+                        selectedValues={seletedSubID}
                         onSelect={onSelect}
                         onRemove={onRemove}
                         displayValue="name"
@@ -91,6 +93,7 @@ const AdminAddProducts = () => {
                     />
                     <select
                         name="brand"
+                        value={BrandID || "0"}
                         onChange={onSeletBrand}
                         className="select input-form-area mt-3 px-2 ">
                         <option value="0">اختر ماركة</option>
@@ -129,7 +132,7 @@ const AdminAddProducts = () => {
             </Row>
             <Row>
                 <Col sm="8" className="d-flex justify-content-end ">
-                    <button onClick={handelSubmit} className="btn-save d-inline mt-2 ">حفظ التعديلات</button>
+                    <button onClick={handelSubmit} className="btn-save d-inline mt-2 ">حفظ</button>
                 </Col>
             </Row>
             <ToastContainer />

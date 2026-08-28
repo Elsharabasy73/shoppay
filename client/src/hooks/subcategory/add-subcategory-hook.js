@@ -3,6 +3,7 @@ import { createSubCategory, getAllSubCategory } from '../../store/actions/subcat
 import { useSelector, useDispatch } from 'react-redux'
 import notify from '../../utils/notify'
 import { getAllCategory } from '../../store/actions/categoryAction'
+import { validateSubCategory, getErrorMessage } from '../../utils/validation'
 
 const useAddSubcategory = () => {
 
@@ -50,6 +51,11 @@ const useAddSubcategory = () => {
             notify("من فضلك ادخل اسم التصنيف", "warn")
             return;
         }
+        const errMsg = validateSubCategory({ name, category: id });
+        if (errMsg) {
+            notify(errMsg, "warn");
+            return;
+        }
 
         setLoading(true)
         await dispatch(createSubCategory({
@@ -62,18 +68,24 @@ const useAddSubcategory = () => {
     useEffect(() => {
         if (loading === false) {
             const isSuccess = subcategory?.status === 201 || subcategory?.status === 200
-            const isDuplicate = typeof subcategory === 'string' && subcategory.includes("400") || subcategory?.status === 400 || subcategory?.data?.message?.includes("duplicate") || subcategory?.data?.errors?.[0]?.msg?.includes("duplicate")
-            const msg = subcategory?.data?.message || subcategory?.message || ""
             if (isSuccess) {
                 notify("تمت الاضافة بنجاح", "success")
+                setName("")
+                setID("0")
                 setTimeout(() => window.location.reload(false), 800)
-            } else if (isDuplicate || msg.toLowerCase().includes("duplicate") || msg.includes("مكرر")) {
-                notify("هذا الاسم مكرر من فضلك اختر اسم اخر", "warn")
-            } else if (subcategory && (subcategory.status >= 400 || msg)) {
-                notify(msg || "هناك مشكله فى عملية الاضافة", "warn")
+            } else if (subcategory) {
+                const msg = getErrorMessage(subcategory);
+                if (subcategory.data?.errors && Array.isArray(subcategory.data.errors)) {
+                    subcategory.data.errors.forEach(e => notify(e.msg, "error"));
+                } else if (msg && msg.toLowerCase().includes("duplicate") || msg?.includes("مكرر")) {
+                    // keep inputs
+                    if (msg.toLowerCase().includes("duplicate")) notify("هذا الاسم مكرر من فضلك اختر اسم اخر", "warn")
+                    else notify(msg, "warn")
+                } else if (subcategory.status >= 400 || msg) {
+                    notify(msg || "هناك مشكله فى عملية الاضافة", "warn")
+                }
+                // do NOT clear inputs on error
             }
-            setName("")
-            setID("0")
             setLoading(true)
         }
     }, [loading])

@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import { createBrand, getAllBrand } from '../../store/actions/brandAction'
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import notify from '../../utils/notify'
 import avatar from '../../assets/images/avatar.png'
+import { validateBrandName, getErrorMessage } from '../../utils/validation'
 
 const AddBrandHook = () => {
  
@@ -34,8 +33,12 @@ const AddBrandHook = () => {
     const handelSubmit = async (event) => {
         event.preventDefault();
         if (name === "" || selectedFile === null) {
-            console.log('من فضلك اكمل البيانات')
             notify('من فضلك اكمل البيانات', "warn");
+            return;
+        }
+        const errMsg = validateBrandName(name);
+        if (errMsg) {
+            notify(errMsg, "warn");
             return;
         }
         const formData = new FormData();
@@ -49,20 +52,26 @@ const AddBrandHook = () => {
 
     useEffect(() => {
         if (loading === false) {
-            setImg(avatar)
-            setName("")
-            setSelectedFile(null)
-            console.log('تم الانتهاء')
+            if (res && res.status === 201) {
+                notify('تمت عملية الاضافة بنجاح', "success");
+                // only clear on success
+                setImg(avatar)
+                setName("")
+                setSelectedFile(null)
+                setTimeout(() => window.location.reload(false), 800)
+            } else if (res) {
+                // keep inputs on error, show validation messages
+                const msg = getErrorMessage(res);
+                if (res.data?.errors && Array.isArray(res.data.errors)) {
+                    res.data.errors.forEach(e => notify(e.msg, "error"));
+                } else if (msg) {
+                    notify(msg, "error");
+                } else {
+                    notify('هناك مشكله فى عملية الاضافة', "error");
+                }
+            }
             setLoading(true)
             setTimeout(() => setIsPress(false), 1000)
-
-            if (res.status === 201) {
-                notify('تمت عملية الاضافة بنجاح', "success");
-                setTimeout(() => window.location.reload(false), 800)
-            }
-            else {
-                notify('هناك مشكله فى عملية الاضافة', "error");
-            }
         }
     }, [loading])
 

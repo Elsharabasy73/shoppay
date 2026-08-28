@@ -49,7 +49,7 @@ const DeleteCartHook = (item) => {
 
     const handeleUpdateCart = async () => {
         await dispatch(updateCartItem(item._id, {
-            count: itemCount
+            quantity: itemCount
         }))
 
         window.location.reload(false);

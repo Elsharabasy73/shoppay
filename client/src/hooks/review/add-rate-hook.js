@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { createNewUser, forgetPassword, loginUser } from '../../store/actions/authAction';
 import { useNavigate } from 'react-router-dom'
 import notify from '../../utils/notify';
 import { createReview } from './../../store/actions/reviewAction';
+import { validateReview, getErrorMessage } from '../../utils/validation';
 
 const AddRateHook = (id) => {
 
@@ -32,6 +32,11 @@ const AddRateHook = (id) => {
             notify("من فضلك اكتب تعليق", "error")
             return
         }
+        const errMsg = validateReview({ comment: rateText, rating: rateValue });
+        if (errMsg) {
+            notify(errMsg, "warn")
+            return
+        }
         setLoading(true)
         await dispatch(createReview(id, {
             review: rateText,
@@ -48,14 +53,20 @@ const AddRateHook = (id) => {
                 console.log(res)
                 if (res.status && res.status === 403) {
                     notify("غير مسموح للادمن بالتقييم", "error")
-                } else if (res.data.errors && res.data.errors[0].msg === "You already added review on this product") {
+                } else if (res.data?.errors && res.data.errors[0]?.msg === "You already added review on this product") {
                     notify("لقد قمت باضافة تقييم لهذا المنتج مسبقا", "error")
                 } else if (res.status && res.status === 201) {
                     notify("تمت اضافة التقييم بنجاح", "success")
                     setTimeout(() => {
                         window.location.reload(false)
                     }, 1000);
+                } else if (res.data?.errors && Array.isArray(res.data.errors)) {
+                    res.data.errors.forEach(e => notify(e.msg, "error"))
+                } else {
+                    const msg = getErrorMessage(res)
+                    if (msg) notify(msg, "error")
                 }
+                // keep inputs on error
             }
         }
     }, [loading])

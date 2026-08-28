@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom';
 const AdminEditCoupon = () => {
 
     const { id } = useParams();
+    const dateRef = useRef();
     const [coupnName, couponDate, couponValue, onChangeName, onChangeDate, onChangeValue, onSubmit] = EditCouponHook(id)
 
     return (
@@ -23,11 +24,14 @@ const AdminEditCoupon = () => {
 
                     />
                     <input
+                        ref={dateRef}
                         type="text"
                         className="input-form d-block mt-3 px-3"
                         placeholder="تاريخ الانتهاء"
                         onChange={onChangeDate}
                         value={couponDate}
+                        onFocus={() => { if (dateRef.current) dateRef.current.type = "date" }}
+                        onBlur={() => { if (dateRef.current && !couponDate) dateRef.current.type = "text" }}
                     />
                     <input
                         value={couponValue}
@@ -41,7 +45,7 @@ const AdminEditCoupon = () => {
             </Row>
             <Row>
                 <Col sm="8" className="d-flex justify-content-end ">
-                    <button onClick={onSubmit} className="btn-save d-inline mt-2 ">حفظ التعديل</button>
+                    <button onClick={onSubmit} className="btn-save d-inline mt-2 ">حفظ التعديلات</button>
                 </Col>
             </Row>
 

@@ -2,6 +2,7 @@ const express = require("express");
 
 const {
   getLoggedUserAddresses,
+  getLoggedUserAddress,
   addAddress,
   updateAddress,
   deleteAddress,
@@ -24,6 +25,7 @@ router
 
 router
   .route("/:addressId")
+  .get(getLoggedUserAddress)
   .put(updateAddressValidator, updateAddress)
   .delete(deleteAddressValidator, deleteAddress);
 

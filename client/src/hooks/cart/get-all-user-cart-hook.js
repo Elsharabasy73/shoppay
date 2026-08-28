@@ -16,7 +16,22 @@ const GetAllUserCartHook = () => {
     const [cartID, setCartID] = useState('0')
     const [totalCartPriceAfterDiscount, setTotalCartPriceAfterDiscount] = useState(0)
 
+    const canUseUserResources = () => {
+        try {
+            const token = localStorage.getItem("token")
+            if (!token) return false
+            const u = JSON.parse(localStorage.getItem("user") || "null")
+            return u && u.role === "user"
+        } catch { return false }
+    }
+
     useEffect(() => {
+        if (!canUseUserResources()) {
+            setLoading(false)
+            setItemsNum(0)
+            setCartItems([])
+            return
+        }
         const get = async () => {
             setLoading(true)
             await dispatch(getAllUserCartItems())

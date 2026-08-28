@@ -1,7 +1,9 @@
 import React from 'react'
 import { Button, Col, Modal, Row } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 import BrandCardHook from '../../hooks/brand/brand-card-hook'
 import deleteicon from '../../assets/images/delete.png'
+import editicon from '../../assets/images/edit.png'
 
 const AdminBrandCard = ({ brand }) => {
     const [show, handleClose, handleShow, handelDelete] = BrandCardHook(brand)
@@ -36,6 +38,10 @@ const AdminBrandCard = ({ brand }) => {
                 </Col>
                 <Col xs="6" className="d-flex justify-content-end">
                     <div className="d-flex p-2">
+                        <Link to={`/admin/editbrand/${brand._id}`} className="d-flex me-3 text-decoration-none ">
+                            <img alt="" className="ms-1 mt-2" src={editicon} height="17px" width="15px" />
+                            <p className="item-delete-edit"> تعديل</p>
+                        </Link>
                         <div onClick={handleShow} className="d-flex ">
                             <img
                                 alt=""

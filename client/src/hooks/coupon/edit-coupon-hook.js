@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { addCoupon, editCoupon, getAllCoupon, getOneCoupon } from '../../store/actions/couponAction';
+import { editCoupon, getOneCoupon } from '../../store/actions/couponAction';
 import notify from '../../utils/notify';
+import { validateCoupon, getErrorMessage } from '../../utils/validation';
 
 const EditCouponHook = (id) => {
 
@@ -26,8 +27,11 @@ const EditCouponHook = (id) => {
     }, [])
 
     const formatDate = (dateString) => {
-        const options = { year: "numeric", month: "numeric", day: "numeric" }
-        return new Date(dateString).toLocaleDateString(undefined, options)
+        const d = new Date(dateString)
+        const year = d.getFullYear()
+        const month = String(d.getMonth() + 1).padStart(2, '0')
+        const day = String(d.getDate()).padStart(2, '0')
+        return `${year}-${month}-${day}`
     }
 
 
@@ -59,8 +63,13 @@ const EditCouponHook = (id) => {
     }
 
     const onSubmit = async () => {
-        if (coupnName === "" || couponDate === "" || couponValue <= 0) {
+        if (coupnName === "" || couponDate === "" || couponValue === "" || couponValue <= 0) {
             notify("من فضلك اكمل البيانات", "warn")
+            return
+        }
+        const errMsg = validateCoupon({ name: coupnName, expire: couponDate, discount: couponValue }, true);
+        if (errMsg) {
+            notify(errMsg, "warn")
             return
         }
         setLoading(true)
@@ -82,8 +91,14 @@ const EditCouponHook = (id) => {
                 setTimeout(() => {
                     navigate('/admin/addcoupon')
                 }, 1000);
-            } else {
-                notify("فضل عملية التعديل ", "error")
+            } else if (res) {
+                if (res.data?.errors && Array.isArray(res.data.errors)) {
+                    res.data.errors.forEach(e => notify(e.msg, "error"))
+                } else {
+                    const msg = getErrorMessage(res)
+                    notify(msg || "فشل فى عملية التعديل", "error")
+                }
+                // keep inputs on error
             }
 
         }

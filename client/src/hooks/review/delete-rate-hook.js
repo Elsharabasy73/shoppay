@@ -36,14 +36,15 @@ const DeleteRateHook = (review) => {
 
     useEffect(() => {
         if (loading === false) {
-            if (res === "") {
+            const isSuccess = res === "" || res?.status === 204 || res?.status === 200 || res?.status === 201
+            if (isSuccess) {
                 notify("تم حذف التقييم بنجاح", "success")
                 setTimeout(() => {
                     window.location.reload(false)
                 }, 1000);
             }
-            else
-                notify("هناك مشكله فى عملية المسح", "error")
+            else if (res?.data?.message) notify(res.data.message, "error")
+            else if (res !== undefined) notify("هناك مشكله فى عملية المسح", "error")
         }
     }, [loading])
 

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getOneUserAddress, editUserAddress } from './../../store/actions/userAddressesAction';
 import { useNavigate } from 'react-router-dom';
 import notify from '../../utils/notify';
+import { validateAddress, getErrorMessage } from '../../utils/validation';
 
 const EditAddressHook = (id) => {
     const navigate = useNavigate()
@@ -54,6 +55,11 @@ const EditAddressHook = (id) => {
     }, [loading])
 
     const handelEdit = async () => {
+        const errMsg = validateAddress({ alias, details: detalis, phone }, true);
+        if (errMsg) {
+            notify(errMsg, "warn")
+            return
+        }
         setLoadingEdit(true)
         await dispatch(editUserAddress(id, {
             alias,
@@ -72,8 +78,13 @@ const EditAddressHook = (id) => {
                 setTimeout(() => {
                     navigate('/user/addresses')
                 }, 1000);
-            } else {
-                notify("فشل فى عملية التعديل", "error")
+            } else if (resEdit) {
+                if (resEdit.data?.errors && Array.isArray(resEdit.data.errors)) {
+                    resEdit.data.errors.forEach(e => notify(e.msg, "error"))
+                } else {
+                    const msg = getErrorMessage(resEdit)
+                    notify(msg || "فشل فى عملية التعديل", "error")
+                }
             }
         }
     }, [loadingEdit])

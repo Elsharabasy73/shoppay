@@ -30,6 +30,21 @@ exports.addAddress = asyncHandler(async (req, res, next) => {
   });
 });
 
+// @desc    Get logged user single address
+// @route   GET /api/v1/addresses/:addressId
+// @access  Private/user
+exports.getLoggedUserAddress = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.user.id);
+  const address = user.addresses.id(req.params.addressId);
+  if (!address) {
+    return next(new ApiError("Address not found", 404));
+  }
+  res.status(200).json({
+    status: "success",
+    data: address,
+  });
+});
+
 // @desc    Update logged user address
 // @route   PUT /api/v1/addresses/:addressId
 // @access  Private/user

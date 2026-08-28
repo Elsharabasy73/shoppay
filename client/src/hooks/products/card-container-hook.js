@@ -10,7 +10,21 @@ const CardContainerHook = () => {
     const [favProd, setFavProd] = useState([])
     const res = useSelector(state => state.addToWishListReducer.allWishList)
 
+    const canUseUserResources = () => {
+        try {
+            const token = localStorage.getItem("token")
+            if (!token) return false
+            const u = JSON.parse(localStorage.getItem("user") || "null")
+            return u && u.role === "user"
+        } catch { return false }
+    }
+
     useEffect(() => {
+        if (!canUseUserResources()) {
+            setLoading(false)
+            setFavProd([])
+            return
+        }
         const get = async () => {
             setLoading(true)
             await dispatch(getProductWishList())

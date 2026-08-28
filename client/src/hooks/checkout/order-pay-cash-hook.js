@@ -52,10 +52,10 @@ const OrderPayCashHook = () => {
         setLoadingCreate(true)
         await dispatch(createOrderCash(cartID, {
             shippingAddress: {
-                details: addressDetalis.alias,
+                details: addressDetalis.details || addressDetalis.address || addressDetalis.alias,
                 phone: addressDetalis.phone,
-                city: "",
-                postalCode: ""
+                city: addressDetalis.city || "",
+                postalCode: addressDetalis.postalCode || addressDetalis.zipCode || ""
             }
         }))
         setLoadingCreate(false)

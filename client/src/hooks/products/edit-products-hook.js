@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { getAllCategory } from '../../store/actions/categoryAction'
 import { getAllBrand } from './../../store/actions/brandAction';
 import { updateProducts } from './../../store/actions/productsAction';
+import { validateProduct } from '../../utils/validation';
 
 const AdminEditProductsHook = (id) => {
 
@@ -188,6 +189,21 @@ const AdminEditProductsHook = (id) => {
         const qtyNum = parseInt(qty, 10);
         if (!CatID || CatID === "0" || CatID === 0 || !prodName.trim() || !prodDescription.trim() || imagesCount <= 0 || isNaN(priceNum) || priceNum <= 0) {
             notify("من فضلك اكمل البيانات", "warn")
+            return;
+        }
+        const errMsg = validateProduct({
+            title: prodName.trim(),
+            description: prodDescription.trim(),
+            quantity: qtyNum,
+            price: priceNum,
+            priceAfterDiscount: (priceAftr && priceAftr !== '') ? priceAftr : undefined,
+            category: CatID,
+            brand: BrandID,
+            subcategories: seletedSubID.map(s => s._id || s),
+            imageCover: images[Object.keys(images)[0]],
+        }, true);
+        if (errMsg) {
+            notify(errMsg, "warn")
             return;
         }
 

@@ -29,6 +29,9 @@ import VerifyPasswordPage from "./pages/Auth/VerifyPasswordPage";
 import ResetPasswordPage from "./pages/Auth/ResetPasswordPage";
 import AdminAddCouponPage from "./pages/Admin/AdminAddCouponPage";
 import AdminEditCouponPage from './pages/Admin/AdminEditCouponPage';
+import AdminEditBrandPage from './pages/Admin/AdminEditBrandPage';
+import AdminEditCategoryPage from './pages/Admin/AdminEditCategoryPage';
+import AdminEditSubCategoryPage from './pages/Admin/AdminEditSubCategoryPage';
 import ProtectedRouteHook from './hooks/auth/protected-route-hook';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import { useEffect, useState } from "react";
@@ -65,8 +68,11 @@ function App() {
             <Route path="/admin/allproducts" element={<AdminAllProductsPage />} />
             <Route path="/admin/orders/:id" element={<AdminOrderDetailsPage />} />
             <Route path="/admin/addbrand" element={<AdminAddBrandPage />} />
+            <Route path="/admin/editbrand/:id" element={<AdminEditBrandPage />} />
             <Route path="/admin/addcategory" element={<AdminAddCategoryPage />} />
+            <Route path="/admin/editcategory/:id" element={<AdminEditCategoryPage />} />
             <Route path="/admin/addsubcategory" element={<AdminAddSubCategoryPage />} />
+            <Route path="/admin/editsubcategory/:id" element={<AdminEditSubCategoryPage />} />
             <Route path="/admin/addproduct" element={<AdminAddProductsPage />} />
             <Route path="/admin/addcoupon" element={<AdminAddCouponPage />} />
             <Route path="/admin/editcoupon/:id" element={<AdminEditCouponPage />} />
@@ -76,6 +82,7 @@ function App() {
           <Route element={<ProtectedRoute auth={isUser} />}>
             <Route path="/user/allorders" element={<UserAllOrdersPage />} />
             <Route path="/order/paymethoud" element={<ChoosePaymentMethodPage />} />
+            <Route path="/order/paymethod" element={<ChoosePaymentMethodPage />} />
             <Route path="/user/favoriteproducts" element={<UserFavoriteProductsPage />} />
             <Route path="/user/addresses" element={<UserAllAddressesPage />} />
             <Route path="/user/add-address" element={<UserAddAddressPage />} />

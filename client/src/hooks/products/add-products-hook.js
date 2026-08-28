@@ -6,6 +6,7 @@ import notify from '../../utils/notify';
 import { useSelector, useDispatch } from 'react-redux'
 import { getAllCategory } from '../../store/actions/categoryAction'
 import { getAllBrand } from './../../store/actions/brandAction';
+import { validateProduct } from '../../utils/validation';
 
 const AdminAddProductsHook = () => {
 
@@ -83,20 +84,25 @@ const AdminAddProductsHook = () => {
 
     //when selet category store id
     const onSeletCategory = async (e) => {
-        if (e.target.value !== 0) {
-            await dispatch(getOneCategory(e.target.value))
+        const val = e.target.value
+        setCatID(val)
+        // clear previous subcategories when category changes
+        setSeletedSubID([])
+        if (val && val !== "0" && val !== 0) {
+            await dispatch(getOneCategory(val))
+        } else {
+            setOptions([])
         }
-        setCatID(e.target.value)
     }
     useEffect(() => {
-        if (CatID !== 0) {
-            if (subCat.data) {
-
-                setOptions(subCat.data)
-            }
-        } else
+        if (subCat && subCat.data && Array.isArray(subCat.data)) {
+            setOptions(subCat.data)
+        } else if (Array.isArray(subCat)) {
+            setOptions(subCat)
+        } else if (!CatID || CatID === "0" || CatID === 0) {
             setOptions([])
-    }, [CatID])
+        }
+    }, [subCat])
 
     //when selet brand store id
     const onSeletBrand = (e) => {
@@ -127,6 +133,21 @@ const AdminAddProductsHook = () => {
         const qtyNum = parseInt(qty, 10);
         if (!CatID || CatID === "0" || !prodName.trim() || !prodDescription.trim() || imagesCount <= 0 || isNaN(priceNum) || priceNum <= 0) {
             notify("من فضلك اكمل البيانات", "warn")
+            return;
+        }
+        const errMsg = validateProduct({
+            title: prodName.trim(),
+            description: prodDescription.trim(),
+            quantity: qtyNum,
+            price: priceNum,
+            priceAfterDiscount: (priceAftr && priceAftr !== 'السعر بعد الخصم') ? priceAftr : undefined,
+            category: CatID,
+            brand: BrandID,
+            subcategories: seletedSubID.map(s => s._id || s),
+            imageCover: images[0],
+        });
+        if (errMsg) {
+            notify(errMsg, "warn")
             return;
         }
 
@@ -202,7 +223,7 @@ const AdminAddProductsHook = () => {
     }, [loading])
 
 
-    return [onChangeDesName, onChangeQty, onChangeColor, onChangePriceAfter, onChangePriceBefor, onChangeProdName, showColor, category, brand, priceAftr, images, setImages, onSelect, onRemove, options, handelChangeComplete, removeColor, onSeletCategory, handelSubmit, onSeletBrand, colors, priceBefore, qty, prodDescription, prodName]
+    return [onChangeDesName, onChangeQty, onChangeColor, onChangePriceAfter, onChangePriceBefor, onChangeProdName, showColor, category, brand, priceAftr, images, setImages, onSelect, onRemove, options, handelChangeComplete, removeColor, onSeletCategory, handelSubmit, onSeletBrand, colors, priceBefore, qty, prodDescription, prodName, CatID, BrandID, seletedSubID]
 
 }
 

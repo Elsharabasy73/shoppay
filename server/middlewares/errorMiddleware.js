@@ -20,7 +20,7 @@ const handleJsonExpiredToken = () => new ApiError("Token expired", 401);
 const globalError = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || "error";
-  console.error(err);
+  console.log("globalError:", err);
 
   if (process.env.NODE_ENV === "development") {
     sendErrorForDev(err, res);

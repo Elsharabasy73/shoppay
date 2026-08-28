@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { addUserAddress } from '../../store/actions/userAddressesAction';
 import notify from '../../utils/notify';
 import { useNavigate } from 'react-router-dom';
+import { validateAddress, getErrorMessage } from '../../utils/validation';
 
 const AddAddressHook = () => {
     const navigate = useNavigate()
@@ -34,13 +35,16 @@ const AddAddressHook = () => {
             notify("من فضلك اكمل البيانات", "warn")
             return
         }
+        const errMsg = validateAddress({ alias, details: detalis, phone });
+        if (errMsg) {
+            notify(errMsg, "warn")
+            return
+        }
         setLoading(true)
         await dispatch(addUserAddress({
             alias: alias,
             details: detalis,
             phone: phone,
-            city: '',
-            postalCode: ""
         }))
         setLoading(false)
     }
@@ -49,15 +53,19 @@ const AddAddressHook = () => {
     useEffect(() => {
 
         if (loading === false) {
-            if (res && res.status === 200) {
+            if (res && (res.status === 200 || res.status === 201)) {
                 notify("تمت اضافة العنوان بنجاح", "success")
                 setTimeout(() => {
                     navigate('/user/addresses')
                 }, 1000);
-
-
-            } else {
-                notify("هناك مشكله فى عملية الاضافة ", "error")
+            } else if (res) {
+                if (res.data?.errors && Array.isArray(res.data.errors)) {
+                    res.data.errors.forEach(e => notify(e.msg, "error"))
+                } else {
+                    const msg = getErrorMessage(res)
+                    notify(msg || "هناك مشكله فى عملية الاضافة ", "error")
+                }
+                // keep inputs on error
             }
 
         }

@@ -16,16 +16,17 @@ const RateItem = ({ review }) => {
     const [showEdit, handleCloseEdit, handleShowEdit, handelEdit, onChangeRateText, newRateText, OnChangeRateValue, newRateValue] = EditRateHook(review)
 
     const setting = {
-        size: 20,
+        size: 30,
         count: 5,
         color: "#979797",
         activeColor: "#ffc107",
         value: newRateValue,
         a11y: true,
-        isHalf: true,
-        emptyIcon: <i className="far fa-star" />,
-        halfIcon: <i className="fa fa-star-half-alt" />,
-        filledIcon: <i className="fa fa-star" />,
+        isHalf: false,
+        char: "★",
+        emptyIcon: <span>☆</span>,
+        halfIcon: <span>★</span>,
+        filledIcon: <span>★</span>,
         onChange: newValue => {
             OnChangeRateValue(newValue);
         }

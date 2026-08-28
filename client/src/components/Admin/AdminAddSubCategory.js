@@ -32,7 +32,7 @@ const AdminAddSubCategory = () => {
             </Row>
             <Row>
                 <Col sm="8" className="d-flex justify-content-end ">
-                    <button onClick={handelSubmit} className="btn-save d-inline mt-2 ">حفظ التعديلات</button>
+                    <button onClick={handelSubmit} className="btn-save d-inline mt-2 ">حفظ</button>
                 </Col>
             </Row>
 

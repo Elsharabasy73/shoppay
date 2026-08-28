@@ -42,7 +42,7 @@ const AdminAddCoupon = () => {
             </Row>
             <Row>
                 <Col sm="8" className="d-flex justify-content-end ">
-                    <button onClick={onSubmit} className="btn-save d-inline mt-2 ">حفظ الكوبون</button>
+                    <button onClick={onSubmit} className="btn-save d-inline mt-2 ">حفظ</button>
                 </Col>
             </Row>
 

@@ -16,7 +16,6 @@ exports.protect = asyncHandler(async (req, res, next) => {
     req.headers.authorization.split(" ")[0] === "Bearer"
   )
     token = req.headers.authorization.split(" ")[1];
-
   if (!token) {
     return next(new ApiError("No token provided", 401));
   }
