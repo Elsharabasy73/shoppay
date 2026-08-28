@@ -1,33 +1,30 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
-import { createBrand } from '../../store/actions/brandAction'
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import notify from '../../utils/notify'
 import { applayCoupnCart } from '../../store/actions/cartAction';
-import cartReducer from './../../store/reducers/cartReducer';
-import GetAllUserCartHook from './get-all-user-cart-hook';
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 const ApplayCouponHook = (cartItems) => {
     const dispatch = useDispatch();
-
+    const navigate = useNavigate()
 
     const [couponName, setCouponName] = useState('')
     const [loading, setLoading] = useState(true)
 
-    const onChangeCoupon = (e) => {
-        setCouponName(e)
+    const onChangeCoupon = (val) => {
+        // supports both event and direct string from CartCheckout
+        if (typeof val === 'string') setCouponName(val)
+        else setCouponName(val.target ? val.target.value : val)
     }
 
     const handelSubmitCoupon = async () => {
-        if (couponName === "") {
+        if (!couponName || couponName.trim() === "") {
             notify("من فضلك ادخل الكوبون", "warn")
             return
         }
         setLoading(true)
         await dispatch(applayCoupnCart({
-            couponName: couponName
+            coupon: couponName.trim()
         }))
         setLoading(false)
     }
@@ -35,27 +32,21 @@ const ApplayCouponHook = (cartItems) => {
     const res = useSelector(state => state.cartReducer.applayCoupon)
 
     useEffect(() => {
-
-        if (loading === false) {
-            console.log(res)
-            if (res && res.status === 200) {
+        if (loading === false && res) {
+            // useInsUpdateData returns axios response; success has data.message
+            const isSuccess = res.status === 200 || res.data?.message?.toLowerCase().includes("coupon applied") || res.message?.includes("Coupon")
+            if (isSuccess || (res.data && res.data.data && res.data.data.totalAfterDiscount !== undefined)) {
                 notify("تم تطبيق الكوبون بنجاح", "success")
-                setTimeout(() => {
-                    window.location.reload(false)
-                }, 1000);
-
+                setTimeout(() => window.location.reload(), 900);
             } else {
-                notify("هذا الكوبون غير صحيح او منتهى الصلاحيه", "warn")
-                setTimeout(() => {
-                    window.location.reload(false)
-                }, 1000);
+                const msg = res.data?.message || res.data?.errors?.[0]?.msg || "هذا الكوبون غير صحيح او منتهى الصلاحيه"
+                notify(msg, "warn")
             }
         }
     }, [loading])
 
-    const navigate = useNavigate()
     const handelCheckout = () => {
-        if (cartItems.length >= 1) {
+        if (cartItems && cartItems.length >= 1) {
             navigate('/order/paymethoud')
         }
         else {
@@ -63,7 +54,7 @@ const ApplayCouponHook = (cartItems) => {
         }
     }
 
-    return [couponName, onChangeCoupon, handelSubmitCoupon,handelCheckout]
+    return [couponName, onChangeCoupon, handelSubmitCoupon, handelCheckout]
 
 }
 

@@ -27,22 +27,24 @@ const GetAllUserCartHook = () => {
     const res = useSelector(state => state.cartReducer.getAllUserCart)
     useEffect(() => {
         if (loading === false) {
-            if (res && res.status === "success") {
-                setItemsNum(res.numOfCartItems)
-                setCartItems(res.data.products)
-                setTotalCartPrice(res.data.totalCartPrice)
-                setCartID(res.data._id)
-                if (res.data.coupon) {
-                    setCouponName(res.data.coupon)
-                } else {
-                    setCouponName('')
-                }
-                if (res.data.totalAfterDiscount) {
-                    setTotalCartPriceAfterDiscount(res.data.totalAfterDiscount)
-                } else {
-                    setTotalCartPriceAfterDiscount('')
-                }
-
+            // server returns { results, data: cart } or e.response with error
+            const cart = res?.data // useGetDataToken returns res.data -> { results, data }
+            if (cart && (cart.cartItems || cart.products)) {
+                const items = cart.cartItems || cart.products || []
+                setItemsNum(items.length)
+                setCartItems(items)
+                setTotalCartPrice(cart.totalPrice || cart.totalCartPrice || 0)
+                setCartID(cart._id || '0')
+                setCouponName(cart.coupon || '')
+                setTotalCartPriceAfterDiscount(cart.totalAfterDiscount || cart.totalPriceAfterDiscount || '')
+            } else if (res && res.data && res.data.cartItems) {
+                // fallback direct shape
+                setItemsNum(res.data.cartItems.length)
+                setCartItems(res.data.cartItems)
+                setTotalCartPrice(res.data.totalPrice || 0)
+                setCartID(res.data._id || '0')
+                setCouponName(res.data.coupon || '')
+                setTotalCartPriceAfterDiscount(res.data.totalAfterDiscount || '')
             } else {
                 setCartID('0')
                 setCouponName('')

@@ -1,6 +1,7 @@
-import { GET_ALL_CATEGORY, GET_ERROR, GET_ONE_CATEGORY, CREATE_CATEGORY } from '../type'
+import { GET_ALL_CATEGORY, GET_ERROR, GET_ONE_CATEGORY, CREATE_CATEGORY, DELETE_CATEGORY } from '../type'
 import { useGetData } from '../../hooks/common/useGetData'
 import { useInsertDataWithImage } from '../../hooks/common/useInsertData'
+import useDeleteData from '../../hooks/common/useDeleteData'
 //get all category
 export const getAllCategory = (limit) => async (dispatch) => {
     try {
@@ -69,6 +70,22 @@ export const createCategory = (formData) => async (dispatch) => {
         dispatch({
             type: GET_ERROR,
             payload: "Error " + e,
+        })
+    }
+}
+
+//delete category
+export const deleteCategory = (id) => async (dispatch) => {
+    try {
+        const response = await useDeleteData(`/api/v1/categories/${id}`);
+        dispatch({
+            type: DELETE_CATEGORY,
+            payload: response,
+        })
+    } catch (e) {
+        dispatch({
+            type: DELETE_CATEGORY,
+            payload: e.response,
         })
     }
 }

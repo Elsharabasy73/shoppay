@@ -1,7 +1,9 @@
-import { GET_ERROR, GET_SUB_CATEGORY, CREATE_SUB_CATEGORY } from '../type'
+import { GET_ERROR, GET_SUB_CATEGORY, CREATE_SUB_CATEGORY, DELETE_SUB_CATEGORY, GET_ALL_SUB_CATEGORY } from '../type'
 
 const inital = {
     subcategory: [],
+    allSubcategory: [],
+    deleteSubcategory: [],
     loading: true,
 }
 const subcategoryReducer = (state = inital, action) => {
@@ -14,8 +16,20 @@ const subcategoryReducer = (state = inital, action) => {
             }
         case GET_SUB_CATEGORY:
             return {
+                ...state,
                 subcategory: action.payload,
                 loading: false,
+            }
+        case GET_ALL_SUB_CATEGORY:
+            return {
+                ...state,
+                allSubcategory: action.payload,
+                loading: false,
+            }
+        case DELETE_SUB_CATEGORY:
+            return {
+                ...state,
+                deleteSubcategory: action.payload,
             }
         case GET_ERROR:
             return {

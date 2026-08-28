@@ -1,27 +1,25 @@
-const sharp = require("sharp");
 const { v4: uuidv4 } = require("uuid");
 const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcryptjs");
 
 const { uploadSingleImage } = require("../middlewares/uploadImageMiddleware");
+const { processAndUploadImage } = require("../utils/imageStorage");
 const factory = require("./handlersFactory");
 const User = require("../models/userModel");
 
 exports.uploadBrandImage = uploadSingleImage("profileImg");
 
-// Image processing
+// Image processing - storage agnostic (local vs cloudinary via STORAGE env)
 exports.resizeImage = asyncHandler(async (req, res, next) => {
-  const filename = `user-${uuidv4()}-${Date.now()}.jpeg`;
-
   if (req.file) {
-    await sharp(req.file.buffer)
-      .resize(600, 600)
-      .toFormat("jpeg")
-      .jpeg({ quality: 95 })
-      .toFile(`uploads/user/${filename}`);
-
-    // Save image into our db
-    req.body.profileImg = filename;
+    const filename = `user-${uuidv4()}-${Date.now()}.jpg`;
+    const stored = await processAndUploadImage(req.file.buffer, filename, "user", {
+      width: 600,
+      height: 600,
+      quality: 95,
+    });
+    // Save image into our db (filename for local, secure_url for cloudinary)
+    req.body.profileImg = stored;
   }
 
   next();
@@ -70,7 +68,16 @@ exports.changeUserPassword = asyncHandler(async (req, res, next) => {
 // @desc    Delete specific user
 // @route   DELETE /api/v1/users/:id
 // @access  Private
-exports.deleteUser = factory.deleteOne(User);
+exports.deleteUser = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+  const document = await User.findByIdAndDelete(id);
+  if (!document) {
+    return next(new (require("../utils/apiError"))(`No document for this id ${id}`, 404));
+  }
+  const { deleteImage } = require("../utils/imageStorage");
+  await deleteImage(document.profileImg, "user");
+  res.status(204).send();
+});
 
 //@dosc    Get Logged in user data
 //@route   GET /api/v1/users/me

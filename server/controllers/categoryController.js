@@ -1,26 +1,25 @@
-const sharp = require("sharp");
 const { v4: uuidv4 } = require("uuid");
 const asyncHandler = require("express-async-handler");
 
 const factory = require("./handlersFactory");
 const { uploadSingleImage } = require("../middlewares/uploadImageMiddleware");
+const { processAndUploadImage } = require("../utils/imageStorage");
 const Category = require("../models/categoryModel");
 
 // Upload single image
 exports.uploadCategoryImage = uploadSingleImage("image");
 
-// Image processing
+// Image processing - storage agnostic (local vs cloudinary via STORAGE env)
 exports.resizeImage = asyncHandler(async (req, res, next) => {
-  const filename = `category-${uuidv4()}-${Date.now()}.jpeg`;
   if (req.file) {
-    await sharp(req.file.buffer)
-      .resize(600, 600)
-      .toFormat("jpeg")
-      .jpeg({ quality: 95 })
-      .toFile(`uploads/categories/${filename}`);
-
-    // Save image into our db
-    req.body.image = filename;
+    const filename = `category-${uuidv4()}-${Date.now()}.jpg`;
+    const stored = await processAndUploadImage(req.file.buffer, filename, "categories", {
+      width: 600,
+      height: 600,
+      quality: 95,
+    });
+    // Save image into our db (filename for local, secure_url for cloudinary)
+    req.body.image = stored;
   }
 
   next();
@@ -49,4 +48,14 @@ exports.updateCategory = factory.updateOne(Category);
 // @desc    Delete specific category
 // @route   DELETE /api/v1/categories/:id
 // @access  Private
-exports.deleteCategory = factory.deleteOne(Category);
+exports.deleteCategory = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+  const document = await Category.findByIdAndDelete(id);
+  if (!document) {
+    return next(new (require("../utils/apiError"))(`No document for this id ${id}`, 404));
+  }
+  const { deleteImage } = require("../utils/imageStorage");
+  // Delete stored image (local or cloudinary) – never blocks response on failure
+  await deleteImage(document.image, "categories");
+  res.status(204).send();
+});

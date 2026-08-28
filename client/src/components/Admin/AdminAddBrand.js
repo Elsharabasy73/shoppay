@@ -1,11 +1,11 @@
 import React from 'react'
 import { Row, Col, Spinner } from 'react-bootstrap'
 import { ToastContainer } from 'react-toastify';
-import avatar from '../../assets/images/avatar.png'
 import AddBrandHook from '../../hooks/brand/add-brand-hook';
+import AdminBrandCard from './AdminBrandCard';
 const AdminAddBrand = () => {
 
-    const [img, name, loading, isPress, handelSubmit, onImageChange, onChangeName] =AddBrandHook();
+    const [img, name, loading, isPress, handelSubmit, onImageChange, onChangeName, brands] = AddBrandHook();
     return (
         <div>
             <Row className="justify-content-start ">
@@ -47,6 +47,17 @@ const AdminAddBrand = () => {
             {
                 isPress ? loading ? <Spinner animation="border" variant="primary" /> : <h4>تم الانتهاء</h4> : null
             }
+
+            <Row>
+                <Col sm="8" className="">
+                    {
+                        Array.isArray(brands) && brands.length > 0 ? (brands.map((item) => {
+                            return <AdminBrandCard key={item._id} brand={item} />
+                        })) : <h6>لا يوجد ماركات حتى الان</h6>
+                    }
+                </Col>
+            </Row>
+
             <ToastContainer />
         </div>
     )

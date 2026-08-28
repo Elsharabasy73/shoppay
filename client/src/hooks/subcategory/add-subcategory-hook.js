@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { createSubCategory } from '../../store/actions/subcategoryAction'
+import { createSubCategory, getAllSubCategory } from '../../store/actions/subcategoryAction'
 import { useSelector, useDispatch } from 'react-redux'
 import notify from '../../utils/notify'
 import { getAllCategory } from '../../store/actions/categoryAction'
@@ -8,11 +8,12 @@ const useAddSubcategory = () => {
 
     const dispatch = useDispatch();
     useEffect(() => {
-        if (!navigator.onLine) {
+        if (typeof navigator !== 'undefined' && !navigator.onLine) {
             notify("هناك مشكله فى الاتصال بالانترنت", "warn")
             return;
         }
-        dispatch(getAllCategory());
+        dispatch(getAllCategory(100));
+        dispatch(getAllSubCategory(100));
     }, [])
     const [id, setID] = useState('0')
     const [name, setName] = useState('')
@@ -32,13 +33,12 @@ const useAddSubcategory = () => {
 
     //to save name
     const onChangeName = (e) => {
-        e.persist();
         setName(e.target.value)
     }
     //on save data 
     const handelSubmit = async (e) => {
         e.preventDefault();
-        if (!navigator.onLine) {
+        if (typeof navigator !== 'undefined' && !navigator.onLine) {
             notify("هناك مشكله فى الاتصال بالانترنت", "warn")
             return;
         }
@@ -60,28 +60,34 @@ const useAddSubcategory = () => {
 
     }
     useEffect(() => {
-
         if (loading === false) {
+            const isSuccess = subcategory?.status === 201 || subcategory?.status === 200
+            const isDuplicate = typeof subcategory === 'string' && subcategory.includes("400") || subcategory?.status === 400 || subcategory?.data?.message?.includes("duplicate") || subcategory?.data?.errors?.[0]?.msg?.includes("duplicate")
+            const msg = subcategory?.data?.message || subcategory?.message || ""
+            if (isSuccess) {
+                notify("تمت الاضافة بنجاح", "success")
+                setTimeout(() => window.location.reload(false), 800)
+            } else if (isDuplicate || msg.toLowerCase().includes("duplicate") || msg.includes("مكرر")) {
+                notify("هذا الاسم مكرر من فضلك اختر اسم اخر", "warn")
+            } else if (subcategory && (subcategory.status >= 400 || msg)) {
+                notify(msg || "هناك مشكله فى عملية الاضافة", "warn")
+            }
             setName("")
             setID("0")
-            if (subcategory)
-                console.log(subcategory)
-            if (subcategory.status === 201) {
-                notify("تمت الاضافة بنجاح", "success")
-            }
-            else if (subcategory === "Error Error: Request failed with status code 400") {
-                notify("هذا الاسم مكرر من فضلك اختر اسم اخر", "warn")
-            }
-            else {
-                notify("هناك مشكله فى عملية الاضافة", "warn")
-            }
-
             setLoading(true)
         }
     }, [loading])
 
+    const allSubcategoryState = useSelector(state => state.subCategory.allSubcategory)
+    let subcategories = []
+    try {
+        const data = allSubcategoryState?.data?.data || allSubcategoryState?.data || allSubcategoryState
+        if (Array.isArray(data) && data.length >= 1) subcategories = data
+        else if (Array.isArray(allSubcategoryState?.data)) subcategories = allSubcategoryState.data
+        else if (Array.isArray(allSubcategoryState)) subcategories = allSubcategoryState
+    } catch (e) { subcategories = [] }
 
-    return [id, name, loading, category, subcategory, handelChange, handelSubmit, onChangeName]
+    return [id, name, loading, category, subcategory, handelChange, handelSubmit, onChangeName, subcategories]
 };
 
 export default useAddSubcategory;

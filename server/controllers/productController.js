@@ -1,8 +1,8 @@
 const asyncHandler = require("express-async-handler");
 const { v4: uuidv4 } = require("uuid");
-const sharp = require("sharp");
 
 const { uploadMixOfImages } = require("../middlewares/uploadImageMiddleware");
+const { processAndUploadImage } = require("../utils/imageStorage");
 const factory = require("./handlersFactory");
 const Product = require("../models/productModel");
 
@@ -19,36 +19,34 @@ exports.uploadProductImages = uploadMixOfImages([
 
 exports.resizeProductImages = asyncHandler(async (req, res, next) => {
   //1- Image processing for imageCover
-  if (req.files.imageCover) {
-    const imageCoverFileName = `product-${uuidv4()}-${Date.now()}-cover.jpeg`;
-
-    await sharp(req.files.imageCover[0].buffer)
-      .resize(2000, 1333)
-      .toFormat("jpeg")
-      .jpeg({ quality: 95 })
-      .toFile(`uploads/products/${imageCoverFileName}`);
-
-    // Save image into our db
-    req.body.imageCover = imageCoverFileName;
+  if (req.files && req.files.imageCover) {
+    const imageCoverFileName = `product-${uuidv4()}-${Date.now()}-cover.jpg`;
+    const stored = await processAndUploadImage(
+      req.files.imageCover[0].buffer,
+      imageCoverFileName,
+      "products",
+      { width: 2000, height: 1333, quality: 95 },
+    );
+    // Save image into our db (filename for local, secure_url for cloudinary)
+    req.body.imageCover = stored;
   }
   //2- Image processing for images
-  if (req.files.images) {
+  if (req.files && req.files.images) {
     req.body.images = [];
     await Promise.all(
       req.files.images.map(async (img, index) => {
-        const imageName = `product-${uuidv4()}-${Date.now()}-${index + 1}.jpeg`;
-
-        await sharp(img.buffer)
-          .resize(2000, 1333)
-          .toFormat("jpeg")
-          .jpeg({ quality: 95 })
-          .toFile(`uploads/products/${imageName}`);
-
+        const imageName = `product-${uuidv4()}-${Date.now()}-${index + 1}.jpg`;
+        const stored = await processAndUploadImage(img.buffer, imageName, "products", {
+          width: 2000,
+          height: 1333,
+          quality: 95,
+        });
         // Save image into our db
-        req.body.images.push(imageName);
+        req.body.images.push(stored);
       }),
     );
   }
+  console.log(req.body);
   next();
 });
 
@@ -74,4 +72,15 @@ exports.updateProduct = factory.updateOne(Product);
 // @desc    Delete specific product
 // @route   DELETE /api/v1/products/:id
 // @access  Private
-exports.deleteProduct = factory.deleteOne(Product);
+exports.deleteProduct = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+  const document = await Product.findByIdAndDelete(id);
+  if (!document) {
+    return next(new (require("../utils/apiError"))(`No document for this id ${id}`, 404));
+  }
+  const { deleteImage, deleteImages } = require("../utils/imageStorage");
+  // Delete cover + all gallery images (handles local and cloudinary via STORAGE)
+  await deleteImage(document.imageCover, "products");
+  await deleteImages(document.images, "products");
+  res.status(204).send();
+});

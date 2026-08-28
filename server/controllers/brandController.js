@@ -1,26 +1,25 @@
 const asyncHandler = require("express-async-handler");
 const { v4: uuidv4 } = require("uuid");
-const sharp = require("sharp");
 
 const factory = require("./handlersFactory");
 const { uploadSingleImage } = require("../middlewares/uploadImageMiddleware");
+const { processAndUploadImage } = require("../utils/imageStorage");
 const Brand = require("../models/brandModel");
 
 // Upload single image
 exports.uploadBrandImage = uploadSingleImage("image");
 
-// Image processing
+// Image processing - storage agnostic (local vs cloudinary via STORAGE env)
 exports.resizeImage = asyncHandler(async (req, res, next) => {
-  const filename = `brand-${uuidv4()}-${Date.now()}.jpeg`;
   if (req.file) {
-    await sharp(req.file.buffer)
-      .resize(600, 600)
-      .toFormat("jpeg")
-      .jpeg({ quality: 95 })
-      .toFile(`uploads/brands/${filename}`);
-
-    // Save image into our db
-    req.body.image = filename;
+    const filename = `brand-${uuidv4()}-${Date.now()}.jpg`;
+    const stored = await processAndUploadImage(req.file.buffer, filename, "brands", {
+      width: 600,
+      height: 600,
+      quality: 95,
+    });
+    // Save image into our db (filename for local, secure_url for cloudinary)
+    req.body.image = stored;
   }
 
   next();
@@ -49,4 +48,13 @@ exports.updateBrand = factory.updateOne(Brand);
 // @desc    Delete specific brand
 // @route   DELETE /api/v1/brands/:id
 // @access  Private
-exports.deleteBrand = factory.deleteOne(Brand);
+exports.deleteBrand = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+  const document = await Brand.findByIdAndDelete(id);
+  if (!document) {
+    return next(new (require("../utils/apiError"))(`No document for this id ${id}`, 404));
+  }
+  const { deleteImage } = require("../utils/imageStorage");
+  await deleteImage(document.image, "brands");
+  res.status(204).send();
+});

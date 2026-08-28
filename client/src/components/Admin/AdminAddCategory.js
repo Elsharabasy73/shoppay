@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { Col, Row, Spinner } from 'react-bootstrap'
 import AddCategoryHook from '../../hooks/category/add-category-hook'
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
+import AdminCategoryCard from './AdminCategoryCard';
 const AdminAddCategory = () => {
 
-    const [img,name,loading,isPress,handelSubmit,onImageChange,onChangeName] =AddCategoryHook();
+    const [img, name, loading, isPress, handelSubmit, onImageChange, onChangeName, categories] = AddCategoryHook();
 
     
 
@@ -50,6 +51,17 @@ const AdminAddCategory = () => {
             {
                 isPress ? loading ? <Spinner animation="border" variant="primary" /> : <h4>تم الانتهاء</h4> : null
             }
+
+            <Row>
+                <Col sm="8" className="">
+                    {
+                        Array.isArray(categories) && categories.length > 0 ? (categories.map((item) => {
+                            return <AdminCategoryCard key={item._id} category={item} />
+                        })) : <h6>لا يوجد تصنيفات حتى الان</h6>
+                    }
+                </Col>
+            </Row>
+
             <ToastContainer />
         </div>
     )

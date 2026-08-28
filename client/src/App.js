@@ -40,9 +40,9 @@ function App() {
 
 
   return (
-    <div className="font" >
-      <NavBarLogin />
-      <BrowserRouter>
+    <BrowserRouter>
+      <div className="font" >
+        <NavBarLogin />
         <Routes>
           <Route index element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
@@ -84,9 +84,9 @@ function App() {
           </Route>
 
         </Routes>
-      </BrowserRouter>
-      <Footer />
-    </div >
+        <Footer />
+      </div >
+    </BrowserRouter>
   );
 }
 

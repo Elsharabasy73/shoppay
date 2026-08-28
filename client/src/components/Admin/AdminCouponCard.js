@@ -32,7 +32,7 @@ const AdminCouponCard = ({ coupon }) => {
 
             <Row className="d-flex justify-content-between  ">
                 <Col xs="6">
-                    <div className="p-2">اسم الكوبون: {coupon.name}</div>
+                    <div className="p-2">اسم الكوبون: {coupon?.name || ''}</div>
                 </Col>
                 <Col xs="6" className="d-flex d-flex justify-content-end">
                     <div className="d-flex p-2">
@@ -94,7 +94,7 @@ const AdminCouponCard = ({ coupon }) => {
                             fontSize: "16px",
                         }}
                         className="mx-2">
-                        {coupon.discount} %
+                        {coupon?.discount ?? 0} %
                     </div>
                 </Col>
             </Row>

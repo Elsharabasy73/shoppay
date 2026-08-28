@@ -12,10 +12,9 @@ const UserGetAllOrderHook = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    const user = JSON.parse(localStorage.getItem('user'))
-    let userName = ''
-    if (user != null)
-        userName = user.name
+    let user = null, userName = ''
+    try { user = JSON.parse(localStorage.getItem('user')) } catch { user = null }
+    if (user != null) userName = user.name || ''
 
     const get = async () => {
         setLoading(true)
@@ -32,17 +31,17 @@ const UserGetAllOrderHook = () => {
         await dispatch(getAllOrders(page, 5))
         setLoading(false)
     }
-    //get address detalis for user
     const resAllOrder = useSelector(state => state.orderReducer.getAllOrders)
     useEffect(() => {
         if (loading === false) {
-            if (resAllOrder.results)
-                setResult(resAllOrder.results)
-            if (resAllOrder.paginationResult)
-                setPaginate(resAllOrder.paginationResult)
-            if (resAllOrder.data)
-                setOrderData(resAllOrder.data)
-
+            // res is either {results, data, paginationResult} or {data:{results,data}} or e.response
+            const payload = resAllOrder?.data ? (resAllOrder.data.results !== undefined ? resAllOrder.data : resAllOrder) : resAllOrder
+            if (payload?.results !== undefined) setResult(payload.results)
+            if (payload?.paginationResult) setPaginate(payload.paginationResult)
+            if (Array.isArray(payload?.data)) setOrderData(payload.data)
+            else if (Array.isArray(payload)) setOrderData(payload)
+            else if (payload?.data && Array.isArray(payload.data)) setOrderData(payload.data)
+            else setOrderData([])
         }
     }, [loading])
 

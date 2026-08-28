@@ -4,10 +4,15 @@ import { deleteCoupon } from '../../store/actions/couponAction';
 
 const CouponCardHook = (coupon) => {
     const dispatch = useDispatch()
-    const dateString = coupon.expire;
-    const formatDate = (dateString) => {
-        const options = { year: "numeric", month: "numeric", day: "numeric" }
-        return new Date(dateString).toLocaleDateString(undefined, options)
+    const dateString = coupon?.expire;
+    const formatDate = (d) => {
+        if (!d) return ""
+        try {
+            const options = { year: "numeric", month: "numeric", day: "numeric" }
+            const dt = new Date(d)
+            if (isNaN(dt.getTime())) return d
+            return dt.toLocaleDateString(undefined, options)
+        } catch { return d || "" }
     }
 
 

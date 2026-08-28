@@ -27,8 +27,8 @@ const AdminAddCoupon = () => {
                         placeholder="تاريخ الانتهاء"
                         onChange={onChangeDate}
                         value={couponDate}
-                        onFocus={() => dateRef.current.type = "date"}
-                        onBlur={() => dateRef.current.type = "text"}
+                        onFocus={() => { if (dateRef.current) dateRef.current.type = "date" }}
+                        onBlur={() => { if (dateRef.current) dateRef.current.type = "text" }}
                     />
                     <input
                         value={couponValue}
@@ -49,11 +49,10 @@ const AdminAddCoupon = () => {
             <Row>
                 <Col sm="8" className="">
                     {
-                        coupons ? (coupons.map((item, index) => {
-                            return <AdminCouponCard key={index} coupon={item} />
+                        Array.isArray(coupons) && coupons.length > 0 ? (coupons.map((item) => {
+                            return <AdminCouponCard key={item._id} coupon={item} />
                         })) : <h6>لا يوجد كوبونات حتى الان</h6>
                     }
-
                 </Col>
             </Row>
 

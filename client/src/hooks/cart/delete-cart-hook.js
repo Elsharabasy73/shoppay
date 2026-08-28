@@ -1,8 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
-import { createBrand } from '../../store/actions/brandAction'
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import notify from '../../utils/notify'
 import { clearAllCartItem, deleteCartItem, updateCartItem } from './../../store/actions/cartAction';
 
@@ -17,23 +14,23 @@ const DeleteCartHook = (item) => {
         setLoading(false)
     }
     const onChangeCount = (e) => {
-        setItemCount(e.target.value)
+        const val = parseInt(e.target.value, 10)
+        setItemCount(isNaN(val) ? 0 : val)
     }
     useEffect(() => {
-        if (item)
-            setItemCount(item.count)
-    }, [])
+        if (item) setItemCount(item.quantity || item.count || 0)
+    }, [item])
     const res = useSelector(state => state.cartReducer.clearCart)
     useEffect(() => {
-        if (loading === false) {
-            if (res === "") {
+        if (loading === false && res !== undefined) {
+            // clearCart success is 204 with empty data or status 204
+            const isSuccess = res === "" || res.status === 204 || res.status === 200 || (res.data === "" )
+            if (isSuccess) {
                 notify("تم الحذف بنجاح", "success")
-                setTimeout(() => {
-                    window.location.reload(false)
-                }, 1000);
-            } else {
+                setTimeout(() => window.location.reload(), 800);
+            } else if (res?.data?.message) {
+                notify(res.data.message, "error")
             }
-
         }
     }, [loading])
 

@@ -44,20 +44,25 @@ const AddCouponHook = () => {
     const res = useSelector(state => state.couponReducer.addCoupon)
 
     useEffect(() => {
-
-        if (loading === false) {
-            if (res && res.status === 201) {
+        if (loading === false && res) {
+            const status = res.status
+            const msg = res.data?.message || res.message || ""
+            const isSuccess = status === 201 || status === 200 || msg.toLowerCase().includes("success") || msg.includes("created")
+            const isDuplicate = status === 400 || msg.toLowerCase().includes("duplicate") || msg.includes("موجود") || res.data?.errors?.[0]?.msg?.toLowerCase().includes("duplicate")
+            const isAuth = status === 403 || status === 401
+            if (isSuccess) {
                 notify("تمت اضافة الكوبون بنجاح", "success")
-                window.location.reload(false)
-            } else if (res && res.status === 400) {
+                setTimeout(() => window.location.reload(), 800)
+            } else if (isDuplicate) {
                 notify("هذا الكوبون موجود من قبل ", "error")
+            } else if (isAuth) {
+                notify("انت غير مسموح لك بالاضافة", "error")
+            } else if (msg) {
+                notify(msg, "error")
+            } else if (res.data?.errors) {
+                notify(res.data.errors[0].msg, "error")
             }
-            else if (res && res.status === 403) {
-                notify("انتا غير مسموح لك بالاضافة", "error")
-            }
-
         }
-
     }, [loading])
 
 
@@ -73,9 +78,11 @@ const AddCouponHook = () => {
 
     let coupons = []
     try {
-        if (allCoupon && allCoupon.data.length >= 1)
-            coupons = allCoupon.data
-    } catch (e) { }
+        const data = allCoupon?.data?.data || allCoupon?.data || allCoupon
+        if (Array.isArray(data) && data.length >= 1) coupons = data
+        else if (Array.isArray(allCoupon?.data)) coupons = allCoupon.data
+        else if (Array.isArray(allCoupon)) coupons = allCoupon
+    } catch (e) { coupons = [] }
 
     return [coupnName, couponDate, couponValue, onChangeName, onChangeDate, onChangeValue, onSubmit, coupons]
 }

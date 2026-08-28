@@ -69,6 +69,20 @@ const userSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
+const setImageURL = (doc) => {
+  if (doc.profileImg) {
+    if (doc.profileImg.startsWith("http://") || doc.profileImg.startsWith("https://")) return;
+    doc.profileImg = `${process.env.BASE_URL}/user/${doc.profileImg}`;
+  }
+};
+// apply for find queries and save
+userSchema.post("init", (doc) => {
+  setImageURL(doc);
+});
+userSchema.post("save", (doc) => {
+  setImageURL(doc);
+});
+
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
   // Hashing user password

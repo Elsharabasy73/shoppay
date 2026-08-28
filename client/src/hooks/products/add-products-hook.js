@@ -11,8 +11,8 @@ const AdminAddProductsHook = () => {
 
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(getAllCategory());
-        dispatch(getAllBrand());
+        dispatch(getAllCategory(100));
+        dispatch(getAllBrand(100));
     }, [])
     //get last catgeory state from redux
     const category = useSelector(state => state.allCategory.category)
@@ -46,32 +46,22 @@ const AdminAddProductsHook = () => {
     const [loading, setLoading] = useState(true);
 
 
-    //to change name state
     const onChangeProdName = (event) => {
-        event.persist();
         setProdName(event.target.value)
     }
-    //to change name state
     const onChangeDesName = (event) => {
-        event.persist();
         setProdDescription(event.target.value)
     }
-    //to change name state
     const onChangePriceBefor = (event) => {
-        event.persist();
         setPriceBefore(event.target.value)
     }
-    //to change name state
     const onChangePriceAfter = (event) => {
-        event.persist();
         setPriceAftr(event.target.value)
-    }  //to change name state
+    }
     const onChangeQty = (event) => {
-        event.persist();
         setQty(event.target.value)
     }
-    const onChangeColor = (event) => {
-        event.persist();
+    const onChangeColor = () => {
         setShowColor(!showColor)
     }
 
@@ -132,7 +122,10 @@ const AdminAddProductsHook = () => {
     //to save data 
     const handelSubmit = async (e) => {
         e.preventDefault();
-        if (CatID === 0 || prodName === "" || prodDescription === "" || images.length <= 0 || priceBefore <= 0) {
+        const imagesCount = images ? Object.keys(images).length : 0;
+        const priceNum = parseFloat(priceBefore);
+        const qtyNum = parseInt(qty, 10);
+        if (!CatID || CatID === "0" || !prodName.trim() || !prodDescription.trim() || imagesCount <= 0 || isNaN(priceNum) || priceNum <= 0) {
             notify("من فضلك اكمل البيانات", "warn")
             return;
         }
@@ -147,30 +140,25 @@ const AdminAddProductsHook = () => {
         )
 
         const formData = new FormData();
-        formData.append("title", prodName);
-        formData.append("description", prodDescription);
-        formData.append("quantity", qty);
-        formData.append("price", priceBefore);
-        formData.append("priceAfterDiscount", priceAftr);
+        formData.append("title", prodName.trim());
+        formData.append("description", prodDescription.trim());
+        formData.append("quantity", isNaN(qtyNum) ? 1 : qtyNum);
+        formData.append("price", priceNum);
+        if (priceAftr && priceAftr !== 'السعر بعد الخصم' && !isNaN(parseFloat(priceAftr))) {
+            formData.append("priceAfterDiscount", parseFloat(priceAftr));
+        }
         formData.append("category", CatID);
-        formData.append("brand", BrandID);
+        if (BrandID && BrandID !== "0" && BrandID !== 0) formData.append("brand", BrandID);
 
-        setTimeout(() => {
-            formData.append("imageCover", imgCover);
-            itemImages.map((item) => formData.append("images", item))
-        }, 1000);
+        formData.append("imageCover", imgCover);
+        itemImages.forEach((item) => formData.append("images", item))
+        colors.forEach((color) => formData.append("colors", color))
+        // backend expects subcategories or category? check productModel subcategories
+        seletedSubID.forEach((item) => formData.append("subcategories", item._id))
 
-        setTimeout(() => {
-            console.log(imgCover)
-            console.log(itemImages)
-        }, 1000);
-        colors.map((color) => formData.append("availableColors", color))
-        seletedSubID.map((item) => formData.append("subcategory", item._id))
-        setTimeout(async () => {
-            setLoading(true)
-            await dispatch(createProduct(formData))
-            setLoading(false)
-        }, 1000);
+        setLoading(true)
+        await dispatch(createProduct(formData))
+        setLoading(false)
 
     }
 
@@ -178,27 +166,38 @@ const AdminAddProductsHook = () => {
     const product = useSelector(state => state.allproducts.products)
 
     useEffect(() => {
-
         if (loading === false) {
-            // setCatID(0)
-            setColors([])
-            setImages([])
-            setProdName('')
-            setProdDescription('')
-            setPriceBefore('السعر قبل الخصم')
-            setPriceAftr('السعر بعد الخصم')
-            setQty('الكمية المتاحة')
-            SetBrandID(0)
-            setSeletedSubID([])
-            setTimeout(() => setLoading(true), 1500)
-
-            if (product) {
-                if (product.status === 201) {
-                    notify("تم الاضافة بنجاح", "success")
+            if (product && (product.status === 201 || product.status === 200)) {
+                notify("تم الاضافة بنجاح", "success")
+                // only clear on success
+                setColors([])
+                setImages({})
+                setProdName('')
+                setProdDescription('')
+                setPriceBefore('السعر قبل الخصم')
+                setPriceAftr('السعر بعد الخصم')
+                setQty('الكمية المتاحة')
+                setCatID('')
+                SetBrandID('')
+                setSeletedSubID([])
+                setOptions([])
+            } else if (product) {
+                // keep inputs, show real error
+                const msg = product.data?.message
+                const errors = product.data?.errors
+                if (errors && Array.isArray(errors) && errors.length > 0) {
+                    errors.forEach(e => notify(e.msg, "error"))
+                } else if (msg) {
+                    notify(msg, "error")
+                } else if (product.message) {
+                    notify(product.message, "error")
+                } else if (typeof product === 'string') {
+                    notify(product, "error")
                 } else {
                     notify("هناك مشكله", "error")
                 }
             }
+            setTimeout(() => setLoading(true), 1500)
         }
     }, [loading])
 

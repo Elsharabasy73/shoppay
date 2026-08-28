@@ -12,16 +12,15 @@ const HomeCategory = () => {
       <SubTitle title="التصنيفات" btntitle="المزيد" pathText="/allcategory" />
       <Row className="my-2 d-flex justify-content-between">
         {loading === false ? (
-          category ? (
+          category && category.data && Array.isArray(category.data) && category.data.length > 0 ? (
             category.data.slice(0, 5).map((item, index) => {
-            //   console.log(item);
               return (
                 <CategoryCard
-                  key={index}
+                  key={item._id || index}
                   id={item._id}
                   title={item.name}
                   img={item.image}
-                  background={colors[index]}
+                  background={colors[index % colors.length]}
                 />
               );
             })

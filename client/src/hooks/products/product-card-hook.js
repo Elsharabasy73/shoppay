@@ -43,8 +43,6 @@ const ProductCardHook = (item, favProd) => {
     const resRemove = useSelector(state => state.addToWishListReducer.removeWishList)
 
     const addToWishListData = async () => {
-        setIsFav(true)
-        setFavImg(favon)
         setLoadingAdd(true)
         await dispatch(addProductToWishList({
             productId: item._id,
@@ -52,41 +50,40 @@ const ProductCardHook = (item, favProd) => {
         setLoadingAdd(false)
     }
 
-
-
-
     const removeToWishListData = async () => {
-        setIsFav(false)
-        setFavImg(favoff)
         setLoadingRemove(true)
         await dispatch(removeProductToWishList(item._id))
         setLoadingRemove(false)
-
     }
 
 
     useEffect(() => {
-        if (loadingAdd === false) {
-            console.log(resAdd)
-            if (resAdd && resAdd.status === 200) {
+        if (loadingAdd === false && resAdd) {
+            const isSuccess = resAdd.status === 200 || resAdd.data?.message?.toLowerCase().includes("added") || resAdd.message?.includes("added")
+            const isAuthError = resAdd.status === 401 || resAdd.status === 403 || resAdd.data?.message?.toLowerCase().includes("not") 
+            if (isSuccess) {
+                setIsFav(true); setFavImg(favon)
                 notify("تمت اضافة المنتج للمفضلة بنجاح", "success")
-            } else if (resAdd && resAdd.status === 401) {
+            } else if (isAuthError || resAdd.data?.message) {
                 notify("انتا غير مسجل", "error")
+            } else if (resAdd.data?.errors) {
+                notify(resAdd.data.errors[0].msg, "error")
             }
         }
     }, [loadingAdd])
 
     useEffect(() => {
-
-
-        if (loadingRemove === false) {
-            console.log(resRemove)
-            if (resRemove && resRemove.status === "success") {
+        if (loadingRemove === false && resRemove) {
+            const isSuccess = resRemove.status === 200 || resRemove.data?.message?.toLowerCase().includes("removed") || resRemove.message?.includes("removed") || resRemove.data?.data
+            const isAuthError = resRemove.status === 401 || resRemove.status === 403
+            if (isSuccess) {
+                setIsFav(false); setFavImg(favoff)
                 notify("تمت حذف المنتج من المفضلة بنجاح", "warn")
-            } else if (resRemove && resRemove.status === 401) {
+            } else if (isAuthError) {
                 notify("انتا غير مسجل", "error")
+            } else if (resRemove.data?.message) {
+                notify(resRemove.data.message, "error")
             }
-
         }
     }, [loadingRemove])
 

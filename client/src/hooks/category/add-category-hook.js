@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
-import { createCategory } from '../../store/actions/categoryAction'
+import { createCategory, getAllCategory } from '../../store/actions/categoryAction'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import notify from '../../utils/notify'
@@ -59,6 +59,7 @@ const AddCategoryHook = () => {
 
             if (res.status === 201) {
                 notify('تمت عملية الاضافة بنجاح', "success");
+                setTimeout(() => window.location.reload(false), 800)
             }
             else {
                 notify('هناك مشكله فى عملية الاضافة', "error");
@@ -66,7 +67,23 @@ const AddCategoryHook = () => {
         }
     }, [loading])
 
-    return [img, name, loading, isPress, handelSubmit, onImageChange, onChangeName]
+    useEffect(() => {
+        const get = async () => {
+            await dispatch(getAllCategory(100))
+        }
+        get();
+    }, [])
+
+    const allCategoryState = useSelector(state => state.allCategory.category)
+    let categories = []
+    try {
+        const data = allCategoryState?.data?.data || allCategoryState?.data || allCategoryState
+        if (Array.isArray(data) && data.length >= 1) categories = data
+        else if (Array.isArray(allCategoryState?.data)) categories = allCategoryState.data
+        else if (Array.isArray(allCategoryState)) categories = allCategoryState
+    } catch (e) { categories = [] }
+
+    return [img, name, loading, isPress, handelSubmit, onImageChange, onChangeName, categories]
 };
 
 export default AddCategoryHook

@@ -18,8 +18,8 @@ export const createProduct = (formatData) => async (dispatch) => {
 
     } catch (e) {
         dispatch({
-            type: GET_ERROR,
-            payload: "Error  " + e,
+            type: CREATE_PRODUCTS,
+            payload: e.response,
         })
     }
 }

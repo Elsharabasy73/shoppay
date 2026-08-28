@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
-import { createBrand } from '../../store/actions/brandAction'
+import { createBrand, getAllBrand } from '../../store/actions/brandAction'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import notify from '../../utils/notify'
@@ -58,6 +58,7 @@ const AddBrandHook = () => {
 
             if (res.status === 201) {
                 notify('تمت عملية الاضافة بنجاح', "success");
+                setTimeout(() => window.location.reload(false), 800)
             }
             else {
                 notify('هناك مشكله فى عملية الاضافة', "error");
@@ -65,7 +66,23 @@ const AddBrandHook = () => {
         }
     }, [loading])
 
-    return [img, name, loading, isPress, handelSubmit, onImageChange, onChangeName]
+    useEffect(() => {
+        const get = async () => {
+            await dispatch(getAllBrand(100))
+        }
+        get();
+    }, [])
+
+    const allBrandState = useSelector(state => state.allBrand.brand)
+    let brands = []
+    try {
+        const data = allBrandState?.data?.data || allBrandState?.data || allBrandState
+        if (Array.isArray(data) && data.length >= 1) brands = data
+        else if (Array.isArray(allBrandState?.data)) brands = allBrandState.data
+        else if (Array.isArray(allBrandState)) brands = allBrandState
+    } catch (e) { brands = [] }
+
+    return [img, name, loading, isPress, handelSubmit, onImageChange, onChangeName, brands]
 };
 
 export default AddBrandHook

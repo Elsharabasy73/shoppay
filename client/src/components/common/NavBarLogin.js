@@ -1,30 +1,31 @@
 import React, { useEffect, useState } from 'react'
 import { Navbar, Container, FormControl, Nav, NavDropdown } from 'react-bootstrap'
+import { Link, useNavigate } from 'react-router-dom'
 import logo from '../../assets/images/logo.png'
 import login from '../../assets/images/login.png'
 import cart from '../../assets/images/cart.png'
 import NavbarSearchHook from '../../hooks/search/navbar-search-hook';
-import { useDispatch, useSelector } from 'react-redux';
-import { getLoggedUser } from './../../store/actions/authAction';
 import GetAllUserCartHook from '../../hooks/cart/get-all-user-cart-hook';
 const NavBarLogin = () => {
-    //const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const [OnChangeSearch] = NavbarSearchHook()
+    const word = localStorage.getItem("searchWord") || ""
 
-    const [OnChangeSearch, searchWord] = NavbarSearchHook()
-    let word = "";
-    if (localStorage.getItem("searchWord") != null)
-        word = localStorage.getItem("searchWord")
-
-    const [user, setUser] = useState('');
+    const [user, setUser] = useState(null);
     useEffect(() => {
-        if (localStorage.getItem("user") != null)
-            setUser(JSON.parse(localStorage.getItem("user")))
+        try {
+            const stored = localStorage.getItem("user")
+            if (stored) setUser(JSON.parse(stored))
+        } catch (e) {
+            setUser(null)
+        }
     }, [])
 
     const logOut = () => {
         localStorage.removeItem("user")
         localStorage.removeItem("token")
-        setUser('')
+        setUser(null)
+        navigate("/")
     }
 
     const [itemsNum] = GetAllUserCartHook()
@@ -32,10 +33,8 @@ const NavBarLogin = () => {
     return (
         <Navbar className="sticky-top" bg="dark" variant="dark" expand="sm">
             <Container>
-                <Navbar.Brand>
-                    <a href='/'>
-                        <img src={logo} className='logo' />
-                    </a>
+                <Navbar.Brand as={Link} to="/">
+                    <img src={logo} className='logo' alt="logo" />
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
@@ -49,34 +48,30 @@ const NavBarLogin = () => {
                     />
                     <Nav className="me-auto">
                         {
-                            user != '' ? (
+                            user ? (
                                 <NavDropdown title={user.name} id="basic-nav-dropdown">
-
-
                                     {
-                                        user.role === "admin" ? (<NavDropdown.Item href="/admin/allproducts">لوحة التحكم</NavDropdown.Item>) : (<NavDropdown.Item href="/user/profile">الصفحه الشخصية</NavDropdown.Item>)
+                                        user.role === "admin" ? (<NavDropdown.Item as={Link} to="/admin/allproducts">لوحة التحكم</NavDropdown.Item>) : (<NavDropdown.Item as={Link} to="/user/profile">الصفحه الشخصية</NavDropdown.Item>)
                                     }
                                     <NavDropdown.Divider />
-                                    <NavDropdown.Item onClick={logOut} href="/">تسجيل خروج</NavDropdown.Item>
-
+                                    <NavDropdown.Item onClick={logOut}>تسجيل خروج</NavDropdown.Item>
                                 </NavDropdown>
                             ) :
-                                (<Nav.Link href='/login'
+                                (<Nav.Link as={Link} to='/login'
                                     className="nav-text d-flex mt-3 justify-content-center">
-                                    <img src={login} className="login-img" alt="sfvs" />
+                                    <img src={login} className="login-img" alt="login" />
                                     <p style={{ color: "white" }}>دخول</p>
                                 </Nav.Link>)
                         }
 
-                        <Nav.Link href='/cart'
+                        <Nav.Link as={Link} to='/cart'
                             className="nav-text position-relative d-flex mt-3 justify-content-center"
                             style={{ color: "white" }}>
-                            <img src={cart} className="login-img" alt="sfvs" />
+                            <img src={cart} className="login-img" alt="cart" />
                             <p style={{ color: "white" }}>العربه</p>
-                            <span class="position-absolute top-10 start-0 translate-middle badge rounded-pill bg-danger">
+                            <span className="position-absolute top-10 start-0 translate-middle badge rounded-pill bg-danger">
                                 {itemsNum || 0}
                             </span>
-
                         </Nav.Link>
                     </Nav>
                 </Navbar.Collapse>

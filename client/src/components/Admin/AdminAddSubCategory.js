@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Row, Col } from 'react-bootstrap'
 
 import { ToastContainer } from 'react-toastify';
 import useAddSubcategory from '../../hooks/subcategory/add-subcategory-hook';
+import AdminSubCategoryCard from './AdminSubCategoryCard';
 
 const AdminAddSubCategory = () => {
-    const [id, name, loading, category, subcategory, handelChange, handelSubmit, onChangeName] = useAddSubcategory();
+    const [id, name, loading, category, subcategory, handelChange, handelSubmit, onChangeName, subcategories] = useAddSubcategory();
 
     return (
         <div>
@@ -19,10 +20,10 @@ const AdminAddSubCategory = () => {
                         className="input-form d-block mt-3 px-3"
                         placeholder="اسم التصنيف الفرعي"
                     />
-                    <select name="category" id="cat" className="select mt-3 px-2 " onChange={handelChange}>
+                    <select name="category" id="cat" className="select mt-3 px-2 " value={id} onChange={handelChange}>
                         <option value="0">اختر تصنيف رئيسي</option>
                         {
-                            category.data ? (category.data.map(item => {
+                            category?.data && Array.isArray(category.data) ? (category.data.map(item => {
                                 return (<option key={item._id} value={item._id}>{item.name}</option>)
                             })) : null
                         }
@@ -34,6 +35,17 @@ const AdminAddSubCategory = () => {
                     <button onClick={handelSubmit} className="btn-save d-inline mt-2 ">حفظ التعديلات</button>
                 </Col>
             </Row>
+
+            <Row>
+                <Col sm="8" className="">
+                    {
+                        Array.isArray(subcategories) && subcategories.length > 0 ? (subcategories.map((item) => {
+                            return <AdminSubCategoryCard key={item._id} subcategory={item} />
+                        })) : <h6>لا يوجد تصنيفات فرعية حتى الان</h6>
+                    }
+                </Col>
+            </Row>
+
             <ToastContainer />
         </div>
     )

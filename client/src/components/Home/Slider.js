@@ -14,28 +14,26 @@ const Slider = () => {
     return (
         <Carousel activeIndex={index} onSelect={handleSelect}>
             <Carousel.Item className="slider-background" interval={2000}>
-                <div className="d-flex flex-row justify-content-center align-items-center">
+                <div className="d-flex flex-row justify-content-center align-items-center flex-wrap p-3">
                     <img
-                        style={{ height: "296px", width: "313.53px" }}
-                        className=""
+                        style={{ height: "296px", width: "313.53px", maxWidth: "100%", objectFit: "contain" }}
                         src={slider4}
                         alt="First slide"
                     />
-                    <div className="">
+                    <div className="text-center">
                         <h3 className="slider-title">هناك خصم كبير</h3>
                         <p className="slider-text">خصم يصل ٥٠٪ عند شرائك</p>
                     </div>
                 </div>
             </Carousel.Item>
             <Carousel.Item className="slider-background2" interval={2000}>
-                <div className="d-flex flex-row justify-content-center align-items-center">
+                <div className="d-flex flex-row justify-content-center align-items-center flex-wrap p-3">
                     <img
-                        style={{ height: "296px", width: "313.53px" }}
-                        className=""
+                        style={{ height: "296px", width: "313.53px", maxWidth: "100%", objectFit: "contain" }}
                         src={sliderimg}
-                        alt="First slide"
+                        alt="Second slide"
                     />
-                    <div className="">
+                    <div className="text-center">
                         <h3 className="slider-title">هناك خصم كبير</h3>
                         <p className="slider-text">خصم يصل ٥٠٪ عند شرائك</p>
                     </div>
@@ -43,14 +41,13 @@ const Slider = () => {
             </Carousel.Item>
 
             <Carousel.Item className="slider-background3" interval={2000}>
-                <div className="d-flex flex-row justify-content-center align-items-center">
+                <div className="d-flex flex-row justify-content-center align-items-center flex-wrap p-3">
                     <img
-                        style={{ height: "296px", width: "373.53px" }}
-                        className=""
+                        style={{ height: "296px", width: "313.53px", maxWidth: "100%", objectFit: "contain" }}
                         src={prod3}
-                        alt="First slide"
+                        alt="Third slide"
                     />
-                    <div className="">
+                    <div className="text-center">
                         <h3 className="slider-title">هناك خصم كبير</h3>
                         <p className="slider-text">خصم يصل ٥٠٪ عند شرائك</p>
                     </div>
@@ -58,14 +55,13 @@ const Slider = () => {
             </Carousel.Item>
 
             <Carousel.Item className="slider-background4" interval={2000}>
-                <div className="d-flex flex-row justify-content-center align-items-center">
+                <div className="d-flex flex-row justify-content-center align-items-center flex-wrap p-3">
                     <img
-                        style={{ height: "296px", width: "373.53px" }}
-                        className=""
+                        style={{ height: "296px", width: "313.53px", maxWidth: "100%", objectFit: "contain" }}
                         src={prod4}
-                        alt="First slide"
+                        alt="Fourth slide"
                     />
-                    <div className="">
+                    <div className="text-center">
                         <h3 className="slider-title">هناك خصم كبير</h3>
                         <p className="slider-text">خصم يصل ٥٠٪ عند شرائك</p>
                     </div>

@@ -1,22 +1,25 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import ViewSearchProductsHook from './../products/view-search-products-hook';
 
 const NavbarSearchHook = () => {
-    const [items, pagination, onPress, getProduct] = ViewSearchProductsHook();
+    const navigate = useNavigate()
+    const location = useLocation()
+    const [, , , getProduct] = ViewSearchProductsHook();
     const [searchWord, setSearchWord] = useState('')
     //when user type search word
     const OnChangeSearch = (e) => {
         localStorage.setItem("searchWord", e.target.value)
         setSearchWord(e.target.value)
-        const path = window.location.pathname;
-        if (path != "/products") {
-           window.location.href = "/products"
+        if (location.pathname !== "/products") {
+           navigate("/products")
         }
     }
     useEffect(() => {
-        setTimeout(() => {
+        const t = setTimeout(() => {
             getProduct();
-        }, 1000);
+        }, 600);
+        return () => clearTimeout(t)
     }, [searchWord])
     return [OnChangeSearch, searchWord]
 }

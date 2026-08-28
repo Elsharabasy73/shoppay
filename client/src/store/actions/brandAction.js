@@ -1,6 +1,7 @@
-import { GET_ALL_BRAND, GET_ONE_BRAND, GET_ERROR, CREATE_BRAND } from '../type'
+import { GET_ALL_BRAND, GET_ONE_BRAND, GET_ERROR, CREATE_BRAND, DELETE_BRAND } from '../type'
 import { useGetData } from '../../hooks/common/useGetData'
 import { useInsertDataWithImage } from '../../hooks/common/useInsertData'
+import useDeleteData from '../../hooks/common/useDeleteData'
 
 //get all Brand
 export const getAllBrand = (limit) => async (dispatch) => {
@@ -70,6 +71,22 @@ export const createBrand = (formData) => async (dispatch) => {
         dispatch({
             type: GET_ERROR,
             payload: "Error " + e,
+        })
+    }
+}
+
+//delete brand
+export const deleteBrand = (id) => async (dispatch) => {
+    try {
+        const response = await useDeleteData(`/api/v1/brands/${id}`);
+        dispatch({
+            type: DELETE_BRAND,
+            payload: response,
+        })
+    } catch (e) {
+        dispatch({
+            type: DELETE_BRAND,
+            payload: e.response,
         })
     }
 }
