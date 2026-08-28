@@ -1,74 +1,163 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { Card, Col } from 'react-bootstrap'
-
-import rate from "../../assets/images/rate.png";
 import { Link } from 'react-router-dom';
-
 import { ToastContainer } from 'react-toastify';
+import rate from "../../assets/images/rate.png";
 import ProductCardHook from '../../hooks/products/product-card-hook';
 
 const ProductCard = ({ item, favProd }) => {
-
-
     const [removeToWishListData, addToWishListData, handelFav, favImg] = ProductCardHook(item, favProd)
 
-    return (
-        <Col xs="6" sm="6" md="4" lg="3" className="d-flex">
+    const hasDiscount = item.priceAfterDiscount && item.priceAfterDiscount >= 1 && item.priceAfterDiscount < item.price;
 
+    return (
+        <Col xs="6" sm="6" md="4" lg="3" className="d-flex align-items-stretch">
             <Card
-                className="my-2"
+                className="product-card my-2 w-100"
                 style={{
-                    width: "100%",
-                    height: "345px",
-                    borderRadius: "8px",
-                    border: "none",
+                    borderRadius: "12px",
+                    border: "1px solid #eee",
                     backgroundColor: "#FFFFFF",
-                    boxShadow: "0 2px 2px 0 rgba(151,151,151,0.5)",
+                    boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
+                    overflow: "hidden",
+                    display: "flex",
+                    flexDirection: "column",
+                    transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                    height: "385px",
                 }}>
-                <Link to={`/products/${item._id}`} style={{ textDecoration: 'none' }}>
-                    <Card.Img style={{ height: "228px", width: "100%" }} src={item.imageCover} />
-                </Link>
-                <div className="d-flex justify-content-end mx-2">
-                    <img
-                        src={favImg}
-                        alt=""
+                {/* Image wrapper with fav button overlay */}
+                <div style={{ position: "relative", height: "220px", backgroundColor: "#f9f9f9", overflow: "hidden", flexShrink: 0 }}>
+                    <Link to={`/products/${item._id}`} style={{ textDecoration: 'none', display: 'block', height: '100%' }}>
+                        <Card.Img
+                            src={item.imageCover}
+                            alt={item.title}
+                            style={{
+                                height: "100%",
+                                width: "100%",
+                                objectFit: "contain",
+                                padding: "10px",
+                                transition: "transform 0.3s ease",
+                            }}
+                            className="product-card-img"
+                        />
+                    </Link>
+                    {/* fav button - absolute top-right */}
+                    <div
                         onClick={handelFav}
-                        className="text-center"
+                        title={favImg && favImg.includes ? "" : "المفضلة"}
                         style={{
-                            height: "24px",
-                            width: "26px",
-                            cursor: 'pointer'
+                            position: "absolute",
+                            top: "10px",
+                            right: "10px",
+                            width: "36px",
+                            height: "36px",
+                            borderRadius: "50%",
+                            backgroundColor: "#fff",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            cursor: 'pointer',
+                            boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
+                            zIndex: 2,
                         }}
-                    />
+                    >
+                        <img
+                            src={favImg}
+                            alt="fav"
+                            style={{
+                                height: "18px",
+                                width: "18px",
+                                objectFit: "contain",
+                            }}
+                        />
+                    </div>
+                    {/* discount badge */}
+                    {hasDiscount ? (
+                        <div style={{
+                            position: "absolute",
+                            top: "10px",
+                            left: "10px",
+                            backgroundColor: "#e53935",
+                            color: "#fff",
+                            fontSize: "11px",
+                            fontWeight: "700",
+                            padding: "3px 8px",
+                            borderRadius: "6px",
+                            zIndex: 2,
+                        }}>
+                            خصم
+                        </div>
+                    ) : null}
                 </div>
-                <Card.Body>
-                    <Card.Title>
-                        <div className="card-title">
-                            {item.title}
-                        </div>
-                    </Card.Title>
-                    <Card.Text>
-                        <div className="d-flex justify-content-between ">
-                            <div className="d-flex">
-                                <img
-                                    className=""
-                                    src={rate}
-                                    alt=""
-                                    height="16px"
-                                    width="16px"
-                                />
-                                <div className="card-rate mx-2">{item.ratingsAverage || 0}</div>
+
+                <Card.Body
+                    style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "space-between",
+                        padding: "12px 14px 14px",
+                        flex: 1,
+                    }}>
+                    <div>
+                        <Card.Title as="div" style={{ marginBottom: "8px" }}>
+                            <div
+                                className="card-title"
+                                title={item.title}
+                                style={{
+                                    display: "-webkit-box",
+                                    WebkitLineClamp: 2,
+                                    WebkitBoxOrient: "vertical",
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                    minHeight: "40px",
+                                    lineHeight: "20px",
+                                    fontSize: "14px",
+                                    fontWeight: "500",
+                                    color: "#333",
+                                    textAlign: "right",
+                                }}>
+                                {item.title}
                             </div>
-                            <div className="d-flex">
-                                <div className="card-price">
-                                    {item.priceAfterDiscount >= 1 ?
-                                        (<div><span style={{ textDecorationLine: 'line-through' }}>{item.price}</span> {item.priceAfterDiscount}</div>)
-                                        : item.price}
-                                </div>
-                                <div className="card-currency mx-1">جنيه</div>
+                        </Card.Title>
+                        {item.description ? (
+                            <div style={{
+                                fontSize: "11px",
+                                color: "#999",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                                textAlign: "right",
+                                marginBottom: "6px",
+                            }}>
+                                {item.category?.name || ""}
                             </div>
+                        ) : null}
+                    </div>
+
+                    <div className="d-flex justify-content-between align-items-center" style={{ marginTop: "auto", paddingTop: "8px", borderTop: "1px solid #f5f5f5" }}>
+                        <div className="d-flex align-items-center" style={{ gap: "4px" }}>
+                            <img
+                                src={rate}
+                                alt="rate"
+                                height="14px"
+                                width="14px"
+                                style={{ objectFit: "contain" }}
+                            />
+                            <div className="card-rate" style={{ fontSize: "13px", color: "#ffc107", fontWeight: "700" }}>{item.ratingsAverage || 0}</div>
+                            <span style={{ fontSize: "11px", color: "#aaa" }}>({item.ratingsQuantity || 0})</span>
                         </div>
-                    </Card.Text>
+                        <div className="d-flex align-items-baseline" style={{ gap: "6px" }}>
+                            {hasDiscount ? (
+                                <>
+                                    <span style={{ textDecorationLine: 'line-through', color: "#aaa", fontSize: "12px" }}>{item.price}</span>
+                                    <span className="card-price" style={{ fontSize: "16px", fontWeight: "800", color: "#272727" }}>{item.priceAfterDiscount}</span>
+                                </>
+                            ) : (
+                                <span className="card-price" style={{ fontSize: "16px", fontWeight: "800", color: "#272727" }}>{item.price}</span>
+                            )}
+                            <span className="card-currency" style={{ fontSize: "11px", color: "#777" }}>جنيه</span>
+                        </div>
+                    </div>
                 </Card.Body>
             </Card>
             <ToastContainer />

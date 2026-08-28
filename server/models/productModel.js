@@ -97,7 +97,6 @@ productSchema.pre(/^find/, function (next) {
 });
 
 const setImageURL = (doc) => {
-  console.log("here5");
   if (doc.imageCover) {
     const imageUrl = `${process.env.BASE_URL}/products/${doc.imageCover}`;
     doc.imageCover = imageUrl;

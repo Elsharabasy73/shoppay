@@ -8,14 +8,16 @@ import favon from "../../assets/images/fav-on.png";
 const ProductCardHook = (item, favProd) => {
     const dispatch = useDispatch();
     const [favImg, setFavImg] = useState(favoff)
-    let Fav = favProd.some(fitem => fitem === item._id);
+    const safeFavProd = Array.isArray(favProd) ? favProd : [];
+    let Fav = safeFavProd.some(fitem => fitem === item._id);
     const [loadingAdd, setLoadingAdd] = useState(true)
     const [loadingRemove, setLoadingRemove] = useState(true)
     const [isFav, setIsFav] = useState(Fav)
 
 
     useEffect(() => {
-        setIsFav(favProd.some(fitem => fitem === item._id))
+        const list = Array.isArray(favProd) ? favProd : [];
+        setIsFav(list.some(fitem => fitem === item._id))
     }, [favProd])
 
     const handelFav = () => {
@@ -81,7 +83,7 @@ const ProductCardHook = (item, favProd) => {
             console.log(resRemove)
             if (resRemove && resRemove.status === "success") {
                 notify("تمت حذف المنتج من المفضلة بنجاح", "warn")
-            } else if (resAdd && resAdd.status === 401) {
+            } else if (resRemove && resRemove.status === 401) {
                 notify("انتا غير مسجل", "error")
             }
 

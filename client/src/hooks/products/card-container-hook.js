@@ -24,8 +24,11 @@ const CardContainerHook = () => {
     useEffect(() => {
 
         if (loading === false) {
-            if (res.data.length >= 1) {
+            if (res && res.data && Array.isArray(res.data) && res.data.length >= 1) {
                 setFavProd(res.data.map(item => item._id))
+            } else if (res && res.data && res.data.data && Array.isArray(res.data.data)) {
+                // handle wrapped response shape {data: [...]}
+                setFavProd(res.data.data.map(item => item._id))
             } else setFavProd([])
         }
 
