@@ -1,7 +1,18 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
 const AdminSideBar = () => {
+    const [user, setUser] = useState(null)
+
+    useEffect(() => {
+        try {
+            const stored = localStorage.getItem("user")
+            if (stored) setUser(JSON.parse(stored))
+        } catch (e) {
+            setUser(null)
+        }
+    }, [])
+
     return (
         <div className="sidebar">
             <div className="d-flex flex-column">
@@ -42,16 +53,20 @@ const AdminSideBar = () => {
                         اضف كوبون
                     </div>
                 </Link>
-                <Link to="/admin/allusers" style={{ textDecoration: 'none' }}>
-                    <div className="admin-side-text my-1 border-bottom p-2 mx-auto text-center">
-                        اداره المستخدمين
-                    </div>
-                </Link>
-                <Link to="/admin/adduser" style={{ textDecoration: 'none' }}>
-                    <div className="admin-side-text my-1 border-bottom p-2 mx-auto text-center">
-                        اضف مستخدم
-                    </div>
-                </Link>
+                {user && user.role === "admin" && (
+                    <>
+                        <Link to="/admin/allusers" style={{ textDecoration: 'none' }}>
+                            <div className="admin-side-text my-1 border-bottom p-2 mx-auto text-center">
+                                اداره المستخدمين
+                            </div>
+                        </Link>
+                        <Link to="/admin/adduser" style={{ textDecoration: 'none' }}>
+                            <div className="admin-side-text my-1 border-bottom p-2 mx-auto text-center">
+                                اضف مستخدم
+                            </div>
+                        </Link>
+                    </>
+                )}
 
             </div>
         </div>

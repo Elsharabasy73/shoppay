@@ -74,15 +74,15 @@ const NavBarLogin = () => {
                             user ? (
                                 <>
                                     {/* Control Panel / Profile - same size pills */}
-                                    {user.role === "admin" ? (
+                                    {["admin", "manager"].includes(user.role) ? (
                                         <Link to="/admin/allproducts" className="hidden lg:flex items-center gap-1 bg-[#1A3F60] text-white px-3 py-1.5 rounded-full text-xs font-bold hover:bg-black no-underline leading-none">لوحة التحكم</Link>
                                     ) : (
                                         <Link to="/user/profile" className="hidden lg:flex items-center gap-1 bg-white border border-[#1A3F60] text-[#1A3F60] px-3 py-1.5 rounded-full text-xs font-bold hover:bg-[#1A3F60] hover:text-white no-underline leading-none">حسابي</Link>
                                     )}
                                     <div className="relative flex items-center bg-[#1A3F60] rounded-full px-2.5 py-0.5 shadow-sm leading-none h-7">
                                         <NavDropdown title={user.name} id="basic-nav-dropdown" className="font-bold text-[11px] m-0 p-0 !text-white [&>a]:!text-white [&>a]:!text-[11px] [&>a]:!font-bold [&>a]:!leading-none [&>a]:!py-0 [&>a]:!my-0">
-                                            {user.role === "admin" ? (<NavDropdown.Item as={Link} to="/admin/allproducts">لوحة التحكم</NavDropdown.Item>) : (<NavDropdown.Item as={Link} to="/user/profile">الصفحه الشخصية</NavDropdown.Item>)}
-                                            <NavDropdown.Item as={Link} to={user.role === "admin" ? "/admin/allproducts" : "/user/profile"}>الملف الشخصي</NavDropdown.Item>
+                                            {["admin", "manager"].includes(user.role) ? (<NavDropdown.Item as={Link} to="/admin/allproducts">لوحة التحكم</NavDropdown.Item>) : (<NavDropdown.Item as={Link} to="/user/profile">الصفحه الشخصية</NavDropdown.Item>)}
+                                            <NavDropdown.Item as={Link} to={["admin", "manager"].includes(user.role) ? "/admin/allproducts" : "/user/profile"}>الملف الشخصي</NavDropdown.Item>
                                             <NavDropdown.Divider />
                                             <NavDropdown.Item onClick={logOut}>تسجيل خروج</NavDropdown.Item>
                                         </NavDropdown>

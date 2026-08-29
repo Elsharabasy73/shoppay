@@ -7,6 +7,7 @@ const ProtectedRouteHook = () => {
     const [userData, setUserData] = useState(getStoredUser())
     const [isUser, setIsUser] = useState()
     const [isAdmin, setIsAdmin] = useState()
+    const [isOnlyAdmin, setIsOnlyAdmin] = useState()
 
     useEffect(() => {
         const data = getStoredUser()
@@ -18,15 +19,17 @@ const ProtectedRouteHook = () => {
             } else {
                 setIsAdmin(false)
             }
+            setIsOnlyAdmin(data.role === "admin")
         } else {
             setIsAdmin(false)
+            setIsOnlyAdmin(false)
             setIsUser(false)
         }
     }, [])
 
 
 
-    return [isUser, isAdmin, userData]
+    return [isUser, isAdmin, isOnlyAdmin, userData]
 }
 
 export default ProtectedRouteHook

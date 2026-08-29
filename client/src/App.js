@@ -43,7 +43,7 @@ import ProductsByCategory from "./pages/Products/ProductsByCategory";
 import ProductsByBrand from "./pages/Products/ProductsByBrand";
 function App() {
 
-  const [isUser, isAdmin, userData] = ProtectedRouteHook()
+  const [isUser, isAdmin, isOnlyAdmin, userData] = ProtectedRouteHook()
 
 
   return (
@@ -82,6 +82,9 @@ function App() {
             <Route path="/admin/addcoupon" element={<AdminAddCouponPage />} />
             <Route path="/admin/editcoupon/:id" element={<AdminEditCouponPage />} />
             <Route path="/admin/editproduct/:id" element={<AdminEditProductsPage />} />
+          </Route>
+
+          <Route element={<ProtectedRoute auth={isOnlyAdmin} />}>
             <Route path="/admin/allusers" element={<AdminAllUsersPage />} />
             <Route path="/admin/adduser" element={<AdminAddUserPage />} />
             <Route path="/admin/edituser/:id" element={<AdminEditUserPage />} />
