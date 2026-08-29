@@ -9,7 +9,7 @@ const AdminSubCategoryCard = ({ subcategory }) => {
     const [show, handleClose, handleShow, handelDelete] = SubcategoryCardHook(subcategory)
 
     return (
-        <div className="user-address-card my-3 px-2">
+        <div className="user-address-card admin-card my-3 px-2">
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header >
                     <Modal.Title> <div className='font'>تاكيد الحذف</div></Modal.Title>

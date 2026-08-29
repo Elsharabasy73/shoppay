@@ -797,6 +797,10 @@ body {
   box-shadow: 0 8px 24px rgba(0,0,0,0.08) !important;
   border: 1px solid rgba(63,150,210,0.15) !important;
 }
+.admin-card {
+  border-radius: 12px !important;
+  overflow: hidden;
+}
 /* Product gallery - mobile responsive */
 .product-gallary-card {
   height: auto !important;

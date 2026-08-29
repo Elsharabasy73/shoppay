@@ -9,7 +9,7 @@ const AdminBrandCard = ({ brand }) => {
     const [show, handleClose, handleShow, handelDelete] = BrandCardHook(brand)
 
     return (
-        <div className="user-address-card my-3 px-2">
+        <div className="user-address-card admin-card my-3 px-2">
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header >
                     <Modal.Title> <div className='font'>تاكيد الحذف</div></Modal.Title>
@@ -25,16 +25,14 @@ const AdminBrandCard = ({ brand }) => {
                 </Modal.Footer>
             </Modal>
 
-            <Row className="d-flex justify-content-between align-items-center">
-                <Col xs="6" className="d-flex align-items-center">
+            <Row className="d-flex justify-content-between align-items-stretch">
+                <Col xs="6" className="d-flex align-items-stretch">
                     <img
                         alt={brand?.name || "brand"}
                         src={brand?.image}
-                        height="40px"
-                        width="40px"
-                        style={{ borderRadius: "50%", objectFit: "cover" }}
+                        style={{ height: "100%", width: "50px", objectFit: "cover", borderRadius: "10px 0 0 10px" }}
                     />
-                    <div className="p-2"> {brand?.name || ''}</div>
+                    <div className="px-3 d-flex align-items-center"> {brand?.name || ''}</div>
                 </Col>
                 <Col xs="6" className="d-flex justify-content-end">
                     <div className="d-flex p-2">

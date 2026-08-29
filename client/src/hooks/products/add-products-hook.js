@@ -34,6 +34,8 @@ const AdminAddProductsHook = () => {
 
     //values images products
     const [images, setImages] = useState({});
+    //value image cover
+    const [imageCover, setImageCover] = useState(null);
     //values state
     const [prodName, setProdName] = useState('');
     const [prodDescription, setProdDescription] = useState('');
@@ -52,6 +54,11 @@ const AdminAddProductsHook = () => {
     }
     const onChangeDesName = (event) => {
         setProdDescription(event.target.value)
+    }
+    const onChangeImageCover = (e) => {
+        if (e.target.files && e.target.files[0]) {
+            setImageCover(e.target.files[0])
+        }
     }
     const onChangePriceBefor = (event) => {
         setPriceBefore(event.target.value)
@@ -131,7 +138,7 @@ const AdminAddProductsHook = () => {
         const imagesCount = images ? Object.keys(images).length : 0;
         const priceNum = parseFloat(priceBefore);
         const qtyNum = parseInt(qty, 10);
-        if (!CatID || CatID === "0" || !prodName.trim() || !prodDescription.trim() || imagesCount <= 0 || isNaN(priceNum) || priceNum <= 0) {
+        if (!CatID || CatID === "0" || !prodName.trim() || !prodDescription.trim() || !imageCover || imagesCount <= 0 || isNaN(priceNum) || priceNum <= 0) {
             notify("من فضلك اكمل البيانات", "warn")
             return;
         }
@@ -144,16 +151,14 @@ const AdminAddProductsHook = () => {
             category: CatID,
             brand: BrandID,
             subcategories: seletedSubID.map(s => s._id || s),
-            imageCover: images[0],
+            imageCover: imageCover,
         });
         if (errMsg) {
             notify(errMsg, "warn")
             return;
         }
 
-        //convert base 64 image to file 
-        const imgCover = dataURLtoFile(images[0], Math.random() + ".png")
-        //convert array of base 64 image to file 
+        //convert base 64 image to file for gallery images
         const itemImages = Array.from(Array(Object.keys(images).length).keys()).map(
             (item, index) => {
                 return dataURLtoFile(images[index], Math.random() + ".png")
@@ -171,10 +176,9 @@ const AdminAddProductsHook = () => {
         formData.append("category", CatID);
         if (BrandID && BrandID !== "0" && BrandID !== 0) formData.append("brand", BrandID);
 
-        formData.append("imageCover", imgCover);
+        formData.append("imageCover", imageCover);
         itemImages.forEach((item) => formData.append("images", item))
         colors.forEach((color) => formData.append("colors", color))
-        // backend expects subcategories or category? check productModel subcategories
         seletedSubID.forEach((item) => formData.append("subcategories", item._id))
 
         setLoading(true)
@@ -193,6 +197,7 @@ const AdminAddProductsHook = () => {
                 // only clear on success
                 setColors([])
                 setImages({})
+                setImageCover(null)
                 setProdName('')
                 setProdDescription('')
                 setPriceBefore('السعر قبل الخصم')
@@ -223,7 +228,7 @@ const AdminAddProductsHook = () => {
     }, [loading])
 
 
-    return [onChangeDesName, onChangeQty, onChangeColor, onChangePriceAfter, onChangePriceBefor, onChangeProdName, showColor, category, brand, priceAftr, images, setImages, onSelect, onRemove, options, handelChangeComplete, removeColor, onSeletCategory, handelSubmit, onSeletBrand, colors, priceBefore, qty, prodDescription, prodName, CatID, BrandID, seletedSubID]
+    return [onChangeDesName, onChangeQty, onChangeColor, onChangePriceAfter, onChangePriceBefor, onChangeProdName, onChangeImageCover, showColor, category, brand, priceAftr, images, setImages, onSelect, onRemove, options, handelChangeComplete, removeColor, onSeletCategory, handelSubmit, onSeletBrand, colors, priceBefore, qty, prodDescription, prodName, CatID, BrandID, seletedSubID, imageCover]
 
 }
 

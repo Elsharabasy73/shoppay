@@ -42,6 +42,9 @@ const AdminEditProductsHook = (id) => {
 
     //values images products - MultiImageInput expects object {0: url/base64, 1: ...}
     const [images, setImages] = useState({});
+    //value image cover
+    const [imageCover, setImageCover] = useState(null);
+    const [imageCoverURL, setImageCoverURL] = useState(null);
     //values state
     const [prodName, setProdName] = useState('');
     const [prodDescription, setProdDescription] = useState('');
@@ -67,11 +70,10 @@ const AdminEditProductsHook = (id) => {
                 data.images.forEach((url, index) => {
                     imagesObj[index] = url;
                 });
-                // also include imageCover as first image if not already in images
-                // Keep as is: MultiImageInput shows images, cover is images[0]
                 setImages(imagesObj);
-            } else if (data.imageCover) {
-                setImages({ 0: data.imageCover });
+            }
+            if (data.imageCover) {
+                setImageCoverURL(data.imageCover);
             }
             setProdName(data.title || '')
             setProdDescription(data.description || '')
@@ -156,6 +158,13 @@ const AdminEditProductsHook = (id) => {
         SetBrandID(e.target.value)
     }
 
+    const onChangeImageCover = (e) => {
+        if (e.target.files && e.target.files[0]) {
+            setImageCover(e.target.files[0])
+            setImageCoverURL(URL.createObjectURL(e.target.files[0]))
+        }
+    }
+
     //to convert base 64 to file
     function dataURLtoFile(dataurl, filename) {
         var arr = dataurl.split(','),
@@ -187,7 +196,7 @@ const AdminEditProductsHook = (id) => {
         const imagesCount = images ? Object.keys(images).length : 0;
         const priceNum = parseFloat(priceBefore);
         const qtyNum = parseInt(qty, 10);
-        if (!CatID || CatID === "0" || CatID === 0 || !prodName.trim() || !prodDescription.trim() || imagesCount <= 0 || isNaN(priceNum) || priceNum <= 0) {
+        if (!CatID || CatID === "0" || CatID === 0 || !prodName.trim() || !prodDescription.trim() || !imageCoverURL || imagesCount <= 0 || isNaN(priceNum) || priceNum <= 0) {
             notify("من فضلك اكمل البيانات", "warn")
             return;
         }
@@ -200,29 +209,31 @@ const AdminEditProductsHook = (id) => {
             category: CatID,
             brand: BrandID,
             subcategories: seletedSubID.map(s => s._id || s),
-            imageCover: images[Object.keys(images)[0]],
+            imageCover: imageCoverURL,
         }, true);
         if (errMsg) {
             notify(errMsg, "warn")
             return;
         }
 
-        // prepare cover and gallery files, handle both base64 (data:) and http urls
-        const imageKeys = Object.keys(images);
-        const coverSrc = images[imageKeys[0]] || images[0];
+        // prepare cover file - use new file if selected, otherwise convert existing URL
         let imgCover;
-        if (coverSrc.startsWith("data:")) {
-            imgCover = dataURLtoFile(coverSrc, Math.random() + ".png")
-        } else {
-            try {
-                imgCover = await convertURLtoFile(coverSrc)
-            } catch (err) {
-                // if fetch fails (CORS etc), try to keep as is - will fail validation, show message
-                notify("فشل تحميل صورة الغلاف", "error")
-                return;
+        if (imageCover) {
+            imgCover = imageCover;
+        } else if (imageCoverURL) {
+            if (imageCoverURL.startsWith("data:")) {
+                imgCover = dataURLtoFile(imageCoverURL, Math.random() + ".png")
+            } else {
+                try {
+                    imgCover = await convertURLtoFile(imageCoverURL)
+                } catch (err) {
+                    notify("فشل تحميل صورة الغلاف", "error")
+                    return;
+                }
             }
         }
 
+        const imageKeys = Object.keys(images);
         const itemImages = []
         for (let i = 0; i < imageKeys.length; i++) {
             const key = imageKeys[i];
@@ -287,7 +298,7 @@ const AdminEditProductsHook = (id) => {
         }
     }, [loading])
 
-    return [CatID, BrandID, onChangeDesName, onChangeQty, onChangeColor, onChangePriceAfter, onChangePriceBefor, onChangeProdName, showColor, category, brand, priceAftr, images, setImages, onSelect, onRemove, options, handelChangeComplete, removeColor, onSeletCategory, handelSubmit, onSeletBrand, colors, priceBefore, qty, prodDescription, prodName]
+    return [CatID, BrandID, onChangeDesName, onChangeQty, onChangeColor, onChangePriceAfter, onChangePriceBefor, onChangeProdName, onChangeImageCover, showColor, category, brand, priceAftr, images, setImages, onSelect, onRemove, options, handelChangeComplete, removeColor, onSeletCategory, handelSubmit, onSeletBrand, colors, priceBefore, qty, prodDescription, prodName, imageCoverURL]
 
 }
 

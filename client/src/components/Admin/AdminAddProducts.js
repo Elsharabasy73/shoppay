@@ -11,7 +11,7 @@ import AdminAddProductsHook from '../../hooks/products/add-products-hook';
 
 const AdminAddProducts = () => {
 
-    const [onChangeDesName, onChangeQty, onChangeColor, onChangePriceAfter, onChangePriceBefor, onChangeProdName, showColor, category, brand, priceAftr, images, setImages, onSelect, onRemove, options, handelChangeComplete, removeColor, onSeletCategory, handelSubmit, onSeletBrand, colors, priceBefore, qty, prodDescription, prodName, CatID, BrandID, seletedSubID] =
+    const [onChangeDesName, onChangeQty, onChangeColor, onChangePriceAfter, onChangePriceBefor, onChangeProdName, onChangeImageCover, showColor, category, brand, priceAftr, images, setImages, onSelect, onRemove, options, handelChangeComplete, removeColor, onSeletCategory, handelSubmit, onSeletBrand, colors, priceBefore, qty, prodDescription, prodName, CatID, BrandID, seletedSubID, imageCover] =
         AdminAddProductsHook();
         
     return (
@@ -19,7 +19,27 @@ const AdminAddProducts = () => {
             <Row className="justify-content-start ">
                 <div className="admin-content-text pb-4"> اضافه منتج جديد</div>
                 <Col sm="8">
-                    <div className="text-form pb-2"> صور للمنتج</div>
+                    <div className="text-form pb-2"> صورة الغلاف</div>
+                    <div>
+                        <label for="upload-cover" style={{ cursor: "pointer" }}>
+                            <img
+                                src={imageCover ? URL.createObjectURL(imageCover) : avatar}
+                                alt="cover"
+                                height="100px"
+                                width="120px"
+                                style={{ objectFit: "cover", borderRadius: "8px" }}
+                            />
+                        </label>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={onChangeImageCover}
+                            id="upload-cover"
+                            style={{ display: "none" }}
+                        />
+                    </div>
+
+                    <div className="text-form pb-2 mt-3"> صور للمنتج</div>
 
                     <MultiImageInput
                         images={images}

@@ -13,7 +13,7 @@ import AdminEditProductsHook from '../../hooks/products/edit-products-hook';
 const AdminEditProducts = () => {
     const { id } = useParams();
 
-    const [CatID, BrandID, onChangeDesName, onChangeQty, onChangeColor, onChangePriceAfter, onChangePriceBefor, onChangeProdName, showColor, category, brand, priceAftr, images, setImages, onSelect, onRemove, options, handelChangeComplete, removeColor, onSeletCategory, handelSubmit, onSeletBrand, colors, priceBefore, qty, prodDescription, prodName] =
+    const [CatID, BrandID, onChangeDesName, onChangeQty, onChangeColor, onChangePriceAfter, onChangePriceBefor, onChangeProdName, onChangeImageCover, showColor, category, brand, priceAftr, images, setImages, onSelect, onRemove, options, handelChangeComplete, removeColor, onSeletCategory, handelSubmit, onSeletBrand, colors, priceBefore, qty, prodDescription, prodName, imageCoverURL] =
         AdminEditProductsHook(id);
 
     return (
@@ -21,7 +21,27 @@ const AdminEditProducts = () => {
             <Row className="justify-content-start ">
                 <div className="admin-content-text pb-4"> تعديل المنتج - {prodName}</div>
                 <Col sm="8">
-                    <div className="text-form pb-2"> صور للمنتج</div>
+                    <div className="text-form pb-2"> صورة الغلاف</div>
+                    <div>
+                        <label for="upload-cover-edit" style={{ cursor: "pointer" }}>
+                            <img
+                                src={imageCoverURL || avatar}
+                                alt="cover"
+                                height="100px"
+                                width="120px"
+                                style={{ objectFit: "cover", borderRadius: "8px" }}
+                            />
+                        </label>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={onChangeImageCover}
+                            id="upload-cover-edit"
+                            style={{ display: "none" }}
+                        />
+                    </div>
+
+                    <div className="text-form pb-2 mt-3"> صور للمنتج</div>
 
 
                     <MultiImageInput
