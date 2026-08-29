@@ -15,11 +15,6 @@ const SigmaTopBar = () => {
           <a href="https://www.facebook.com/sigmacomputer.egypt/" target="_blank" rel="noreferrer" className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-[11px] hover:bg-white/30 text-white no-underline">f</a>
           <a href="https://t.me/SigmaComputer/" target="_blank" rel="noreferrer" className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-[11px] hover:bg-white/30 text-white no-underline">✈</a>
           <a href="https://www.youtube.com/@Sigma.Computer/" target="_blank" rel="noreferrer" className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-[11px] hover:bg-white/30 text-white no-underline">▶</a>
-          <span className="hidden md:inline opacity-70">|</span>
-          <select className="bg-[#013A60] text-white text-xs px-3 py-1.5 rounded-full border border-white/20 outline-none">
-            <option>English</option>
-            <option>العربية</option>
-          </select>
         </div>
       </div>
     </div>
