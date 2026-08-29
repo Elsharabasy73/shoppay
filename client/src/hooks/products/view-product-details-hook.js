@@ -40,12 +40,22 @@ const ViewProductsDetalisHook = (prodID) => {
     }, [item._id || item.id])
 
 
-    //to view images gallery
+    //to view images gallery - Amazon style: include cover + images with thumbnail
     let images = []
-    if (item.images)
-        images = item.images.map((img) => { return { original: img } })
-    else {
-        images = [{ original: `${mobile}` }]
+    if (item.imageCover || item.images) {
+        const cover = item.imageCover ? [{ original: item.imageCover, thumbnail: item.imageCover }] : []
+        const rest = Array.isArray(item.images) ? item.images.map((img) => ({ original: img, thumbnail: img })) : []
+        images = [...cover, ...rest]
+        // de-duplicate if cover already in images
+        const seen = new Set()
+        images = images.filter(i => {
+            if (seen.has(i.original)) return false
+            seen.add(i.original)
+            return true
+        })
+    }
+    if (!images.length) {
+        images = [{ original: `${mobile}`, thumbnail: `${mobile}` }]
     }
 
 
