@@ -1,18 +1,26 @@
 import React from 'react'
 import { Card, Col } from 'react-bootstrap'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import rate from "../../assets/images/rate.png";
 import ProductCardHook from '../../hooks/products/product-card-hook';
 
 const ProductCard = ({ item, favProd }) => {
+    const navigate = useNavigate()
     const [removeToWishListData, addToWishListData, handelFav, favImg] = ProductCardHook(item, favProd)
 
     const hasDiscount = item.priceAfterDiscount && item.priceAfterDiscount >= 1 && item.priceAfterDiscount < item.price;
+    const handleCardClick = (e) => {
+        // don't navigate when clicking fav button
+        if (e.target.closest('[data-fav-btn]')) return
+        navigate(`/products/${item._id || item.id}`)
+        window.scrollTo(0,0)
+    }
 
     return (
         <Col xs="6" sm="6" md="4" lg="3" className="d-flex align-items-stretch">
             <Card
+                onClick={handleCardClick}
                 className="product-card my-2 w-100 border-0"
                 style={{
                     borderRadius: "24px",
@@ -24,10 +32,11 @@ const ProductCard = ({ item, favProd }) => {
                     flexDirection: "column",
                     transition: "transform 0.2s ease, box-shadow 0.2s ease",
                     height: "385px",
+                    cursor: "pointer",
                 }}>
                 {/* Image wrapper with fav button overlay */}
                 <div style={{ position: "relative", height: "220px", backgroundColor: "#F2F8FD", overflow: "hidden", flexShrink: 0 }}>
-                    <Link to={`/products/${item._id}`} style={{ textDecoration: 'none', display: 'block', height: '100%' }}>
+                    <Link to={`/products/${item._id || item.id}`} style={{ textDecoration: 'none', display: 'block', height: '100%' }}>
                         <Card.Img
                             src={item.imageCover}
                             alt={item.title}
@@ -43,7 +52,8 @@ const ProductCard = ({ item, favProd }) => {
                     </Link>
                     {/* fav button - absolute top-right */}
                     <div
-                        onClick={handelFav}
+                        data-fav-btn
+                        onClick={(e)=>{e.stopPropagation(); handelFav()}}
                         title={favImg && favImg.includes ? "" : "المفضلة"}
                         style={{
                             position: "absolute",
@@ -99,26 +109,28 @@ const ProductCard = ({ item, favProd }) => {
                         flex: 1,
                     }}>
                     <div>
-                        <Card.Title as="div" style={{ marginBottom: "8px" }}>
-                            <div
-                                className="card-title"
-                                title={item.title}
-                                style={{
-                                    display: "-webkit-box",
-                                    WebkitLineClamp: 2,
-                                    WebkitBoxOrient: "vertical",
-                                    overflow: "hidden",
-                                    textOverflow: "ellipsis",
-                                    minHeight: "40px",
-                                    lineHeight: "20px",
-                                    fontSize: "14px",
-                                    fontWeight: "500",
-                                    color: "#333",
-                                    textAlign: "right",
-                                }}>
-                                {item.title}
-                            </div>
-                        </Card.Title>
+                        <Link to={`/products/${item._id || item.id}`} style={{ textDecoration: 'none' }}>
+                            <Card.Title as="div" style={{ marginBottom: "8px" }}>
+                                <div
+                                    className="card-title"
+                                    title={item.title}
+                                    style={{
+                                        display: "-webkit-box",
+                                        WebkitLineClamp: 2,
+                                        WebkitBoxOrient: "vertical",
+                                        overflow: "hidden",
+                                        textOverflow: "ellipsis",
+                                        minHeight: "40px",
+                                        lineHeight: "20px",
+                                        fontSize: "14px",
+                                        fontWeight: "500",
+                                        color: "#333",
+                                        textAlign: "right",
+                                    }}>
+                                    {item.title}
+                                </div>
+                            </Card.Title>
+                        </Link>
                         {item.description ? (
                             <div style={{
                                 fontSize: "11px",

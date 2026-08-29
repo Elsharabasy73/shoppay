@@ -30,13 +30,13 @@ const RatePost = () => {
     value: rateValue,
     a11y: true,
     isHalf: false,
-    edit: canRate,
+    edit: !!user,
     char: "★",
     emptyIcon: <span>☆</span>,
     halfIcon: <span>★</span>,
     filledIcon: <span>★</span>,
     onChange: newValue => {
-      if (canRate) OnChangeRateValue(newValue);
+      OnChangeRateValue(newValue);
     }
   };
   return (

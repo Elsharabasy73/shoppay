@@ -12,10 +12,10 @@ const Footer = () => {
                 <div className="relative z-10 w-full md:w-3/4 mx-auto">
                     <div className="flex flex-col lg:flex-row justify-between gap-8">
                         <div className="flex flex-col gap-2 items-center lg:items-start">
-                            <div className="font-extrabold text-xl tracking-tighter">ShopPay • Sigma</div>
+                            <div className="font-extrabold text-xl tracking-tighter">ShopPay</div>
                             <a href="https://maps.app.goo.gl/LKn1is733eKxzMfSA" target="_blank" rel="noreferrer" className="text-white/70 text-sm hover:text-white no-underline">25 Esraa Al Moalmeen st, Lebnan Sq Giza, Egypt</a>
-                            <a href="tel:0233033099" className="text-white/70 text-sm hover:text-white no-underline">0233033099</a>
-                            <a href="mailto:sigmapc@gmail.com" className="text-white/70 text-sm hover:text-white no-underline">sigmapc@gmail.com</a>
+                            <a href="tel:01553029842" className="text-white/70 text-sm hover:text-white no-underline">01553029842</a>
+                            <a href="mailto:shoppay@gmail.com" className="text-white/70 text-sm hover:text-white no-underline">shoppay@gmail.com</a>
                         </div>
                         <div className="flex flex-col md:flex-row gap-8 justify-center">
                             <div className="min-w-[150px] text-center lg:text-left">

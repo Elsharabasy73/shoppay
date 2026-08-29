@@ -11,8 +11,7 @@ const ProductGallery = () => {
 
     
     return (
-        <div className="product-gallary-card d-flex justfiy-content-center  align-items-center
-        pt-2">
+        <div className="product-gallary-card d-flex justify-content-center align-items-center p-2 sm:p-3 bg-[#F2F8FD] rounded-3xl border border-[#DAEBF7] overflow-hidden w-full max-w-full sm:aspect-square">
             <ImageGallery items={images}
                 showFullscreenButton={false}
                 isRTL={true}

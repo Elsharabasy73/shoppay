@@ -7,12 +7,12 @@ const ProductDetails = () => {
    
     return (
         <div>
-            <Row className='py-3'>
-                <Col lg="4">
+            <Row className='py-2 g-4'>
+                <Col lg="5">
                     <ProductGallery  />
                 </Col>
 
-                <Col lg="8">
+                <Col lg="7">
 
                     <ProductText  />
                 </Col>

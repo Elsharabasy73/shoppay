@@ -797,6 +797,26 @@ body {
   box-shadow: 0 8px 24px rgba(0,0,0,0.08) !important;
   border: 1px solid rgba(63,150,210,0.15) !important;
 }
+/* Product gallery - mobile responsive */
+.product-gallary-card {
+  height: auto !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  border-radius: 24px !important;
+}
+.image-gallery-slide {
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 1;
+}
+@media (max-width: 640px) {
+  .product-gallary-card {
+    padding: 8px !important;
+  }
+  .image-gallery-slide {
+    height: auto !important;
+  }
+}
 .input-form, .input-form-area, .select, .user-input, .copon-input {
   border-radius: 12px !important;
   background: #fff !important;
