@@ -7,17 +7,19 @@ import DiscountSection from './../../components/Home/DiscountSection';
 import BrandFeatured from '../../components/Brand/BrandFeatured';
 import Footer from '../../components/common/Footer';
 import ViewHomeProductsHook from '../../hooks/products/view-home-products-hook';
+import ViewHomeNewestHook from '../../hooks/products/view-home-newest-hook';
 const HomePage = () => {
 
-    const [items] = ViewHomeProductsHook();
+    const [soldItems] = ViewHomeProductsHook();
+    const [newestItems] = ViewHomeNewestHook();
     return (
         <div className='font' style={{ minHeight: '670px' }}>
 
             <Slider />
             <HomeCategory />
-            <CardProductsContainer products={items} title="الاكثر مبيعا" btntitle="المزيد" pathText="/products" />
+            <CardProductsContainer products={soldItems} title="الاكثر مبيعا" btntitle="المزيد" pathText="/products" />
             <DiscountSection />
-            <CardProductsContainer products={items} title="احدث الازياء" btntitle="المزيد" pathText="/products" />
+            <CardProductsContainer products={newestItems} title="احدث المنتجات" btntitle="المزيد" pathText="/products" />
             <BrandFeatured title="اشهر الماركات" btntitle="المزيد" />
 
         </div>

@@ -13,12 +13,12 @@ const ProductCard = ({ item, favProd }) => {
     return (
         <Col xs="6" sm="6" md="4" lg="3" className="d-flex align-items-stretch">
             <Card
-                className="product-card my-2 w-100"
+                className="product-card my-2 w-100 border-0"
                 style={{
-                    borderRadius: "12px",
-                    border: "1px solid #eee",
+                    borderRadius: "24px",
+                    border: "1px solid rgba(63,150,210,0.15)",
                     backgroundColor: "#FFFFFF",
-                    boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
                     overflow: "hidden",
                     display: "flex",
                     flexDirection: "column",
@@ -26,7 +26,7 @@ const ProductCard = ({ item, favProd }) => {
                     height: "385px",
                 }}>
                 {/* Image wrapper with fav button overlay */}
-                <div style={{ position: "relative", height: "220px", backgroundColor: "#f9f9f9", overflow: "hidden", flexShrink: 0 }}>
+                <div style={{ position: "relative", height: "220px", backgroundColor: "#F2F8FD", overflow: "hidden", flexShrink: 0 }}>
                     <Link to={`/products/${item._id}`} style={{ textDecoration: 'none', display: 'block', height: '100%' }}>
                         <Card.Img
                             src={item.imageCover}
@@ -77,15 +77,15 @@ const ProductCard = ({ item, favProd }) => {
                             position: "absolute",
                             top: "10px",
                             left: "10px",
-                            backgroundColor: "#e53935",
+                            backgroundColor: "#34C759",
                             color: "#fff",
                             fontSize: "11px",
                             fontWeight: "700",
                             padding: "3px 8px",
-                            borderRadius: "6px",
+                            borderRadius: "9999px",
                             zIndex: 2,
                         }}>
-                            خصم
+                            خصم {Math.round(((item.price - item.priceAfterDiscount)/item.price)*100)}%
                         </div>
                     ) : null}
                 </div>
@@ -150,10 +150,10 @@ const ProductCard = ({ item, favProd }) => {
                             {hasDiscount ? (
                                 <>
                                     <span style={{ textDecorationLine: 'line-through', color: "#aaa", fontSize: "12px" }}>{item.price}</span>
-                                    <span className="card-price" style={{ fontSize: "16px", fontWeight: "800", color: "#272727" }}>{item.priceAfterDiscount}</span>
+                                    <span className="card-price" style={{ fontSize: "16px", fontWeight: "800", color: "#1A3F60" }}>{item.priceAfterDiscount}</span>
                                 </>
                             ) : (
-                                <span className="card-price" style={{ fontSize: "16px", fontWeight: "800", color: "#272727" }}>{item.price}</span>
+                                <span className="card-price" style={{ fontSize: "16px", fontWeight: "800", color: "#1A3F60" }}>{item.price}</span>
                             )}
                             <span className="card-currency" style={{ fontSize: "11px", color: "#777" }}>جنيه</span>
                         </div>

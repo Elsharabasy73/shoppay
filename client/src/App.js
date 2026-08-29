@@ -1,6 +1,7 @@
 import HomePage from "./pages/Home/HomePage";
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import NavBarLogin from "./components/common/NavBarLogin";
+import SigmaTopBar from "./components/common/SigmaTopBar";
 import Footer from "./components/common/Footer";
 import LoginPage from './pages/Auth/LoginPage';
 import RegisterPage from "./pages/Auth/RegisterPage";
@@ -48,6 +49,7 @@ function App() {
   return (
     <BrowserRouter>
       <div className="font" >
+        <SigmaTopBar />
         <NavBarLogin />
         <Routes>
           <Route index element={<HomePage />} />

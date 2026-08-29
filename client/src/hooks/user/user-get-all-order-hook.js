@@ -17,8 +17,10 @@ const UserGetAllOrderHook = () => {
     if (user != null) userName = user.name || ''
 
     const get = async () => {
+        const token = localStorage.getItem("token")
+        if (!token) { setLoading(false); return; }
         setLoading(true)
-        await dispatch(getAllOrders('', 5))
+        await dispatch(getAllOrders(1, 5))
         setLoading(false)
     }
 
@@ -27,6 +29,8 @@ const UserGetAllOrderHook = () => {
     }, [])
 
     const onPress = async (page) => {
+        const token = localStorage.getItem("token")
+        if (!token) return;
         setLoading(true)
         await dispatch(getAllOrders(page, 5))
         setLoading(false)

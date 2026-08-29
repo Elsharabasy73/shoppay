@@ -12,7 +12,9 @@ const Slider = () => {
         setIndex(selectedIndex)
     }
     return (
-        <Carousel activeIndex={index} onSelect={handleSelect}>
+        <div className="max-w-[1400px] mx-auto px-5 lg:px-20 mt-4">
+            <div className="rounded-3xl overflow-hidden shadow-lg border border-[#DAEBF7]">
+                <Carousel activeIndex={index} onSelect={handleSelect}>
             <Carousel.Item className="slider-background" interval={2000}>
                 <div className="d-flex flex-row justify-content-center align-items-center flex-wrap p-3">
                     <img
@@ -68,6 +70,8 @@ const Slider = () => {
                 </div>
             </Carousel.Item>
         </Carousel>
+            </div>
+        </div>
     )
 }
 

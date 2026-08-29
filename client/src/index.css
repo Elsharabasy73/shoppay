@@ -1,6 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --sigma-blue: #3F96D2;
+    --sigma-blue-dark: #1A3F60;
+    --sigma-blue-soft: #206EA9;
+    --sigma-blue-light: #F2F8FD;
+    --sigma-blue-lighter: #DAEBF7;
+    --sigma-dark: #393F55;
+    --sigma-green: #34C759;
+    --sigma-gradient: linear-gradient(90deg, #1075B8 0%, #002137 100%);
+  }
+}
+
 body {
   margin: 0;
-  font-family: "Almarai", sans-serif;
+  font-family: "Almarai", system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: #F2F8FD;
 }
 .m-0 {
   margin: 0;
@@ -687,9 +705,12 @@ body {
 
 .dropdown-toggle {
   color: white !important;
-  font-size: 16px !important;
-  font-weight: bold  !important;
-  margin-top: 14px;
+  font-size: 11px !important;
+  font-weight: 700  !important;
+  margin-top: 0 !important;
+  padding-top: 2px !important;
+  padding-bottom: 2px !important;
+  line-height: 1 !important;
 }
 .dropdown-menu {
   background-color: #212529 !important;
@@ -706,5 +727,83 @@ body {
 
 .badge {
   font-size: 12px !important;
-font-weight: bold !important;
+ font-weight: bold !important;
+}
+
+/* Sigma overrides */
+.font {
+  background-color: #F2F8FD !important;
+}
+.sigma-gradient {
+  background: var(--sigma-gradient);
+}
+.sigma-card {
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+.sigma-search-wrap {
+  background: #F1F5F9;
+  border-radius: 12px;
+  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+}
+.sigma-product-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 1rem;
+}
+@media (min-width: 1024px) {
+  .sigma-product-grid {
+    grid-template-columns: repeat(4, minmax(0,1fr));
+  }
+}
+.tilt-backplate {
+  position: absolute;
+  inset: 0;
+  background: var(--sigma-blue);
+  border-radius: 24px;
+  transform: rotate(-1deg);
+  transform-origin: bottom left;
+  z-index: 0;
+}
+
+/* Sigma overrides for legacy classes */
+.btn-save, .btn-login, .btn-a, .btn-add-address, .product-cart-add, .copon-btn {
+  background-color: var(--sigma-blue) !important;
+  border-radius: 12px !important;
+}
+.btn-save:hover, .btn-login:hover, .btn-a:hover, .product-cart-add:hover, .copon-btn:hover {
+  background-color: var(--sigma-blue-dark) !important;
+  color: white !important;
+}
+.sidebar {
+  border-radius: 24px !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08) !important;
+}
+.admin-side-text:hover {
+  background-color: var(--sigma-blue-dark) !important;
+}
+.shopping-now, .card-filter-item:hover, .page-link:hover {
+  border-color: var(--sigma-blue-dark) !important;
+  background-color: var(--sigma-blue-dark) !important;
+}
+.page-link {
+  border-color: var(--sigma-blue-dark) !important;
+  color: var(--sigma-blue-dark) !important;
+  border-radius: 12px !important;
+}
+.cart-item-body, .cart-checkout, .user-data, .user-address-card, .rate-container, .user-order, .product-gallary-card {
+  border-radius: 24px !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08) !important;
+  border: 1px solid rgba(63,150,210,0.15) !important;
+}
+.input-form, .input-form-area, .select, .user-input, .copon-input {
+  border-radius: 12px !important;
+  background: #fff !important;
+  border-color: #DAEBF7 !important;
+}
+.admin-content-text, .sub-tile, .cart-title {
+  color: #1A3F60 !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.02em !important;
 }

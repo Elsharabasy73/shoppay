@@ -6,7 +6,7 @@ const ViewHomeProductsHook = () => {
 
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(getAllProducts())
+        dispatch(getAllProducts(8, "-sold"))
     }, [])
 
     const allProducts = useSelector((state) => state.allproducts.allProducts)

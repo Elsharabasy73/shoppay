@@ -24,10 +24,12 @@ export const createProduct = (formatData) => async (dispatch) => {
     }
 }
 
-//get all products with pagination
-export const getAllProducts = (limit) => async (dispatch) => {
+//get all products with pagination (supports sort like -sold, -createdAt)
+export const getAllProducts = (limit, sort) => async (dispatch) => {
     try {
-        const response = await useGetData(`/api/v1/products?limit=${limit}`);
+        let query = `/api/v1/products?limit=${limit || 8}`;
+        if (sort) query += `&sort=${sort}`;
+        const response = await useGetData(query);
         dispatch({
             type: GET_ALL_PRODUCTS,
             payload: response,
