@@ -199,7 +199,43 @@ export const validateAddress = ({ alias, details, phone, city, address, country,
   return null;
 };
 
-// User – create/update (reuse signup checks)
+// User – admin create/update
+export const validateUserCreate = ({ name, email, password, passwordConfirm, phone, role }) => {
+  if (!name || String(name).trim() === "") return "The name is required";
+  if (String(name).trim().length < 3) return "Too short User name";
+  if (String(name).trim().length > 60) return "Too long User name";
+  if (!email || String(email).trim() === "") return "The email is required";
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email.trim())) return "Invalid email address";
+  if (!password) return "Password is required";
+  if (String(password).length < 6) return "Password must be at least 6 characters";
+  if (!passwordConfirm) return "Password confirmation is required";
+  if (password !== passwordConfirm) return "Passwords do not match";
+  if (role && !["user", "manager"].includes(role)) return "Invalid role value. Allowed roles are user and manager only";
+  if (phone && !/^(\+20)?(010|011|012|015)[0-9]{8}$/.test(String(phone).replace(/[\s-]/g, "")) && !/^\+?[0-9]{8,15}$/.test(phone)) {
+    // fallback: allow valid international format, backend checks ar-EG/ar-SA
+  }
+  return null;
+};
+
+export const validateUserUpdate = ({ name, email, phone, role, password, passwordConfirm }) => {
+  if (name !== undefined && name !== null && String(name).trim() !== "") {
+    if (String(name).trim().length < 3) return "Too short User name";
+    if (String(name).trim().length > 60) return "Too long User name";
+  }
+  if (email !== undefined && email !== null && String(email).trim() !== "") {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(String(email).trim())) return "Invalid email address";
+  }
+  if (role && !["user", "manager"].includes(role)) return "Invalid role value. Allowed roles are user and manager only";
+  if (password !== undefined && password !== null && String(password).trim() !== "") {
+    if (String(password).length < 6) return "Password must be at least 6 characters";
+    if (!passwordConfirm || String(passwordConfirm).trim() === "") return "Password confirmation is required";
+    if (password !== passwordConfirm) return "Passwords do not match";
+  }
+  return null;
+};
+
 // Helper to extract error message from axios response
 export const getErrorMessage = (res) => {
   if (!res) return null;

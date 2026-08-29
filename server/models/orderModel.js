@@ -94,7 +94,7 @@ orderSchema.pre(/^find/, function (next) {
     select: "name email phone profileImg",
   }).populate({
     path: "cartItems.product",
-    select: "title price imageCover",
+    select: "title price imageCover ratingsAverage ratingsQuantity quantity sold",
   });
   next();
 });

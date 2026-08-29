@@ -32,6 +32,9 @@ import AdminEditCouponPage from './pages/Admin/AdminEditCouponPage';
 import AdminEditBrandPage from './pages/Admin/AdminEditBrandPage';
 import AdminEditCategoryPage from './pages/Admin/AdminEditCategoryPage';
 import AdminEditSubCategoryPage from './pages/Admin/AdminEditSubCategoryPage';
+import AdminAllUsersPage from './pages/Admin/AdminAllUsersPage';
+import AdminAddUserPage from './pages/Admin/AdminAddUserPage';
+import AdminEditUserPage from './pages/Admin/AdminEditUserPage';
 import ProtectedRouteHook from './hooks/auth/protected-route-hook';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import { useEffect, useState } from "react";
@@ -77,6 +80,9 @@ function App() {
             <Route path="/admin/addcoupon" element={<AdminAddCouponPage />} />
             <Route path="/admin/editcoupon/:id" element={<AdminEditCouponPage />} />
             <Route path="/admin/editproduct/:id" element={<AdminEditProductsPage />} />
+            <Route path="/admin/allusers" element={<AdminAllUsersPage />} />
+            <Route path="/admin/adduser" element={<AdminAddUserPage />} />
+            <Route path="/admin/edituser/:id" element={<AdminEditUserPage />} />
           </Route>
 
           <Route element={<ProtectedRoute auth={isUser} />}>

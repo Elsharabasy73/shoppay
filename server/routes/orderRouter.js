@@ -6,6 +6,7 @@ const {
   getOrders,
   getOrder,
   updateOrderToDelivered,
+  updateOrderToPaid,
   checkoutSession,
 } = require("../controllers/orderController");
 const { createPaymobPayment } = require("../controllers/paymobController");
@@ -14,17 +15,27 @@ const router = express.Router();
 
 const { protect, allowTo } = require("../middlewares/authMiddleware");
 
-router.use(protect, allowTo(["user", "admin"]));
+router.use(protect);
 
-router.get("/", filterOrdersForLoggedUser, getOrders);
-router.route("/:cartId").post(createCashOrder);
+// stripe checkout must be before `/:id` else it is captured as an id
+router.get("/checkout-session/:cartId", allowTo(["user"]), checkoutSession);
 
-router.post("/:id/paymob", createPaymobPayment);
-router.put("/:id/deliver", updateOrderToDelivered);
+router.get(
+  "/",
+  allowTo(["user", "admin", "manager"]),
+  filterOrdersForLoggedUser,
+  getOrders,
+);
+router.get("/:id", allowTo(["user", "admin", "manager"]), getOrder);
 
-router.get("/:id", getOrder);
-//stripe payment
-router.get("/checkout-session/:cartId", checkoutSession);
+router.route("/:cartId").post(allowTo(["user"]), createCashOrder);
 
+router.post("/:id/paymob", allowTo(["user"]), createPaymobPayment);
+router.put(
+  "/:id/deliver",
+  allowTo(["admin", "manager"]),
+  updateOrderToDelivered,
+);
+router.put("/:id/pay", allowTo(["admin", "manager"]), updateOrderToPaid);
 
 module.exports = router;

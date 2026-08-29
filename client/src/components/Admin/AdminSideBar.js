@@ -42,6 +42,16 @@ const AdminSideBar = () => {
                         اضف كوبون
                     </div>
                 </Link>
+                <Link to="/admin/allusers" style={{ textDecoration: 'none' }}>
+                    <div className="admin-side-text my-1 border-bottom p-2 mx-auto text-center">
+                        اداره المستخدمين
+                    </div>
+                </Link>
+                <Link to="/admin/adduser" style={{ textDecoration: 'none' }}>
+                    <div className="admin-side-text my-1 border-bottom p-2 mx-auto text-center">
+                        اضف مستخدم
+                    </div>
+                </Link>
 
             </div>
         </div>

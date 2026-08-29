@@ -24,7 +24,8 @@ const UserAllOrderCard = ({ item }) => {
                     <div className="mt-3 d-flex">
                         <div className="cat-text mt-1  d-inline">الكميه</div>
                         <input
-                            value={item.count}
+                            value={item.quantity}
+                            readOnly
                             className="mx-2 "
                             type="number"
                             style={{ width: "40px", height: "30px" }}

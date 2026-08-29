@@ -52,8 +52,8 @@ exports.createUserValidator = [
     }),
   check("role")
     .optional()
-    .isIn(["user", "admin"])
-    .withMessage("Invalid role value"),
+    .isIn(["user", "manager"])
+    .withMessage("Invalid role value. Allowed roles are user and manager only"),
   check("profileImg").optional(),
   check("phone")
     .optional()
@@ -67,30 +67,40 @@ exports.updateUserValidator = [
   body("name")
     .optional()
     .custom((val, { req }) => {
-      req.body.slug = slugify(val);
+      if (val) req.body.slug = slugify(val);
       return true;
     }),
   check("email")
-    .notEmpty()
-    .withMessage("User email required")
+    .optional()
     .isEmail()
     .withMessage("Invalid email address")
-    .custom((val, { req }) =>
-      User.findOne({ email: val }).then((user) => {
+    .custom((val, { req }) => {
+      if (!val) return true;
+      return User.findOne({ email: val }).then((user) => {
         if (user && user._id.toString() !== req.params.id) {
           return Promise.reject(new Error("Email already in use"));
         }
-      }),
-    ),
+      });
+    }),
   check("password")
-    .notEmpty()
-    .withMessage("Password is required")
+    .optional()
     .isLength({ min: 6 })
     .withMessage("Password must be at least 6 characters"),
+  check("passwordConfirm")
+    .optional()
+    .custom((val, { req }) => {
+      if (req.body.password && !val) {
+        throw new Error("Password confirmation is required");
+      }
+      if (req.body.password && val !== req.body.password) {
+        throw new Error("Passwords do not match");
+      }
+      return true;
+    }),
   check("role")
     .optional()
-    .isIn(["user", "admin"])
-    .withMessage("Invalid role value"),
+    .isIn(["user", "manager"])
+    .withMessage("Invalid role value. Allowed roles are user and manager only"),
   check("profileImg").optional(),
   check("phone")
     .optional()

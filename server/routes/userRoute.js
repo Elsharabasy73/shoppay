@@ -26,12 +26,12 @@ const router = express.Router();
 router.get("/getMe", protect, getLoggedInUser, getUser);
 
 // Only admin can access this route
-router.use(protect, allowTo(["admin", "user"]));
 
 router
-  .route("/")
+  .route("/", protect, allowTo(["admin"]))
   .get(getUsers)
   .post(uploadBrandImage, resizeImage, createUserValidator, createUser);
+router.use(protect, allowTo(["admin", "user"]));
 
 router
   .route("/:id")
