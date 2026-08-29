@@ -1,5 +1,4 @@
 import React from 'react'
-import { Row, Col } from 'react-bootstrap'
 
 import { ToastContainer } from 'react-toastify';
 import useAddSubcategory from '../../hooks/subcategory/add-subcategory-hook';
@@ -10,9 +9,9 @@ const AdminAddSubCategory = () => {
 
     return (
         <div>
-            <Row className="justify-content-start ">
+            <div className="flex flex-wrap justify-start ">
                 <div className="admin-content-text pb-4">اضافه تصنيف فرعي جديد</div>
-                <Col sm="8">
+                <div className="w-full sm:w-2/3 px-2">
                     <input
                         value={name}
                         onChange={onChangeName}
@@ -28,23 +27,23 @@ const AdminAddSubCategory = () => {
                             })) : null
                         }
                     </select>
-                </Col>
-            </Row>
-            <Row>
-                <Col sm="8" className="d-flex justify-content-end ">
+                </div>
+            </div>
+            <div className="flex flex-wrap">
+                <div className="w-full sm:w-2/3 flex justify-end px-2">
                     <button onClick={handelSubmit} className="btn-save d-inline mt-2 ">حفظ</button>
-                </Col>
-            </Row>
+                </div>
+            </div>
 
-            <Row>
-                <Col sm="8" className="">
+            <div className="flex flex-wrap">
+                <div className="w-full sm:w-2/3 px-2">
                     {
                         Array.isArray(subcategories) && subcategories.length > 0 ? (subcategories.map((item) => {
                             return <AdminSubCategoryCard key={item._id} subcategory={item} />
                         })) : <h6>لا يوجد تصنيفات فرعية حتى الان</h6>
                     }
-                </Col>
-            </Row>
+                </div>
+            </div>
 
             <ToastContainer />
         </div>

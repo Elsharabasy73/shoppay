@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { Container, Row } from 'react-bootstrap'
 import SubTitle from '../common/SubTitle'
 import ProductCard from './ProductCard'
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,9 +10,9 @@ const CardProductsContainer = ({ title, btntitle, pathText, products }) => {
     const [favProd] = CardContainerHook()
 
     return (
-        <Container>
+        <div className="max-w-[1400px] mx-auto px-5">
             {products ? (<SubTitle title={title} btntitle={btntitle} pathText={pathText} />) : null}
-            <Row className='my-2 d-flex justify-content-between'>
+            <div className='my-2 flex flex-wrap justify-between'>
                 {
                     products ? (
                         products.map((item, index) => <ProductCard favProd={favProd} key={index} item={item} />)
@@ -21,8 +20,8 @@ const CardProductsContainer = ({ title, btntitle, pathText, products }) => {
 
                 }
 
-            </Row>
-        </Container>
+            </div>
+        </div>
     )
 }
 

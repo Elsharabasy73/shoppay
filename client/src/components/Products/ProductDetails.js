@@ -1,22 +1,18 @@
 import React from 'react'
-import { Row, Col } from 'react-bootstrap'
 import ProductGallery from './ProductGallery'
 import ProductText from './ProductText'
 
 const ProductDetails = () => {
-   
+
     return (
-        <div>
-            <Row className='py-2 g-4'>
-                <Col lg="5">
-                    <ProductGallery  />
-                </Col>
+        <div className="flex flex-col lg:flex-row gap-4 lg:gap-6">
+            <div className="w-full lg:w-5/12">
+                <ProductGallery />
+            </div>
 
-                <Col lg="7">
-
-                    <ProductText  />
-                </Col>
-            </Row>
+            <div className="w-full lg:w-7/12">
+                <ProductText />
+            </div>
         </div>
     )
 }

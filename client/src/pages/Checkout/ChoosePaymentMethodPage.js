@@ -1,12 +1,11 @@
 import React from 'react'
-import { Container } from 'react-bootstrap'
 import ChoosePaymentMethod from '../../components/Checkout/ChoosePaymentMethod'
 
 const ChoosePaymentMethodPage = () => {
     return (
-        <Container style={{minHeight:'670px'}}>
+        <div className="max-w-[1400px] mx-auto px-5" style={{minHeight:'670px'}}>
            <ChoosePaymentMethod />
-        </Container>
+        </div>
     )
 }
 

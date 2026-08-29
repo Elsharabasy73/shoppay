@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
-import { Button, Col, Modal, Row } from 'react-bootstrap'
 import CouponCardHook from '../../hooks/coupon/coupon-card-hook'
 import deleteicon from '../../assets/images/delete.png'
 import editicon from '../../assets/images/edit.png'
 import { deleteCoupon } from '../../store/actions/couponAction'
 import { Link } from 'react-router-dom';
+import TwModal from '../common/TwModal';
+
 const AdminCouponCard = ({ coupon }) => {
 
     const [formatDate, dateString, show, handleClose, handleShow, handelDelete] = CouponCardHook(coupon)
@@ -13,31 +14,24 @@ const AdminCouponCard = ({ coupon }) => {
         <div className="user-address-card my-3 px-2">
 
 
-            <Modal show={show} onHide={handleClose}>
-                <Modal.Header >
-                    <Modal.Title> <div className='font'>تاكيد الحذف</div></Modal.Title>
-                </Modal.Header>
-                <Modal.Body><div className='font'>هل انتا متاكد من عملية الحذف للكوبون</div></Modal.Body>
-                <Modal.Footer>
-                    <Button className='font' variant="success" onClick={handleClose}>
-                        تراجع
-                    </Button>
-                    <Button className='font' variant="dark" onClick={handelDelete}>
-                        حذف
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+            <TwModal show={show} onClose={handleClose} title="تاكيد الحذف"
+                footer={<>
+                    <button className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 font-[Almarai]" onClick={handleClose}>تراجع</button>
+                    <button className="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-900 font-[Almarai]" onClick={handelDelete}>حذف</button>
+                </>}>
+                <p className="font-[Almarai]">هل انتا متاكد من عملية الحذف للكوبون</p>
+            </TwModal>
 
 
 
-            <Row className="d-flex justify-content-between  ">
-                <Col xs="6">
+            <div className="flex flex-wrap justify-between">
+                <div className="w-1/2 px-2">
                     <div className="p-2">اسم الكوبون: {coupon?.name || ''}</div>
-                </Col>
-                <Col xs="6" className="d-flex d-flex justify-content-end">
-                    <div className="d-flex p-2">
+                </div>
+                <div className="w-1/2 flex justify-end px-2">
+                    <div className="flex p-2">
                         <Link to={`/admin/editcoupon/${coupon._id}`} style={{ textDecoration: 'none' }}>
-                            <div className="d-flex mx-2">
+                            <div className="flex mx-2">
                                 <img
                                     alt=""
                                     className="ms-1 mt-2"
@@ -49,7 +43,7 @@ const AdminCouponCard = ({ coupon }) => {
 
                             </div>
                         </Link>
-                        <div onClick={handleShow} className="d-flex ">
+                        <div onClick={handleShow} className="flex ">
                             <img
                                 alt=""
                                 className="ms-1 mt-2"
@@ -60,11 +54,11 @@ const AdminCouponCard = ({ coupon }) => {
                             <p className="item-delete-edit"> ازاله</p>
                         </div>
                     </div>
-                </Col>
-            </Row>
+                </div>
+            </div>
 
-            <Row>
-                <Col xs="12">
+            <div className="flex flex-wrap">
+                <div className="w-full px-2">
                     <div
                         style={{
                             color: "#555550",
@@ -73,11 +67,11 @@ const AdminCouponCard = ({ coupon }) => {
                         }}>
                         تاريخ الانتهاء:  {formatDate(dateString)}
                     </div>
-                </Col>
-            </Row>
+                </div>
+            </div>
 
-            <Row className="mt-3">
-                <Col xs="12" className="d-flex">
+            <div className="flex flex-wrap mt-3">
+                <div className="w-full flex px-2">
                     <div
                         style={{
                             color: "#555550",
@@ -96,8 +90,8 @@ const AdminCouponCard = ({ coupon }) => {
                         className="mx-2">
                         {coupon?.discount ?? 0} %
                     </div>
-                </Col>
-            </Row>
+                </div>
+            </div>
         </div >
     )
 }

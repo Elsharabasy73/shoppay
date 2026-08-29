@@ -1,20 +1,20 @@
 import React from 'react'
-import { Container, Spinner, Row } from 'react-bootstrap'
 import SubTitle from '../common/SubTitle'
 import BrandCard from './BrandCard'
 import brand1 from "../../assets/images/brand1.png";
 import HomeBrandHook from '../../hooks/brand/home-brand-hook'
+import TwSpinner from '../common/TwSpinner';
 
 const BrandFeatured = ({ title, btntitle }) => {
 
     const [brand, loading] = HomeBrandHook();
 
     return (
-        <Container>
+        <div className="max-w-[1400px] mx-auto px-5">
 
 
             <SubTitle title={title} btntitle={btntitle} pathText="/allbrand" />
-            <Row className='my-1 d-flex justify-content-between'>
+            <div className='my-1 flex flex-wrap justify-between'>
                 {
                     loading === false ? (
                         brand ? (
@@ -22,13 +22,13 @@ const BrandFeatured = ({ title, btntitle }) => {
                                 return (<BrandCard id={item._id} key={index} img={item.image} />)
                             })
                         ) : <h4>لا يوجد ماركات</h4>
-                    ) : <Spinner animation="border" variant="primary" />
+                    ) : <TwSpinner />
                 }
-            </Row>
+            </div>
 
 
 
-        </Container>
+        </div>
     )
 }
 

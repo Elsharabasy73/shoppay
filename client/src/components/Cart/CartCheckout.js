@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-import { Row, Col } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
 import DeleteCartHook from '../../hooks/cart/delete-cart-hook';
 import { ToastContainer, toast } from 'react-toastify';
@@ -21,9 +20,9 @@ const CartCheckout = ({ totalCartPrice, cartItems, totalCartPriceAfterDiscount, 
 
 
     return (
-        <Row className="my-1 d-flex justify-content-center cart-checkout pt-3">
-            <Col xs="12" className="d-flex  flex-column  ">
-                <div className="d-flex  ">
+        <div className="my-1 flex flex-wrap justify-center cart-checkout pt-3">
+            <div className="w-full flex flex-col">
+                <div className="flex">
                     <input
                         value={couponName}
                         onChange={(e) => onChangeCoupon(e.target.value)}
@@ -43,9 +42,9 @@ const CartCheckout = ({ totalCartPrice, cartItems, totalCartPriceAfterDiscount, 
                 <button className="product-cart-add  d-inline " onClick={handelCheckout}> اتمام الشراء</button>
 
                 <button onClick={handelDeleteCart} className="product-cart-add w-100 px-2 my-1"> مسح العربة</button>
-            </Col>
+            </div>
             <ToastContainer />
-        </Row>
+        </div>
     )
 }
 

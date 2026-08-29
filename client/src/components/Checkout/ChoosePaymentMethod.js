@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { Row, Col } from 'react-bootstrap'
 import ViewAddressesHook from '../../hooks/user/view-addresses-hook';
 import OrderPayCashHook from '../../hooks/checkout/order-pay-cash-hook';
 import { ToastContainer } from 'react-toastify';
@@ -35,8 +34,8 @@ const ChoosePaymentMethod = () => {
         <div>
             <div className="admin-content-text pt-5">اختر طريقة الدفع</div>
             <div className="user-address-card my-3 px-3">
-                <Row className="d-flex justify-content-between ">
-                    <Col xs="12" className="my-2">
+                <div className="flex flex-wrap justify-between">
+                    <div className="w-full my-2">
                         <input
                             onChange={changeMathoud}
                             style={{ cursor: 'pointer' }}
@@ -46,14 +45,14 @@ const ChoosePaymentMethod = () => {
                             value="CARD"
                             className="mt-2"
                         />
-                        <label style={{ cursor: 'pointer' }} className="mx-2" for="group1">
+                        <label style={{ cursor: 'pointer' }} className="mx-2" htmlFor="group1">
                             الدفع عن طريق البطاقه الائتمانية
                         </label>
-                    </Col>
-                </Row>
+                    </div>
+                </div>
 
-                <Row className="mt-2">
-                    <Col xs="12" className="d-flex">
+                <div className="flex flex-wrap mt-2">
+                    <div className="w-full flex">
                         <input style={{ cursor: 'pointer' }}
                             onChange={changeMathoud}
                             name="group"
@@ -62,15 +61,15 @@ const ChoosePaymentMethod = () => {
                             value="CASH"
                             className="mt-2"
                         />
-                        <label style={{ cursor: 'pointer' }} className="mx-2" for="group2">
+                        <label style={{ cursor: 'pointer' }} className="mx-2" htmlFor="group2">
                             الدفع عند الاستلام
                         </label>
-                    </Col>
-                </Row>
+                    </div>
+                </div>
 
 
-                <Row className="mt-2">
-                    <Col xs="4" className="d-flex">
+                <div className="flex flex-wrap mt-2">
+                    <div className="w-1/3 flex">
                         <select name="address" id="address" className="select mt-1 px-2 " onChange={handelChooseAddress} >
                             <option value="0">اختر عنوان للشحن</option>
                             {
@@ -80,15 +79,15 @@ const ChoosePaymentMethod = () => {
                             }
 
                         </select>
-                    </Col>
-                </Row>
+                    </div>
+                </div>
 
 
 
             </div>
 
-            <Row>
-                <Col xs="12" className="d-flex justify-content-end">
+            <div className="flex flex-wrap">
+                <div className="w-full flex justify-end">
                     <div className="product-price d-inline   border">
 
                         {
@@ -99,8 +98,8 @@ const ChoosePaymentMethod = () => {
 
                     </div>
                     <div onClick={handelPay} className="product-cart-add px-3 pt-2 d-inline me-2"> اتمام الشراء</div>
-                </Col>
-            </Row>
+                </div>
+            </div>
             <ToastContainer />
         </div>
     )

@@ -1,5 +1,4 @@
 import React from 'react'
-import { Card, Col } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import rate from "../../assets/images/rate.png";
@@ -18,10 +17,10 @@ const ProductCard = ({ item, favProd }) => {
     }
 
     return (
-        <Col xs="6" sm="6" md="4" lg="3" className="d-flex align-items-stretch">
-            <Card
+        <div className="w-1/2 sm:w-1/2 md:w-1/3 lg:w-1/4 px-2 my-2 flex items-stretch">
+            <div
                 onClick={handleCardClick}
-                className="product-card my-2 w-100 border-0"
+                className="product-card w-full border-0"
                 style={{
                     borderRadius: "24px",
                     border: "1px solid rgba(63,150,210,0.15)",
@@ -37,7 +36,7 @@ const ProductCard = ({ item, favProd }) => {
                 {/* Image wrapper with fav button overlay */}
                 <div style={{ position: "relative", height: "220px", backgroundColor: "#F2F8FD", overflow: "hidden", flexShrink: 0 }}>
                     <Link to={`/products/${item._id || item.id}`} style={{ textDecoration: 'none', display: 'block', height: '100%' }}>
-                        <Card.Img
+                        <img
                             src={item.imageCover}
                             alt={item.title}
                             style={{
@@ -100,7 +99,7 @@ const ProductCard = ({ item, favProd }) => {
                     ) : null}
                 </div>
 
-                <Card.Body
+                <div
                     style={{
                         display: "flex",
                         flexDirection: "column",
@@ -110,7 +109,7 @@ const ProductCard = ({ item, favProd }) => {
                     }}>
                     <div>
                         <Link to={`/products/${item._id || item.id}`} style={{ textDecoration: 'none' }}>
-                            <Card.Title as="div" style={{ marginBottom: "8px" }}>
+                            <div style={{ marginBottom: "8px" }}>
                                 <div
                                     className="card-title"
                                     title={item.title}
@@ -129,7 +128,7 @@ const ProductCard = ({ item, favProd }) => {
                                     }}>
                                     {item.title}
                                 </div>
-                            </Card.Title>
+                            </div>
                         </Link>
                         {item.description ? (
                             <div style={{
@@ -146,8 +145,8 @@ const ProductCard = ({ item, favProd }) => {
                         ) : null}
                     </div>
 
-                    <div className="d-flex justify-content-between align-items-center" style={{ marginTop: "auto", paddingTop: "8px", borderTop: "1px solid #f5f5f5" }}>
-                        <div className="d-flex align-items-center" style={{ gap: "4px" }}>
+                    <div className="flex justify-between items-center" style={{ marginTop: "auto", paddingTop: "8px", borderTop: "1px solid #f5f5f5" }}>
+                        <div className="flex items-center" style={{ gap: "4px" }}>
                             <img
                                 src={rate}
                                 alt="rate"
@@ -158,7 +157,7 @@ const ProductCard = ({ item, favProd }) => {
                             <div className="card-rate" style={{ fontSize: "13px", color: "#ffc107", fontWeight: "700" }}>{item.ratingsAverage || 0}</div>
                             <span style={{ fontSize: "11px", color: "#aaa" }}>({item.ratingsQuantity || 0})</span>
                         </div>
-                        <div className="d-flex align-items-baseline" style={{ gap: "6px" }}>
+                        <div className="flex items-baseline" style={{ gap: "6px" }}>
                             {hasDiscount ? (
                                 <>
                                     <span style={{ textDecorationLine: 'line-through', color: "#aaa", fontSize: "12px" }}>{item.price}</span>
@@ -170,10 +169,10 @@ const ProductCard = ({ item, favProd }) => {
                             <span className="card-currency" style={{ fontSize: "11px", color: "#777" }}>جنيه</span>
                         </div>
                     </div>
-                </Card.Body>
-            </Card>
+                </div>
+            </div>
             <ToastContainer />
-        </Col>
+        </div>
     )
 }
 

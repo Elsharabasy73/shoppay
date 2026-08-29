@@ -1,16 +1,11 @@
 import React from 'react'
-import { Col, Card } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 
 const BrandCard = ({ img, id }) => {
   return (
-    <Col
-      xs="6"
-      sm="6"
-      md="4"
-      lg="2"
-      className="my-2 d-flex justify-content-center">
-      <Card
+    <div
+      className="w-1/2 sm:w-1/2 md:w-1/3 lg:w-1/6 my-2 flex justify-center px-2">
+      <div
         className="my-1"
         style={{
           width: "100%",
@@ -20,10 +15,10 @@ const BrandCard = ({ img, id }) => {
           backgroundColor: "#FFFFFF",
         }}>
         <Link to={`/products/brand/${id}`} style={{ textDecoration: 'none' }}>
-          <Card.Img style={{ width: "100%", height: "151px" }} src={img} />
+          <img style={{ width: "100%", height: "151px" }} src={img} alt="" />
         </Link>
-      </Card>
-    </Col>
+      </div>
+    </div>
   )
 }
 

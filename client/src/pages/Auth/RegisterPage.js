@@ -1,5 +1,4 @@
 import React from 'react'
-import { Container, Row, Col } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import RegisterHook from '../../hooks/auth/register-hook';
 import { ToastContainer } from 'react-toastify';
@@ -7,9 +6,9 @@ const RegisterPage = () => {
   const [name, email, phone, password, confirmPassword, loading, onChangeName, onChangeEmail, onChangePhone, onChangePassword, onChangeConfirmPassword, OnSubmit] = RegisterHook();
 
   return (
-    <Container style={{ minHeight: "680px" }}>
-      <Row className="py-5 d-flex justify-content-center hieght-search">
-        <Col sm="12" className="d-flex flex-column ">
+    <div className="max-w-[1400px] mx-auto px-5" style={{ minHeight: "680px" }}>
+      <div className="py-5 flex justify-center hieght-search">
+        <div className="sm:w-full flex flex-col px-2">
           <label className="mx-auto title-login">تسجيل حساب جديد</label>
           <input
             value={name}
@@ -55,10 +54,10 @@ const RegisterPage = () => {
               </span>
             </Link>
           </label>
-        </Col>
-      </Row>
+        </div>
+      </div>
       <ToastContainer />
-    </Container>
+    </div>
   )
 }
 

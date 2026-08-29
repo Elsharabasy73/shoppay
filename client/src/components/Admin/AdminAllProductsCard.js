@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { Col, Card, Row, Modal, Button } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
-import prod1 from '../../assets/images/prod1.png'
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteProducts } from '../../store/actions/productsAction';
+import TwModal from '../common/TwModal';
+
 const AdminAllProductsCard = ({ item }) => {
 
     const [show, setShow] = useState(false);
@@ -20,49 +20,39 @@ const AdminAllProductsCard = ({ item }) => {
     }
 
     return (
-        <Col xs="12" sm="6" md="5" lg="4" className="d-flex">
+        <div className="w-full sm:w-1/2 md:w-5/12 lg:w-1/3 flex px-2">
 
-            <Modal show={show} onHide={handleClose}>
-                <Modal.Header >
-                    <Modal.Title> <div className='font'>تاكيد الحذف</div></Modal.Title>
-                </Modal.Header>
-                <Modal.Body><div className='font'>هل انتا متاكد من عملية الحذف للمنتج</div></Modal.Body>
-                <Modal.Footer>
-                    <Button className='font' variant="success" onClick={handleClose}>
-                        تراجع
-                    </Button>
-                    <Button className='font' variant="dark" onClick={handelDelete}>
-                        حذف
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+            <TwModal show={show} onClose={handleClose} title="تاكيد الحذف"
+                footer={<>
+                    <button className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 font-[Almarai]" onClick={handleClose}>تراجع</button>
+                    <button className="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-900 font-[Almarai]" onClick={handelDelete}>حذف</button>
+                </>}>
+                <p className="font-[Almarai]">هل انتا متاكد من عملية الحذف للمنتج</p>
+            </TwModal>
 
-            <Card
-                className="my-2"
+            <div
+                className="my-2 w-full"
                 style={{
-                    width: "100%",
                     height: "350px",
                     borderRadius: "8px",
                     border: "none",
                     backgroundColor: "#FFFFFF",
                 }}>
-                <Row className="d-flex justify-content-center px-2">
-                    <Col className=" d-flex justify-content-between">
+                <div className="flex justify-center px-2">
+                    <div className="flex justify-between w-full">
                         <div onClick={handleShow} className="d-inline item-delete-edit">ازاله</div>
                         <Link to={`/admin/editproduct/${item._id}`} style={{ textDecoration: "none" }}>
                             <div className="d-inline item-delete-edit">تعديل</div>
                         </Link>
-                    </Col>
-                </Row>
+                    </div>
+                </div>
                 <Link to={`/products/${item._id}`} style={{ textDecoration: "none" }}>
-                    <Card.Img style={{ height: "228px", width: "100%" }} src={item.imageCover} />
-                    <Card.Body>
-                        <Card.Title>
-                            <div className="card-title">
-                                {item.title}
-                            </div>
-                        </Card.Title>
-                        <Card.Text>
+                    <img style={{ height: "228px", width: "100%", objectFit: "cover" }} src={item.imageCover} alt={item.title} />
+                    <div className="p-3">
+                        <div className="card-title">
+                            {item.title}
+                        </div>
+                        <div>
                             <div className="d-flex justify-content-between">
                                 <div className="card-rate">{item.ratingsQuantity}</div>
                                 <div className="d-flex">
@@ -73,11 +63,11 @@ const AdminAllProductsCard = ({ item }) => {
                                     <div className="card-currency mx-1">جنيه</div>
                                 </div>
                             </div>
-                        </Card.Text>
-                    </Card.Body>
+                        </div>
+                    </div>
                 </Link>
-            </Card>
-        </Col>
+            </div>
+        </div>
     )
 }
 

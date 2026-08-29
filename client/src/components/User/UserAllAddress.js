@@ -1,5 +1,4 @@
 import React from 'react'
-import { Row, Col } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import ViewAddressesHook from '../../hooks/user/view-addresses-hook'
 import UserAddressCard from './UserAddressCard'
@@ -17,13 +16,13 @@ const UserAllAddress = () => {
                 })) : <h6>لا يوجد عنوانين حتى الان</h6>
             }
 
-            <Row className="justify-content-center">
-                <Col sm="5" className="d-flex justify-content-center">
+            <div className="flex flex-wrap justify-center">
+                <div className="sm:w-5/12 flex justify-center px-2">
                     <Link to="/user/add-address" style={{ textDecoration: "none" }}>
                         <button className="btn-add-address">اضافه عنوان جديد</button>
                     </Link>
-                </Col>
-            </Row>
+                </div>
+            </div>
         </div >
     )
 }

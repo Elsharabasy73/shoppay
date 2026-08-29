@@ -1,5 +1,4 @@
 import React from 'react'
-import { Col, Row } from 'react-bootstrap'
 import { useParams } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import AdminEditUserHook from '../../hooks/user/edit-user-hook'
@@ -10,9 +9,9 @@ const AdminEditUser = () => {
 
   return (
     <div>
-      <Row className="justify-content-start ">
+      <div className="flex flex-wrap justify-start ">
         <div className="admin-content-text pb-4">تعديل المستخدم</div>
-        <Col sm="8">
+        <div className="w-full sm:w-2/3 px-2">
           <div className="text-form pb-2">صوره المستخدم</div>
           <div>
             <label htmlFor="upload-photo">
@@ -30,13 +29,13 @@ const AdminEditUser = () => {
           <div className="text-form mt-3">تغيير كلمة المرور (اختياري)</div>
           <input onChange={onChangePassword} value={password} type="password" className="input-form d-block mt-3 px-3" placeholder="كلمة المرور الجديدة" />
           <input onChange={onChangePasswordConfirm} value={passwordConfirm} type="password" className="input-form d-block mt-3 px-3" placeholder="تاكيد كلمة المرور" />
-        </Col>
-      </Row>
-      <Row>
-        <Col sm="8" className="d-flex justify-content-end ">
+        </div>
+      </div>
+      <div className="flex flex-wrap">
+        <div className="w-full sm:w-2/3 flex justify-end px-2">
           <button onClick={handelSubmit} className="btn-save d-inline mt-2 ">حفظ التعديلات</button>
-        </Col>
-      </Row>
+        </div>
+      </div>
       <ToastContainer />
     </div>
   )

@@ -1,7 +1,5 @@
-import React from 'react'
-import { Container, Col, Row } from 'react-bootstrap';
+import React from 'react';
 import Pagination from '../../components/common/Pagination';
-import ViewSearchProductsHook from '../../hooks/products/view-search-products-hook';
 import CardProductsContainer from './../../components/Products/CardProductsContainer';
 import { useParams } from 'react-router-dom';
 import ViewAllProductsBarndHook from '../../hooks/products/view-all-products-brand-hook';
@@ -19,16 +17,16 @@ const ProductsByBrand = () => {
     return (
         <div style={{ minHeight: '670px' }}>
 
-            <Container>
-                <Row className='d-flex flex-row'>
+            <div className="max-w-[1400px] mx-auto px-5">
+                <div className='flex flex-row'>
 
-                    <Col sm="12" >
+                    <div className="sm:w-full">
                         <CardProductsContainer products={items} title="" btntitle="" />
-                    </Col>
-                </Row>
+                    </div>
+                </div>
 
                 <Pagination pageCount={pageCount} onPress={onPress} />
-            </Container>
+            </div>
         </div>
     )
 }

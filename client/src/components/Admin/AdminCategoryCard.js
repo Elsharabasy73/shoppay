@@ -1,9 +1,9 @@
 import React from "react";
-import { Button, Col, Modal, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import CategoryCardHook from "../../hooks/category/category-card-hook";
 import deleteicon from "../../assets/images/delete.png";
 import editicon from "../../assets/images/edit.png";
+import TwModal from "../common/TwModal";
 
 const AdminCategoryCard = ({ category }) => {
   const [show, handleClose, handleShow, handelDelete] =
@@ -11,35 +11,19 @@ const AdminCategoryCard = ({ category }) => {
 
   return (
     <div className="user-address-card admin-card my-3 px-2">
-      {/* Delete Modal */}
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header>
-          <Modal.Title>
-            <div className="font">تاكيد الحذف</div>
-          </Modal.Title>
-        </Modal.Header>
-
-        <Modal.Body>
-          <div className="font">هل انت متاكد من عملية الحذف للتصنيف</div>
-        </Modal.Body>
-
-        <Modal.Footer>
-          <Button className="font" variant="success" onClick={handleClose}>
-            تراجع
-          </Button>
-
-          <Button className="font" variant="dark" onClick={handelDelete}>
-            حذف
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <TwModal show={show} onClose={handleClose} title="تاكيد الحذف"
+        footer={<>
+          <button className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 font-[Almarai]" onClick={handleClose}>تراجع</button>
+          <button className="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-900 font-[Almarai]" onClick={handelDelete}>حذف</button>
+        </>}>
+        <p className="font-[Almarai]">هل انت متاكد من عملية الحذف للتصنيف</p>
+      </TwModal>
 
       {/* Category Card */}
-      <Row className="d-flex justify-content-between align-items-center">
+      <div className="flex flex-wrap justify-between items-center">
         {/* Category image + name */}
-        <Col
-          xs="6"
-          className="d-flex align-items-center"
+        <div
+          className="w-1/2 flex items-center px-2"
           style={{ height: "100%" }}
         >
           <div
@@ -63,15 +47,15 @@ const AdminCategoryCard = ({ category }) => {
             />
           </div>
 
-          <div className="px-3 d-flex align-items-center">
+          <div className="px-3 flex items-center">
             {category?.name || ""}
           </div>
-        </Col>
+        </div>
 
         {/* Edit / Delete */}
-        <Col xs="6" className="d-flex justify-content-end align-items-center">
+        <div className="w-1/2 flex justify-end items-center px-2">
           <div
-            className="d-flex align-items-center p-2"
+            className="flex items-center p-2"
             style={{
               flexShrink: 0,
               height: "auto",
@@ -80,7 +64,7 @@ const AdminCategoryCard = ({ category }) => {
             {/* Edit */}
             <Link
               to={`/admin/editcategory/${category._id}`}
-              className="d-flex align-items-center me-3 text-decoration-none"
+              className="flex items-center me-3 text-decoration-none"
               style={{
                 flexShrink: 0,
               }}
@@ -104,7 +88,7 @@ const AdminCategoryCard = ({ category }) => {
             {/* Delete */}
             <div
               onClick={handleShow}
-              className="d-flex align-items-center"
+              className="flex items-center"
               style={{
                 cursor: "pointer",
                 flexShrink: 0,
@@ -126,8 +110,8 @@ const AdminCategoryCard = ({ category }) => {
               <p className="item-delete-edit mb-0">ازاله</p>
             </div>
           </div>
-        </Col>
-      </Row>
+        </div>
+      </div>
     </div>
   );
 };

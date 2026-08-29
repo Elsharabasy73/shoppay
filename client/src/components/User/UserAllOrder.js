@@ -1,5 +1,4 @@
 import React from 'react'
-import { Row } from 'react-bootstrap'
 import UserAllOrderItem from './UserAllOrderItem'
 import UserGetAllOrderHook from '../../hooks/user/user-get-all-order-hook';
 import Pagination from './../common/Pagination';
@@ -10,7 +9,7 @@ const UserAllOrder = () => {
     return (
         <div>
             <div className="admin-content-text pb-4">عدد الطلبات  #{results}</div>
-            <Row className='justify-content-between'>
+            <div className='flex flex-wrap justify-between'>
                 {
                     orderData.length >= 1 ? (orderData.map((orderItem, index) => {
                         return <UserAllOrderItem key={index} orderItem={orderItem} />
@@ -22,7 +21,7 @@ const UserAllOrder = () => {
                 }
 
 
-            </Row>
+            </div>
         </div >
     )
 }

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { Container, Row, Col } from 'react-bootstrap'
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import AllCategoryHook from '../../hooks/category/all-category-page-hook';
@@ -15,9 +14,9 @@ const CategoryHeader = () => {
   }, [category])
   return (
     <div className="cat-header">
-      <Container>
-        <Row>
-          <Col className="d-flex justify-content-start py-2 flex-wrap">
+      <div className="max-w-[1400px] mx-auto px-5">
+        <div className="flex flex-wrap">
+          <div className="flex justify-start py-2 flex-wrap">
 
             {
               items ? (items.map((item, index) => {
@@ -30,9 +29,9 @@ const CategoryHeader = () => {
             <Link to="/allcategory" style={{ textDecoration: 'none' }}>
               <div className="cat-text-header">المزيد</div>
             </Link>
-          </Col>
-        </Row>
-      </Container>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

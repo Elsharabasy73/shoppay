@@ -1,5 +1,4 @@
 import React, { useRef } from 'react'
-import { Row, Col, Spinner } from 'react-bootstrap'
 import { ToastContainer } from 'react-toastify';
 import AddCouponHook from '../../hooks/coupon/add-coupon-hook';
 import AdminCouponCard from './AdminCouponCard';
@@ -9,9 +8,9 @@ const AdminAddCoupon = () => {
     const [coupnName, couponDate, couponValue, onChangeName, onChangeDate, onChangeValue, onSubmit, coupons] = AddCouponHook()
     return (
         <div>
-            <Row className="justify-content-start ">
+            <div className="flex flex-wrap justify-start ">
                 <div className="admin-content-text pb-4">اضف كوبون جديد</div>
-                <Col sm="8">
+                <div className="w-full sm:w-2/3 px-2">
                     <input
                         value={coupnName}
                         onChange={onChangeName}
@@ -38,23 +37,23 @@ const AdminAddCoupon = () => {
                         placeholder="نسبة خصم الكوبون"
 
                     />
-                </Col>
-            </Row>
-            <Row>
-                <Col sm="8" className="d-flex justify-content-end ">
+                </div>
+            </div>
+            <div className="flex flex-wrap">
+                <div className="w-full sm:w-2/3 flex justify-end px-2">
                     <button onClick={onSubmit} className="btn-save d-inline mt-2 ">حفظ</button>
-                </Col>
-            </Row>
+                </div>
+            </div>
 
-            <Row>
-                <Col sm="8" className="">
+            <div className="flex flex-wrap">
+                <div className="w-full sm:w-2/3 px-2">
                     {
                         Array.isArray(coupons) && coupons.length > 0 ? (coupons.map((item) => {
                             return <AdminCouponCard key={item._id} coupon={item} />
                         })) : <h6>لا يوجد كوبونات حتى الان</h6>
                     }
-                </Col>
-            </Row>
+                </div>
+            </div>
 
             <ToastContainer />
         </div>

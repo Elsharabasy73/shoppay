@@ -1,7 +1,4 @@
 import React from 'react'
-import { Container, Row, Col, Spinner } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
-import LoginHook from '../../hooks/auth/login-hook';
 import { ToastContainer } from 'react-toastify';
 import ResetPasswordHook from '../../hooks/auth/reset-password-hook';
 const ResetPasswordPage = () => {
@@ -9,9 +6,9 @@ const ResetPasswordPage = () => {
     const [password, confirmPassword, , OnChangePassword, OnChangeConfirmPassword, onSubmit] = ResetPasswordHook()
 
     return (
-        <Container style={{ minHeight: "690px" }}>
-            <Row className="py-5 d-flex justify-content-center ">
-                <Col sm="12" className="d-flex flex-column ">
+        <div className="max-w-[1400px] mx-auto px-5" style={{ minHeight: "690px" }}>
+            <div className="py-5 flex justify-center ">
+                <div className="sm:w-full flex flex-col px-2">
                     <label className="mx-auto title-login">ادخل كلمه السر الجديده</label>
                     <input
                         value={password}
@@ -30,11 +27,11 @@ const ResetPasswordPage = () => {
 
                     <button onClick={onSubmit} className="btn-login mx-auto mt-2">حفظ</button>
 
-                </Col>
+                </div>
 
-            </Row>
+            </div>
             <ToastContainer />
-        </Container>
+        </div>
     )
 }
 

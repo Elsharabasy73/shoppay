@@ -1,16 +1,16 @@
 import React from 'react'
-import { Row, Col, Spinner } from 'react-bootstrap'
 import { ToastContainer } from 'react-toastify';
 import AddBrandHook from '../../hooks/brand/add-brand-hook';
 import AdminBrandCard from './AdminBrandCard';
+import TwSpinner from '../common/TwSpinner';
 const AdminAddBrand = () => {
 
     const [img, name, loading, isPress, handelSubmit, onImageChange, onChangeName, brands] = AddBrandHook();
     return (
         <div>
-            <Row className="justify-content-start ">
+            <div className="flex flex-wrap justify-start ">
                 <div className="admin-content-text pb-4">اضف ماركه جديده</div>
-                <Col sm="8">
+                <div className="w-full sm:w-2/3 px-2">
                     <div className="text-form pb-2">صوره الماركه</div>
                     <div>
                         <label for="upload-photo">
@@ -36,27 +36,27 @@ const AdminAddBrand = () => {
                         placeholder="اسم الماركه"
                         onChange={onChangeName}
                     />
-                </Col>
-            </Row>
-            <Row>
-                <Col sm="8" className="d-flex justify-content-end ">
+                </div>
+            </div>
+            <div className="flex flex-wrap">
+                <div className="w-full sm:w-2/3 flex justify-end px-2">
                     <button onClick={handelSubmit} className="btn-save d-inline mt-2 ">حفظ</button>
-                </Col>
-            </Row>
+                </div>
+            </div>
 
             {
-                isPress ? loading ? <Spinner animation="border" variant="primary" /> : <h4>تم الانتهاء</h4> : null
+                isPress ? loading ? <TwSpinner /> : <h4>تم الانتهاء</h4> : null
             }
 
-            <Row>
-                <Col sm="8" className="">
+            <div className="flex flex-wrap">
+                <div className="w-full sm:w-2/3 px-2">
                     {
                         Array.isArray(brands) && brands.length > 0 ? (brands.map((item) => {
                             return <AdminBrandCard key={item._id} brand={item} />
                         })) : <h6>لا يوجد ماركات حتى الان</h6>
                     }
-                </Col>
-            </Row>
+                </div>
+            </div>
 
             <ToastContainer />
         </div>

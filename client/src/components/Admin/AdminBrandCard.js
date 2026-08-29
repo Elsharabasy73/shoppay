@@ -1,46 +1,39 @@
 import React from 'react'
-import { Button, Col, Modal, Row } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import BrandCardHook from '../../hooks/brand/brand-card-hook'
 import deleteicon from '../../assets/images/delete.png'
 import editicon from '../../assets/images/edit.png'
+import TwModal from '../common/TwModal'
 
 const AdminBrandCard = ({ brand }) => {
     const [show, handleClose, handleShow, handelDelete] = BrandCardHook(brand)
 
     return (
         <div className="user-address-card admin-card my-3 px-2">
-            <Modal show={show} onHide={handleClose}>
-                <Modal.Header >
-                    <Modal.Title> <div className='font'>تاكيد الحذف</div></Modal.Title>
-                </Modal.Header>
-                <Modal.Body><div className='font'>هل انت متاكد من عملية الحذف للماركة</div></Modal.Body>
-                <Modal.Footer>
-                    <Button className='font' variant="success" onClick={handleClose}>
-                        تراجع
-                    </Button>
-                    <Button className='font' variant="dark" onClick={handelDelete}>
-                        حذف
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+            <TwModal show={show} onClose={handleClose} title="تاكيد الحذف"
+                footer={<>
+                    <button className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 font-[Almarai]" onClick={handleClose}>تراجع</button>
+                    <button className="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-900 font-[Almarai]" onClick={handelDelete}>حذف</button>
+                </>}>
+                <p className="font-[Almarai]">هل انت متاكد من عملية الحذف للماركة</p>
+            </TwModal>
 
-            <Row className="d-flex justify-content-between align-items-stretch">
-                <Col xs="6" className="d-flex align-items-stretch">
+            <div className="flex flex-wrap justify-between items-stretch">
+                <div className="w-1/2 flex items-stretch px-2">
                     <img
                         alt={brand?.name || "brand"}
                         src={brand?.image}
                         style={{ height: "100%", width: "50px", objectFit: "cover", borderRadius: "10px 0 0 10px" }}
                     />
-                    <div className="px-3 d-flex align-items-center"> {brand?.name || ''}</div>
-                </Col>
-                <Col xs="6" className="d-flex justify-content-end">
-                    <div className="d-flex p-2">
-                        <Link to={`/admin/editbrand/${brand._id}`} className="d-flex me-3 text-decoration-none ">
+                    <div className="px-3 flex items-center"> {brand?.name || ''}</div>
+                </div>
+                <div className="w-1/2 flex justify-end px-2">
+                    <div className="flex p-2">
+                        <Link to={`/admin/editbrand/${brand._id}`} className="flex me-3 text-decoration-none ">
                             <img alt="" className="ms-1 mt-2" src={editicon} height="17px" width="15px" />
                             <p className="item-delete-edit"> تعديل</p>
                         </Link>
-                        <div onClick={handleShow} className="d-flex ">
+                        <div onClick={handleShow} className="flex ">
                             <img
                                 alt=""
                                 className="ms-1 mt-2"
@@ -51,8 +44,8 @@ const AdminBrandCard = ({ brand }) => {
                             <p className="item-delete-edit"> ازاله</p>
                         </div>
                     </div>
-                </Col>
-            </Row>
+                </div>
+            </div>
         </div >
     )
 }

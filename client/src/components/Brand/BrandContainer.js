@@ -3,14 +3,14 @@ import BrandCard from './BrandCard'
 import brand1 from "../../assets/images/brand1.png";
 import brand2 from "../../assets/images/brand2.png";
 import brand3 from "../../assets/images/brand3.png";
-import { Container, Row, Spinner } from 'react-bootstrap';
+import TwSpinner from '../common/TwSpinner';
 
 const BrandContainer = ({ data,loading }) => {
    
     return (
-        <Container>
+        <div className="max-w-[1400px] mx-auto px-5">
             <div className="admin-content-text mt-2 ">كل الماركات</div>
-            <Row className='my-1 d-flex justify-content-between'>
+            <div className='my-1 flex flex-wrap justify-between'>
 
                 {
                     loading === false ? (
@@ -19,11 +19,11 @@ const BrandContainer = ({ data,loading }) => {
                                 return (<BrandCard id={item._id} key={index} img={item.image} />)
                             })
                         ) : <h4>لا يوجد ماركات</h4>
-                    ) : <Spinner animation="border" variant="primary" />
+                    ) : <TwSpinner />
                 }
 
-            </Row>
-        </Container>
+            </div>
+        </div>
     )
 }
 

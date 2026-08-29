@@ -1,16 +1,15 @@
 import React from 'react'
-import { Container, Row, Col } from 'react-bootstrap'
 import AdminSideBar from '../../components/Admin/AdminSideBar'
 import AdminEditCategory from '../../components/Admin/AdminEditCategory'
 
 const AdminEditCategoryPage = () => {
   return (
-    <Container>
-      <Row className='py-3'>
-        <Col sm="3" xs="2" md="2"><AdminSideBar /></Col>
-        <Col sm="9" xs="10" md="10"><AdminEditCategory /></Col>
-      </Row>
-    </Container>
+    <div className="max-w-[1400px] mx-auto px-5">
+      <div className="flex flex-wrap py-3">
+        <div className="sm:w-1/4 md:w-1/6 px-2"><AdminSideBar /></div>
+        <div className="sm:w-3/4 md:w-5/6 px-2"><AdminEditCategory /></div>
+      </div>
+    </div>
   )
 }
 

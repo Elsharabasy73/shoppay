@@ -1,16 +1,16 @@
 import React, { useEffect } from "react";
-import { Container, Row, Spinner } from "react-bootstrap";
 import SubTitle from "../common/SubTitle";
 import CategoryCard from "./../Category/CategoryCard";
 import HomeCategoryHook from "../../hooks/category/home-category-hook";
+import TwSpinner from "../common/TwSpinner";
 
 const HomeCategory = () => {
   const [category, loading, colors] = HomeCategoryHook();
 
   return (
-    <Container>
+    <div className="max-w-[1400px] mx-auto px-5">
       <SubTitle title="التصنيفات" btntitle="المزيد" pathText="/allcategory" />
-      <Row className="my-2 d-flex justify-content-between">
+      <div className="my-2 flex flex-wrap justify-between">
         {loading === false ? (
           category && category.data && Array.isArray(category.data) && category.data.length > 0 ? (
             category.data.slice(0, 5).map((item, index) => {
@@ -28,10 +28,10 @@ const HomeCategory = () => {
             <h4>لا يوجد تصنيفات</h4>
           )
         ) : (
-          <Spinner animation="border" variant="primary" />
+          <TwSpinner />
         )}
-      </Row>
-    </Container>
+      </div>
+    </div>
   );
 };
 

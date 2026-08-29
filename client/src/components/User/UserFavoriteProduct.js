@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { Row } from 'react-bootstrap';
 import ProductCard from './../Products/ProductCard';
 import Pagination from '../common/Pagination'
 import CardProductsContainer from './../Products/CardProductsContainer';
@@ -42,12 +41,12 @@ const UserFavoriteProduct = () => {
     return (
         <div>
             <div className="admin-content-text pb-4">قائمة المفضلة</div>
-            <Row className='justify-content-start'>
+            <div className='flex flex-wrap justify-start'>
                 {
                     items.length <= 0 ? (<h6>لا يوجد منتدات مفضله حاليا</h6>) : <CardProductsContainer products={items} title="" btntitle="" />
                 }
 
-            </Row>
+            </div>
         </div>
     )
 }

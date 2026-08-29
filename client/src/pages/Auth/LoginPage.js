@@ -1,15 +1,15 @@
 import React from 'react'
-import { Container, Row, Col, Spinner } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import LoginHook from '../../hooks/auth/login-hook';
 import { ToastContainer } from 'react-toastify';
+import TwSpinner from '../../components/common/TwSpinner';
 
 const LoginPage = () => {
     const [email, password, loading, onChangeEmail, onChangePassword, onSubmit, isPress] = LoginHook();
     return (
-        <Container style={{ minHeight: "690px" }}>
-            <Row className="py-5 d-flex justify-content-center ">
-                <Col sm="12" className="d-flex flex-column ">
+        <div className="max-w-[1400px] mx-auto px-5" style={{ minHeight: "690px" }}>
+            <div className="py-5 flex justify-center ">
+                <div className="sm:w-full flex flex-col px-2">
                     <label className="mx-auto title-login">تسجيل الدخول</label>
                     <input
                         value={email}
@@ -43,18 +43,16 @@ const LoginPage = () => {
                         </Link>
                     </label>
 
-                    {isPress === true ? (loading === true ? (<Spinner animation="border" role="status">
-
-                    </Spinner>) : null) : null}
+                    {isPress === true ? (loading === true ? (<TwSpinner />) : null) : null}
 
 
-                </Col>
+                </div>
 
 
 
-            </Row>
+            </div>
             <ToastContainer />
-        </Container>
+        </div>
     )
 }
 

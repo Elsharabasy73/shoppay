@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { Row, Col } from 'react-bootstrap'
 import Multiselect from 'multiselect-react-dropdown';
 import avatar from '../../assets/images/avatar.png'
 import add from '../../assets/images/add.png'
@@ -13,12 +12,12 @@ const AdminAddProducts = () => {
 
     const [onChangeDesName, onChangeQty, onChangeColor, onChangePriceAfter, onChangePriceBefor, onChangeProdName, onChangeImageCover, showColor, category, brand, priceAftr, images, setImages, onSelect, onRemove, options, handelChangeComplete, removeColor, onSeletCategory, handelSubmit, onSeletBrand, colors, priceBefore, qty, prodDescription, prodName, CatID, BrandID, seletedSubID, imageCover] =
         AdminAddProductsHook();
-        
+
     return (
         <div>
-            <Row className="justify-content-start ">
+            <div className="flex flex-wrap justify-start ">
                 <div className="admin-content-text pb-4"> اضافه منتج جديد</div>
-                <Col sm="8">
+                <div className="w-full sm:w-2/3 px-2">
                     <div className="text-form pb-2"> صورة الغلاف</div>
                     <div>
                         <label for="upload-cover" style={{ cursor: "pointer" }}>
@@ -127,7 +126,7 @@ const AdminAddProducts = () => {
                         }
                     </select>
                     <div className="text-form mt-3 "> الالوان المتاحه للمنتج</div>
-                    <div className="mt-1 d-flex">
+                    <div className="mt-1 flex">
                         {
                             colors.length >= 1 ? (
                                 colors.map((color, index) => {
@@ -148,13 +147,13 @@ const AdminAddProducts = () => {
                         }
 
                     </div>
-                </Col>
-            </Row>
-            <Row>
-                <Col sm="8" className="d-flex justify-content-end ">
+                </div>
+            </div>
+            <div className="flex flex-wrap">
+                <div className="w-full sm:w-2/3 flex justify-end px-2">
                     <button onClick={handelSubmit} className="btn-save d-inline mt-2 ">حفظ</button>
-                </Col>
-            </Row>
+                </div>
+            </div>
             <ToastContainer />
         </div>
     )

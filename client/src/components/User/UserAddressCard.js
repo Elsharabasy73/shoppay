@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
-import { Row, Col, Modal, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import deleteicon from '../../assets/images/delete.png'
 import { useDispatch } from 'react-redux';
 import { deleteUserAddress } from './../../store/actions/userAddressesAction';
 import DeleteAddressHook from '../../hooks/user/delete-address-hook';
+import TwModal from '../common/TwModal';
+
 const UserAddressCard = ({ item }) => {
 
     const [show, handleClose, handleShow, handelDelete] = DeleteAddressHook(item._id)
@@ -12,29 +13,26 @@ const UserAddressCard = ({ item }) => {
     return (
         <div className="user-address-card my-3 px-2">
 
-            <Modal show={show} onHide={handleClose}>
-                <Modal.Header >
-                    <Modal.Title> <div className='font'>تاكيد الحذف</div></Modal.Title>
-                </Modal.Header>
-                <Modal.Body><div className='font'>هل انتا متاكد من عملية الحذف العنوان</div></Modal.Body>
-                <Modal.Footer>
-                    <Button className='font' variant="success" onClick={handleClose}>
+            <TwModal show={show} onClose={handleClose} title="تاكيد الحذف"
+                footer={<>
+                    <button className='font bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 font-[Almarai]' onClick={handleClose}>
                         تراجع
-                    </Button>
-                    <Button className='font' variant="dark" onClick={handelDelete}>
+                    </button>
+                    <button className='font bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-900 font-[Almarai]' onClick={handelDelete}>
                         حذف
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+                    </button>
+                </>}>
+                <p className='font'>هل انتا متاكد من عملية الحذف العنوان</p>
+            </TwModal>
 
-            <Row className="d-flex justify-content-between  ">
-                <Col xs="6">
+            <div className="flex flex-wrap justify-between ">
+                <div className="w-1/2 px-2">
                     <div className="p-2">{item.alias}</div>
-                </Col>
-                <Col xs="6" className="d-flex d-flex justify-content-end">
-                    <div className="d-flex p-2">
+                </div>
+                <div className="w-1/2 flex justify-end px-2">
+                    <div className="flex p-2">
                         <Link to={`/user/edit-address/${item._id}`} style={{ textDecoration: 'none' }}>
-                            <div className="d-flex mx-2">
+                            <div className="flex mx-2">
                                 <img
                                     alt=""
                                     className="ms-1 mt-2"
@@ -46,7 +44,7 @@ const UserAddressCard = ({ item }) => {
 
                             </div>
                         </Link>
-                        <div onClick={handleShow} className="d-flex ">
+                        <div onClick={handleShow} className="flex ">
                             <img
                                 alt=""
                                 className="ms-1 mt-2"
@@ -57,11 +55,11 @@ const UserAddressCard = ({ item }) => {
                             <p className="item-delete-edit"> حذف</p>
                         </div>
                     </div>
-                </Col>
-            </Row>
+                </div>
+            </div>
 
-            <Row>
-                <Col xs="12">
+            <div className="flex flex-wrap">
+                <div className="w-full px-2">
                     <div
                         style={{
                             color: "#555550",
@@ -70,11 +68,11 @@ const UserAddressCard = ({ item }) => {
                         }}>
                         {item.details}
                     </div>
-                </Col>
-            </Row>
+                </div>
+            </div>
 
-            <Row className="mt-3">
-                <Col xs="12" className="d-flex">
+            <div className="flex flex-wrap mt-3">
+                <div className="w-full flex px-2">
                     <div
                         style={{
                             color: "#555550",
@@ -93,8 +91,8 @@ const UserAddressCard = ({ item }) => {
                         className="mx-2">
                         {item.phone}
                     </div>
-                </Col>
-            </Row>
+                </div>
+            </div>
         </div>
     )
 }

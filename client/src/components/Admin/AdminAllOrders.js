@@ -1,5 +1,4 @@
 import React from 'react'
-import { Row } from 'react-bootstrap'
 import AdminAllOrdersItem from './AdminAllOrdersItem'
 import UserGetAllOrderHook from '../../hooks/user/user-get-all-order-hook';
 import Pagination from '../common/Pagination';
@@ -13,7 +12,7 @@ const AdminAllOrders = () => {
     return (
         <div>
             <div className='admin-content-text'>ادارة جميع الطلبات</div>
-            <Row className='justify-content-start'>
+            <div className='flex flex-wrap justify-start'>
                 {
                     safeOrders.length >= 1 ? (safeOrders.map((orderItem, index) => {
                         return <AdminAllOrdersItem key={orderItem._id || index} orderItem={orderItem} />
@@ -22,7 +21,7 @@ const AdminAllOrders = () => {
                 {
                     pageCount >= 2 ? (<Pagination onPress={onPress} pageCount={pageCount} />) : null
                 }
-            </Row>
+            </div>
         </div>
     )
 }

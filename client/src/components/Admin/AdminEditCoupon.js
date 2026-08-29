@@ -1,5 +1,4 @@
 import React, { useRef } from 'react'
-import { Row, Col } from 'react-bootstrap';
 import { ToastContainer } from 'react-toastify';
 import EditCouponHook from '../../hooks/coupon/edit-coupon-hook';
 import { useParams } from 'react-router-dom';
@@ -12,9 +11,9 @@ const AdminEditCoupon = () => {
 
     return (
         <div>
-            <Row className="justify-content-start ">
+            <div className="flex flex-wrap justify-start ">
                 <div className="admin-content-text pb-4">تعديل بيانات الكوبون</div>
-                <Col sm="8">
+                <div className="w-full sm:w-2/3 px-2">
                     <input
                         value={coupnName}
                         onChange={onChangeName}
@@ -41,13 +40,13 @@ const AdminEditCoupon = () => {
                         placeholder="نسبة خصم الكوبون"
 
                     />
-                </Col>
-            </Row>
-            <Row>
-                <Col sm="8" className="d-flex justify-content-end ">
+                </div>
+            </div>
+            <div className="flex flex-wrap">
+                <div className="w-full sm:w-2/3 flex justify-end px-2">
                     <button onClick={onSubmit} className="btn-save d-inline mt-2 ">حفظ التعديلات</button>
-                </Col>
-            </Row>
+                </div>
+            </div>
 
 
             <ToastContainer />

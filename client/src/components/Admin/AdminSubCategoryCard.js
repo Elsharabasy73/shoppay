@@ -1,44 +1,37 @@
 import React from 'react'
-import { Button, Col, Modal, Row } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import SubcategoryCardHook from '../../hooks/subcategory/subcategory-card-hook'
 import deleteicon from '../../assets/images/delete.png'
 import editicon from '../../assets/images/edit.png'
+import TwModal from '../common/TwModal'
 
 const AdminSubCategoryCard = ({ subcategory }) => {
     const [show, handleClose, handleShow, handelDelete] = SubcategoryCardHook(subcategory)
 
     return (
         <div className="user-address-card admin-card my-3 px-2">
-            <Modal show={show} onHide={handleClose}>
-                <Modal.Header >
-                    <Modal.Title> <div className='font'>تاكيد الحذف</div></Modal.Title>
-                </Modal.Header>
-                <Modal.Body><div className='font'>هل انت متاكد من عملية الحذف للتصنيف الفرعي</div></Modal.Body>
-                <Modal.Footer>
-                    <Button className='font' variant="success" onClick={handleClose}>
-                        تراجع
-                    </Button>
-                    <Button className='font' variant="dark" onClick={handelDelete}>
-                        حذف
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+            <TwModal show={show} onClose={handleClose} title="تاكيد الحذف"
+                footer={<>
+                    <button className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 font-[Almarai]" onClick={handleClose}>تراجع</button>
+                    <button className="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-900 font-[Almarai]" onClick={handelDelete}>حذف</button>
+                </>}>
+                <p className="font-[Almarai]">هل انت متاكد من عملية الحذف للتصنيف الفرعي</p>
+            </TwModal>
 
-            <Row className="d-flex justify-content-between align-items-center">
-                <Col xs="6">
+            <div className="flex flex-wrap justify-between items-center">
+                <div className="w-1/2 px-2">
                     <div className="p-2">{subcategory?.name || ''}</div>
                     {subcategory?.category?.name ? (
                         <small className="text-muted d-block px-2">{subcategory.category.name}</small>
                     ) : null}
-                </Col>
-                <Col xs="6" className="d-flex justify-content-end">
-                    <div className="d-flex p-2">
-                        <Link to={`/admin/editsubcategory/${subcategory._id}`} className="d-flex me-3 text-decoration-none ">
+                </div>
+                <div className="w-1/2 flex justify-end px-2">
+                    <div className="flex p-2">
+                        <Link to={`/admin/editsubcategory/${subcategory._id}`} className="flex me-3 text-decoration-none ">
                             <img alt="" className="ms-1 mt-2" src={editicon} height="17px" width="15px" />
                             <p className="item-delete-edit"> تعديل</p>
                         </Link>
-                        <div onClick={handleShow} className="d-flex ">
+                        <div onClick={handleShow} className="flex ">
                             <img
                                 alt=""
                                 className="ms-1 mt-2"
@@ -49,8 +42,8 @@ const AdminSubCategoryCard = ({ subcategory }) => {
                             <p className="item-delete-edit"> ازاله</p>
                         </div>
                     </div>
-                </Col>
-            </Row>
+                </div>
+            </div>
         </div >
     )
 }

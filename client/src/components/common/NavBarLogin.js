@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react'
-import { NavDropdown } from 'react-bootstrap'
+import React, { useEffect, useState, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import logo from '../../assets/images/logo.png'
 import login from '../../assets/images/login.png'
@@ -29,6 +28,18 @@ const NavBarLogin = () => {
     }
 
     const [itemsNum] = GetAllUserCartHook()
+    const [dropdownOpen, setDropdownOpen] = useState(false)
+    const dropdownRef = useRef(null)
+
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+                setDropdownOpen(false)
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside)
+        return () => document.removeEventListener("mousedown", handleClickOutside)
+    }, [])
 
     return (
         <div className="sticky top-0 z-40 shadow-sm">
@@ -79,13 +90,22 @@ const NavBarLogin = () => {
                                     ) : (
                                         <Link to="/user/profile" className="hidden lg:flex items-center gap-1 bg-white border border-[#1A3F60] text-[#1A3F60] px-3 py-1.5 rounded-full text-xs font-bold hover:bg-[#1A3F60] hover:text-white no-underline leading-none">حسابي</Link>
                                     )}
-                                    <div className="relative flex items-center bg-[#1A3F60] rounded-full px-2.5 py-0.5 shadow-sm leading-none h-7">
-                                        <NavDropdown title={user.name} id="basic-nav-dropdown" className="font-bold text-[11px] m-0 p-0 !text-white [&>a]:!text-white [&>a]:!text-[11px] [&>a]:!font-bold [&>a]:!leading-none [&>a]:!py-0 [&>a]:!my-0">
-                                            {["admin", "manager"].includes(user.role) ? (<NavDropdown.Item as={Link} to="/admin/allproducts">لوحة التحكم</NavDropdown.Item>) : (<NavDropdown.Item as={Link} to="/user/profile">الصفحه الشخصية</NavDropdown.Item>)}
-                                            <NavDropdown.Item as={Link} to={["admin", "manager"].includes(user.role) ? "/admin/allproducts" : "/user/profile"}>الملف الشخصي</NavDropdown.Item>
-                                            <NavDropdown.Divider />
-                                            <NavDropdown.Item onClick={logOut}>تسجيل خروج</NavDropdown.Item>
-                                        </NavDropdown>
+                                    <div ref={dropdownRef} className="relative flex items-center bg-[#1A3F60] rounded-full px-2.5 py-0.5 shadow-sm leading-none h-7">
+                                        <button onClick={() => setDropdownOpen(!dropdownOpen)} className="font-bold text-[11px] text-white cursor-pointer bg-transparent border-none">
+                                            {user.name}
+                                        </button>
+                                        {dropdownOpen && (
+                                            <div className="absolute top-full right-0 mt-1 bg-[#212529] rounded-lg shadow-lg min-w-[160px] z-50 py-1">
+                                                {["admin", "manager"].includes(user.role) ? (
+                                                    <Link to="/admin/allproducts" onClick={() => setDropdownOpen(false)} className="block text-center text-white text-sm px-4 py-2 hover:bg-white hover:text-[#212529] no-underline font-[Almarai]">لوحة التحكم</Link>
+                                                ) : (
+                                                    <Link to="/user/profile" onClick={() => setDropdownOpen(false)} className="block text-center text-white text-sm px-4 py-2 hover:bg-white hover:text-[#212529] no-underline font-[Almarai]">الصفحه الشخصية</Link>
+                                                )}
+                                                <Link to={["admin", "manager"].includes(user.role) ? "/admin/allproducts" : "/user/profile"} onClick={() => setDropdownOpen(false)} className="block text-center text-white text-sm px-4 py-2 hover:bg-white hover:text-[#212529] no-underline font-[Almarai]">الملف الشخصي</Link>
+                                                <div className="border-t border-gray-600 my-1"></div>
+                                                <button onClick={() => { setDropdownOpen(false); logOut() }} className="block w-full text-center text-white text-sm px-4 py-2 hover:bg-white hover:text-[#212529] bg-transparent border-none cursor-pointer font-[Almarai]">تسجيل خروج</button>
+                                            </div>
+                                        )}
                                     </div>
                                 </>
                             ) : (

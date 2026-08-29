@@ -1,5 +1,4 @@
 import React from 'react'
-import { Container, Row, Col } from 'react-bootstrap'
 import AdminSideBar from '../../components/Admin/AdminSideBar'
 import AdminAllUsers from '../../components/Admin/AdminAllUsers'
 import Pagination from '../../components/common/Pagination'
@@ -10,20 +9,20 @@ const AdminAllUsersPage = () => {
     let pageCount = pagination ? pagination : 0;
 
     return (
-        <Container >
-            <Row className='py-3'>
-                <Col sm="3" xs="2" md="2">
+        <div className="max-w-[1400px] mx-auto px-5">
+            <div className='flex flex-wrap py-3'>
+                <div className="sm:w-1/4 md:w-1/6 px-2">
                     <AdminSideBar />
-                </Col>
+                </div>
 
-                <Col sm="9" xs="10" md="10">
+                <div className="sm:w-3/4 md:w-5/6 px-2">
                     <AdminAllUsers users={items} />
                     {
                         pageCount > 1 ? (<Pagination pageCount={pageCount} onPress={onPress} />) : null
                     }
-                </Col>
-            </Row>
-        </Container>
+                </div>
+            </div>
+        </div>
     )
 }
 

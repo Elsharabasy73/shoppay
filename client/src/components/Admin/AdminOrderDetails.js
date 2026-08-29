@@ -1,5 +1,4 @@
 import React from 'react'
-import { Row, Col } from 'react-bootstrap'
 import { useParams } from 'react-router-dom'
 import CartItem from '../Cart/CartItem'
 import UserAllOrderItem from '../User/UserAllOrderItem'
@@ -18,11 +17,11 @@ const AdminOrderDetails = () => {
 
             <UserAllOrderItem orderItem={orderData} />
 
-            <Row className="justify-content-center mt-4 user-data">
-                <Col xs="12" className=" d-flex">
+            <div className="flex flex-wrap justify-center mt-4 user-data">
+                <div className="w-full flex px-2">
                     <div className="admin-content-text py-2">تفاصيل العميل</div>
-                </Col>
-                <Col xs="12" className="d-flex">
+                </div>
+                <div className="w-full flex px-2">
                     <div
                         style={{
                             color: "#555550",
@@ -41,9 +40,9 @@ const AdminOrderDetails = () => {
                         className="mx-2">
                         {orderData ? orderData.user ? orderData.user.name : '' : ''}
                     </div>
-                </Col>
+                </div>
 
-                <Col xs="12" className="d-flex">
+                <div className="w-full flex px-2">
                     <div
                         style={{
                             color: "#555550",
@@ -62,8 +61,8 @@ const AdminOrderDetails = () => {
                         className="mx-2">
                         {orderData ? orderData.user ? orderData.user.phone : '' : ''}
                     </div>
-                </Col>
-                <Col xs="12" className="d-flex">
+                </div>
+                <div className="w-full flex px-2">
                     <div
                         style={{
                             color: "#555550",
@@ -82,8 +81,8 @@ const AdminOrderDetails = () => {
                         className="mx-2">
                         {orderData ? orderData.user ? orderData.user.email : '' : ''}
                     </div>
-                </Col>
-                <div className="d-flex mt-2 justify-content-center">
+                </div>
+                <div className="flex mt-2 justify-center">
                     <div>
                         <select
                             name="pay"
@@ -109,7 +108,7 @@ const AdminOrderDetails = () => {
                         <button onClick={changeDeliverOrder} className="btn-a px-2 d-inline mx-1 ">حفظ </button>
                     </div>
                 </div>
-            </Row>
+            </div>
             <ToastContainer />
         </div>
     )

@@ -1,5 +1,4 @@
 import React from 'react'
-import { Col, Row } from 'react-bootstrap';
 import ReactStars from "react-rating-stars-component";
 import AddRateHook from '../../hooks/review/add-rate-hook';
 import { ToastContainer } from 'react-toastify';
@@ -41,24 +40,22 @@ const RatePost = () => {
   };
   return (
     <div>
-      <Row className="mt-3 ">
-        <Col sm="12" className="me-5 d-flex align-items-center flex-wrap">
+      <div className="mt-3 flex flex-wrap sm:w-full me-5 items-center">
           <div className="rate-name d-inline ms-3 mt-1">{name}</div>
-          <div className="d-flex align-items-center">
+          <div className="flex items-center">
             <ReactStars {...setting} />
             <span className="ms-2" style={{ fontSize: "12px", color: "#979797" }}>
               {rateValue ? `${rateValue}/5` : "اختر التقييم"}
             </span>
           </div>
-        </Col>
-      </Row>
+      </div>
       {!canRate && user && user.role !== "user" ? (
-        <Row><Col className="me-5 mt-2" style={{ color: "#979797", fontSize: "12px" }}>التقييم متاح للمستخدمين فقط</Col></Row>
+        <div><div className="me-5 mt-2" style={{ color: "#979797", fontSize: "12px" }}>التقييم متاح للمستخدمين فقط</div></div>
       ) : !user ? (
-        <Row><Col className="me-5 mt-2" style={{ color: "#979797", fontSize: "12px" }}>سجل دخول لتتمكن من التقييم</Col></Row>
+        <div><div className="me-5 mt-2" style={{ color: "#979797", fontSize: "12px" }}>سجل دخول لتتمكن من التقييم</div></div>
       ) : null}
-      <Row className="border-bottom mx-2">
-        <Col className="d-felx me-4 pb-2">
+      <div className="border-bottom mx-2">
+        <div className="d-felx me-4 pb-2">
           <textarea
             value={rateText}
             onChange={OnChangeRateText}
@@ -67,11 +64,11 @@ const RatePost = () => {
             cols="20"
             placeholder="اكتب تعليقك...."
           />
-          <div className=" d-flex justify-content-end al">
+          <div className=" flex justify-end al">
             <div onClick={onSubmit} className="product-cart-add px-3  py-2 text-center d-inline">اضف تعليق</div>
           </div>
-        </Col>
-      </Row>
+        </div>
+      </div>
       <ToastContainer />
 
     </div>
