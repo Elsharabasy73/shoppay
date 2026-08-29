@@ -11,10 +11,6 @@ const SideFilter = () => {
       <Row>
         <div className="d-flex flex-column mt-2">
           <div className="filter-title">الفئة</div>
-          <div className="d-flex mt-3">
-            <input onChange={clickCategory} type="checkbox" value="0" />
-            <div className="filter-sub me-2 ">الكل</div>
-          </div>
           {
             category ? (category.map((item, index) => {
               return (
@@ -29,11 +25,6 @@ const SideFilter = () => {
 
         <div className="d-flex flex-column mt-2">
           <div className="filter-title mt-3">الماركة</div>
-          <div className="d-flex mt-3">
-            <input onChange={clickBrand} type="checkbox" value="0" />
-            <div className="filter-sub me-2 ">الكل</div>
-          </div>
-
           {
             brand ? (brand.map((item, index) => {
               return (

@@ -6,8 +6,8 @@ const SigmaTopBar = () => {
     <div className="sigma-gradient text-white text-xs md:text-sm">
       <div className="max-w-[1400px] mx-auto px-5 lg:px-20 py-3 flex items-center justify-between gap-3">
         <div className="flex items-center gap-4 font-semibold">
-          <a href="tel:+20233033099" className="hover:opacity-80 flex items-center gap-1.5 no-underline text-white">
-            <span>📞</span> +20233033099
+          <a href="tel:+2010123456789" className="hover:opacity-80 flex items-center gap-1.5 no-underline text-white">
+            <span>📞</span> 010123456789
           </a>
           <Link to="/allcategory" className="hidden sm:inline hover:opacity-80 text-white no-underline">Stores</Link>
         </div>

@@ -8,9 +8,9 @@ class ApiFeatures {
     const queryStringObj = { ...this.queryString };
     const excludesFields = ["page", "sort", "limit", "fields"];
     excludesFields.forEach((field) => delete queryStringObj[field]);
-    // Apply filtration using [gte, gt, lte, lt]
+    // Apply filtration using [gte, gt, lte, lt, in]
     let queryStr = JSON.stringify(queryStringObj);
-    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt|in)\b/g, (match) => `$${match}`);
     this.mongooseQuery = this.mongooseQuery.find(JSON.parse(queryStr));
 
     return this;
@@ -21,7 +21,7 @@ class ApiFeatures {
       const sortBy = this.queryString.sort.split(",").join(" ");
       this.mongooseQuery = this.mongooseQuery.sort(sortBy);
     } else {
-      this.mongooseQuery = this.mongooseQuery.sort("-createAt");
+      this.mongooseQuery = this.mongooseQuery.sort("-createdAt");
     }
     return this;
   }

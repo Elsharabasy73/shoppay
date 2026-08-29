@@ -7,11 +7,24 @@ const ViewSearchProductsHook = () => {
     let limit = 8;
     const dispatch = useDispatch();
 
-    const getProduct = async () => {
+    const buildQuery = () => {
         getStorge();
         sortData();
+        const parts = [];
+        if (sort) parts.push(`sort=${encodeURIComponent(sort)}`);
+        parts.push(`limit=${limit}`);
+        if (word) parts.push(`keyword=${encodeURIComponent(word)}`);
+        if (queryCat) parts.push(queryCat);
+        if (brandCat) parts.push(brandCat);
+        if (pricefromString) parts.push(pricefromString.replace(/^&/, ''));
+        if (priceToString) parts.push(priceToString.replace(/^&/, ''));
+        // filter out empty parts and join correctly
+        return parts.filter(Boolean).join('&');
+    }
 
-        await dispatch(getAllProductsSearch(`sort=${sort}&limit=${limit}&keyword=${word}&${queryCat}&${brandCat}${pricefromString}${priceToString}`))
+    const getProduct = async () => {
+        const query = buildQuery();
+        await dispatch(getAllProductsSearch(query))
     }
     useEffect(() => {
         getProduct()
@@ -43,7 +56,17 @@ const ViewSearchProductsHook = () => {
     const onPress = async (page) => {
         getStorge();
         sortData();
-        await dispatch(getAllProductsSearch(`sort=${sort}&limit=${limit}&page=${page}&keyword=${word}&${queryCat}&${brandCat}${pricefromString}${priceToString}`))
+        const parts = [];
+        if (sort) parts.push(`sort=${encodeURIComponent(sort)}`);
+        parts.push(`limit=${limit}`);
+        parts.push(`page=${page}`);
+        if (word) parts.push(`keyword=${encodeURIComponent(word)}`);
+        if (queryCat) parts.push(queryCat);
+        if (brandCat) parts.push(brandCat);
+        if (pricefromString) parts.push(pricefromString.replace(/^&/, ''));
+        if (priceToString) parts.push(priceToString.replace(/^&/, ''));
+        const query = parts.filter(Boolean).join('&');
+        await dispatch(getAllProductsSearch(query))
     }
     let pricefromString = "", priceToString = ""
     let word = "", queryCat = "", brandCat = "", priceTo = "", priceFrom = "";
@@ -82,7 +105,7 @@ const ViewSearchProductsHook = () => {
         }
 
         if (sortType === "السعر من الاقل للاعلي")
-            sort = "+price"
+            sort = "price"
         else if (sortType === "السعر من الاعلي للاقل")
             sort = "-price"
         else if (sortType === "")
@@ -90,7 +113,7 @@ const ViewSearchProductsHook = () => {
         else if (sortType === "الاكثر مبيعا")
             sort = "-sold"
         else if (sortType === "الاعلي تقييما")
-            sort = "-quantity"
+            sort = "-ratingsAverage"
 
     }
 

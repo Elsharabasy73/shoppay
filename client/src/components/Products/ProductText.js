@@ -45,7 +45,7 @@ const ProductText = () => {
 
       <div className="bg-[#F2F8FD] rounded-2xl border border-[#DAEBF7] p-4">
         <div className="text-xs font-bold text-[#1A3F60] mb-2">المواصفات</div>
-        <p className="text-sm text-gray-700 leading-6 m-0">{item.description || 'لا يوجد وصف'}</p>
+        <p className="text-sm text-gray-700 leading-6 m-0 whitespace-pre-wrap break-words">{item.description || 'لا يوجد وصف'}</p>
       </div>
 
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full">

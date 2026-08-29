@@ -64,8 +64,12 @@ const NavBarLogin = () => {
 
                     {/* Actions - ALWAYS visible sign-in / profile / control panel */}
                     <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-                        <Link to="/user/favoriteproducts" className="w-9 h-9 rounded-full bg-white border border-[#DAEBF7] hidden sm:flex items-center justify-center text-[#206EA9] hover:shadow-md no-underline">♡</Link>
-                        <div className="hidden sm:block w-px h-6 bg-[#1A3F60]/20"></div>
+                        {(!user || user.role === 'user') && (
+                          <>
+                            <Link to="/user/favoriteproducts" className="w-9 h-9 rounded-full bg-white border border-[#DAEBF7] hidden sm:flex items-center justify-center text-[#206EA9] hover:shadow-md no-underline">♡</Link>
+                            <div className="hidden sm:block w-px h-6 bg-[#1A3F60]/20"></div>
+                          </>
+                        )}
                         {
                             user ? (
                                 <>
@@ -91,13 +95,15 @@ const NavBarLogin = () => {
                                 </Link>
                             )
                         }
-                        <Link to='/cart' className="relative flex items-center gap-1.5 bg-[#3F96D2] text-white px-3 sm:px-4 py-2 rounded-full font-bold text-sm hover:bg-[#206EA9] no-underline">
+                        {(!user || user.role === 'user') && (
+                          <Link to='/cart' className="relative flex items-center gap-1.5 bg-[#3F96D2] text-white px-3 sm:px-4 py-2 rounded-full font-bold text-sm hover:bg-[#206EA9] no-underline">
                             <img src={cart} className="w-5 h-5 brightness-0 invert" alt="cart" />
                             <span className="hidden sm:inline">العربه</span>
                             <span className="absolute -top-2 -right-2 bg-[#34C759] text-white w-5 h-5 rounded-full text-xs font-bold flex items-center justify-center border-2 border-white">
                                 {itemsNum || 0}
                             </span>
-                        </Link>
+                          </Link>
+                        )}
 
                     </div>
                 </div>
@@ -130,12 +136,13 @@ const NavBarLogin = () => {
                         <Link to="/products" className="hover:text-white/70 text-white no-underline">All Products</Link>
                         <Link to="/allcategory" className="hover:text-white/70 text-white no-underline">Categories</Link>
                         <Link to="/allbrand" className="hover:text-white/70 text-white no-underline">Brands</Link>
-                        <Link to="/cart" className="hover:text-white/70 text-white no-underline">Cart</Link>
-                        <Link to="/user/favoriteproducts" className="hover:text-white/70 text-white hidden md:inline no-underline">Wishlist</Link>
+                        {(!user || user.role === 'user') && (
+                          <>
+                            <Link to="/cart" className="hover:text-white/70 text-white no-underline">Cart</Link>
+                            <Link to="/user/favoriteproducts" className="hover:text-white/70 text-white hidden md:inline no-underline">Wishlist</Link>
+                          </>
+                        )}
                     </div>
-                    <Link to="/products" className="ml-auto hidden lg:flex shrink-0 bg-[#3F96D2] hover:bg-[#206EA9] text-white px-4 py-1.5 rounded-full text-xs font-bold transition no-underline">
-                        Offers 30% OFF
-                    </Link>
                 </div>
             </div>
         </div>

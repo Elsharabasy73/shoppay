@@ -52,7 +52,7 @@ const SidebarSearchHook = () => {
 
     }
     useEffect(() => {
-        queryCat = catChecked.map(val => "category[in][]=" + val).join("&")
+        queryCat = catChecked.map(val => "category[in]=" + val).join("&")
         localStorage.setItem("catCecked", queryCat)
         setTimeout(() => {
             getProduct();
@@ -78,7 +78,7 @@ const SidebarSearchHook = () => {
     }
 
     useEffect(() => {
-        queryBrand = brandChecked.map(val => "brand[in][]=" + val).join("&")
+        queryBrand = brandChecked.map(val => "brand[in]=" + val).join("&")
         localStorage.setItem("brandCecked", queryBrand)
         setTimeout(() => {
             getProduct();

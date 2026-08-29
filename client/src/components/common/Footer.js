@@ -14,7 +14,7 @@ const Footer = () => {
                         <div className="flex flex-col gap-2 items-center lg:items-start">
                             <div className="font-extrabold text-xl tracking-tighter">ShopPay</div>
                             <a href="https://maps.app.goo.gl/LKn1is733eKxzMfSA" target="_blank" rel="noreferrer" className="text-white/70 text-sm hover:text-white no-underline">25 Esraa Al Moalmeen st, Lebnan Sq Giza, Egypt</a>
-                            <a href="tel:01553029842" className="text-white/70 text-sm hover:text-white no-underline">01553029842</a>
+                            <a href="tel:010123456789" className="text-white/70 text-sm hover:text-white no-underline">010123456789</a>
                             <a href="mailto:shoppay@gmail.com" className="text-white/70 text-sm hover:text-white no-underline">shoppay@gmail.com</a>
                         </div>
                         <div className="flex flex-col md:flex-row gap-8 justify-center">
@@ -43,7 +43,7 @@ const Footer = () => {
                             <a href="#" className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 no-underline text-white">f</a>
                             <a href="#" className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 no-underline text-white">◎</a>
                             <a href="#" className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 no-underline text-white">▶</a>
-                            <a href="https://wa.me/201553029842" target="_blank" rel="noreferrer" className="text-white/60 text-sm ml-2 hover:text-white no-underline">01553029842</a>
+                            <a href="tel:010123456789" className="text-white/60 text-sm ml-2 hover:text-white no-underline">010123456789</a>
                         </div>
                         <div className="text-white/60 text-xs text-center">© 2025 ShopPay. All rights reserved.</div>
                         <a href="#header" className="text-white/80 text-xs flex flex-col items-center hover:text-white no-underline">
