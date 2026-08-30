@@ -10,8 +10,7 @@ const BrandContainer = ({ data,loading }) => {
     return (
         <div className="max-w-[1400px] mx-auto px-5">
             <div className="admin-content-text mt-2 ">كل الماركات</div>
-            <div className='my-1 flex flex-wrap justify-between'>
-
+            <div className="my-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6">
                 {
                     loading === false ? (
                         data ? (
@@ -19,9 +18,8 @@ const BrandContainer = ({ data,loading }) => {
                                 return (<BrandCard id={item._id} key={index} img={item.image} />)
                             })
                         ) : <h4>لا يوجد ماركات</h4>
-                    ) : <TwSpinner />
+                    ) : <div className="col-span-full flex justify-center"><TwSpinner /></div>
                 }
-
             </div>
         </div>
     )

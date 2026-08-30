@@ -15,12 +15,10 @@ const ChangeOrderStatusHook = (id) => {
     const changePayOrder = async () => {
 
         if (pay === 'true') {
-            console.log(pay)
             setLoading(true)
             await dispatch(changeOrderPay(id))
             setLoading(false)
         } else if (pay === '0') {
-            console.log('من فضلك اختر قيمة')
         }
 
     }
@@ -33,7 +31,6 @@ const ChangeOrderStatusHook = (id) => {
             await dispatch(changeOrderDeliver(id))
             setLoadingDeliver(false)
         } else if (deliver === '0') {
-            console.log('من فضلك اختر قيمة')
         }
 
     }
@@ -51,7 +48,6 @@ const ChangeOrderStatusHook = (id) => {
             } else {
                 notify("هناك مشكله فى عملية التغير", "error")
             }
-            console.log(resOneOrder)
         }
     }, [loading])
 
@@ -68,7 +64,6 @@ const ChangeOrderStatusHook = (id) => {
             } else {
                 notify("هناك مشكله فى عملية التغير", "error")
             }
-            console.log(resDeliverOrder)
         }
     }, [loadingDeliver])
 

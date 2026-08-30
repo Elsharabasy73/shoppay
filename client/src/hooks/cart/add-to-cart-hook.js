@@ -22,7 +22,6 @@ const AddToCartHook = (prdID, item) => {
     //add product to cart
     const addToCartHandel = async () => {
         const availableColors = item.colors || item.availableColors || []
-        console.log(availableColors)
         if (availableColors.length >= 1) {
             if (colorText === "") {
                 notify("من فضلك اختر لون اولا للمنتج", "warn")

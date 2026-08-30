@@ -17,156 +17,77 @@ const ProductCard = ({ item, favProd }) => {
     }
 
     return (
-        <div className="w-1/2 sm:w-1/2 md:w-1/3 lg:w-1/4 px-2 my-2 flex items-stretch">
+        <div className="flex flex-col h-full">
             <div
                 onClick={handleCardClick}
-                className="product-card w-full border-0"
-                style={{
-                    borderRadius: "24px",
-                    border: "1px solid rgba(63,150,210,0.15)",
-                    backgroundColor: "#FFFFFF",
-                    boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
-                    overflow: "hidden",
-                    display: "flex",
-                    flexDirection: "column",
-                    transition: "transform 0.2s ease, box-shadow 0.2s ease",
-                    height: "385px",
-                    cursor: "pointer",
-                }}>
+                className="group relative bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:-translate-y-1.5 transition-all duration-300 flex flex-col h-full cursor-pointer overflow-hidden"
+            >
                 {/* Image wrapper with fav button overlay */}
-                <div style={{ position: "relative", height: "220px", backgroundColor: "#F2F8FD", overflow: "hidden", flexShrink: 0 }}>
-                    <Link to={`/products/${item._id || item.id}`} style={{ textDecoration: 'none', display: 'block', height: '100%' }}>
+                <div className="relative h-48 sm:h-52 bg-slate-50/50 overflow-hidden shrink-0 flex items-center justify-center">
+                    <Link to={`/products/${item._id || item.id}`} className="block w-full h-full p-4">
                         <img
                             src={item.imageCover}
                             alt={item.title}
-                            style={{
-                                height: "100%",
-                                width: "100%",
-                                objectFit: "contain",
-                                padding: "10px",
-                                transition: "transform 0.3s ease",
-                            }}
-                            className="product-card-img"
+                            className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
                         />
                     </Link>
+                    
                     {/* fav button - absolute top-right */}
-                    <div
+                    <button
                         data-fav-btn
-                        onClick={(e)=>{e.stopPropagation(); handelFav()}}
+                        onClick={(e) => { e.stopPropagation(); handelFav() }}
                         title={favImg && favImg.includes ? "" : "المفضلة"}
-                        style={{
-                            position: "absolute",
-                            top: "10px",
-                            right: "10px",
-                            width: "36px",
-                            height: "36px",
-                            borderRadius: "50%",
-                            backgroundColor: "#fff",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            cursor: 'pointer',
-                            boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
-                            zIndex: 2,
-                        }}
+                        className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white flex items-center justify-center border-none shadow-sm hover:shadow-md hover:scale-105 transition-all duration-200 z-10 cursor-pointer"
                     >
                         <img
                             src={favImg}
                             alt="fav"
-                            style={{
-                                height: "18px",
-                                width: "18px",
-                                objectFit: "contain",
-                            }}
+                            className="h-5 w-5 object-contain"
                         />
-                    </div>
+                    </button>
+
                     {/* discount badge */}
                     {hasDiscount ? (
-                        <div style={{
-                            position: "absolute",
-                            top: "10px",
-                            left: "10px",
-                            backgroundColor: "#34C759",
-                            color: "#fff",
-                            fontSize: "11px",
-                            fontWeight: "700",
-                            padding: "3px 8px",
-                            borderRadius: "9999px",
-                            zIndex: 2,
-                        }}>
-                            خصم {Math.round(((item.price - item.priceAfterDiscount)/item.price)*100)}%
+                        <div className="absolute top-3 left-3 bg-emerald-500 text-white text-[10px] sm:text-xs font-extrabold px-2.5 py-0.5 rounded-full z-10 shadow-sm">
+                            خصم {Math.round(((item.price - item.priceAfterDiscount) / item.price) * 100)}%
                         </div>
                     ) : null}
                 </div>
 
-                <div
-                    style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "space-between",
-                        padding: "12px 14px 14px",
-                        flex: 1,
-                    }}>
+                <div className="flex flex-col justify-between p-4 flex-1 bg-white">
                     <div>
-                        <Link to={`/products/${item._id || item.id}`} style={{ textDecoration: 'none' }}>
-                            <div style={{ marginBottom: "8px" }}>
-                                <div
-                                    className="card-title"
-                                    title={item.title}
-                                    style={{
-                                        display: "-webkit-box",
-                                        WebkitLineClamp: 2,
-                                        WebkitBoxOrient: "vertical",
-                                        overflow: "hidden",
-                                        textOverflow: "ellipsis",
-                                        minHeight: "40px",
-                                        lineHeight: "20px",
-                                        fontSize: "14px",
-                                        fontWeight: "500",
-                                        color: "#333",
-                                        textAlign: "right",
-                                    }}>
-                                    {item.title}
-                                </div>
+                        <Link to={`/products/${item._id || item.id}`} className="no-underline">
+                            <div className="text-slate-700 font-bold text-xs sm:text-sm text-right line-clamp-2 h-10 leading-relaxed group-hover:text-[#206EA9] transition-colors">
+                                {item.title}
                             </div>
                         </Link>
-                        {item.description ? (
-                            <div style={{
-                                fontSize: "11px",
-                                color: "#999",
-                                whiteSpace: "nowrap",
-                                overflow: "hidden",
-                                textOverflow: "ellipsis",
-                                textAlign: "right",
-                                marginBottom: "6px",
-                            }}>
-                                {item.category?.name || ""}
+                        {item.category?.name ? (
+                            <div className="text-[10px] sm:text-xs text-slate-400 text-right mt-1 truncate">
+                                {item.category.name}
                             </div>
                         ) : null}
                     </div>
 
-                    <div className="flex justify-between items-center" style={{ marginTop: "auto", paddingTop: "8px", borderTop: "1px solid #f5f5f5" }}>
-                        <div className="flex items-center" style={{ gap: "4px" }}>
+                    <div className="flex justify-between items-center mt-4 pt-3 border-t border-slate-100">
+                        <div className="flex items-center gap-1">
                             <img
                                 src={rate}
                                 alt="rate"
-                                height="14px"
-                                width="14px"
-                                style={{ objectFit: "contain" }}
+                                className="h-3.5 w-3.5 object-contain"
                             />
-                            <div className="card-rate" style={{ fontSize: "13px", color: "#ffc107", fontWeight: "700" }}>{item.ratingsAverage || 0}</div>
-                            <span style={{ fontSize: "11px", color: "#aaa" }}>({item.ratingsQuantity || 0})</span>
+                            <div className="text-xs text-amber-500 font-bold leading-none">{item.ratingsAverage || 0}</div>
+                            <span className="text-[10px] text-slate-400 leading-none">({item.ratingsQuantity || 0})</span>
                         </div>
-                        <div className="flex items-baseline" style={{ gap: "6px" }}>
+                        <div className="flex items-baseline gap-1">
                             {hasDiscount ? (
                                 <>
-                                    <span style={{ textDecorationLine: 'line-through', color: "#aaa", fontSize: "12px" }}>{item.price}</span>
-                                    <span className="card-price" style={{ fontSize: "16px", fontWeight: "800", color: "#1A3F60" }}>{item.priceAfterDiscount}</span>
+                                    <span className="line-through text-slate-400 text-[11px] sm:text-xs">{item.price}</span>
+                                    <span className="text-sm sm:text-base font-extrabold text-[#1A3F60]">{item.priceAfterDiscount}</span>
                                 </>
                             ) : (
-                                <span className="card-price" style={{ fontSize: "16px", fontWeight: "800", color: "#1A3F60" }}>{item.price}</span>
+                                <span className="text-sm sm:text-base font-extrabold text-[#1A3F60]">{item.price}</span>
                             )}
-                            <span className="card-currency" style={{ fontSize: "11px", color: "#777" }}>جنيه</span>
+                            <span className="text-[10px] text-slate-500">جنيه</span>
                         </div>
                     </div>
                 </div>

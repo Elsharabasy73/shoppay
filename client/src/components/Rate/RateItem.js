@@ -74,7 +74,7 @@ const RateItem = ({ review }) => {
 
             <div className="mt-3">
                 <div className="d-felx me-5">
-                    <div className="rate-name  d-inline ms-2">{review.user.name}</div>
+                    <div className="rate-name  d-inline ms-2">{review.user?.name || "مستخدم غير معروف"}</div>
                     <img className="" src={rate} alt="" height="16px" width="16px" />
                     <div className="cat-rate  d-inline  p-1 pt-2">{review.rating}</div>
                 </div>

@@ -50,7 +50,6 @@ const AddRateHook = (id) => {
     useEffect(() => {
         if (loading === false) {
             if (res) {
-                console.log(res)
                 if (res.status && res.status === 403) {
                     notify("غير مسموح للادمن بالتقييم", "error")
                 } else if (res.data?.errors && res.data.errors[0]?.msg === "You already added review on this product") {

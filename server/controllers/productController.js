@@ -51,7 +51,6 @@ exports.resizeProductImages = asyncHandler(async (req, res, next) => {
       }),
     );
   }
-  console.log(req.body);
   next();
 });
 
@@ -69,9 +68,7 @@ exports.getProduct = factory.getOne(Product, "reviews");
 // @route   POST  /api/v1/products
 // @access  Private
 exports.createProduct = asyncHandler(async (req, res, next) => {
-  console.log("createProduct");
   const newDoc = await Product.create(req.body);
-  console.log("createProduct2");
   res.status(201).json({ data: newDoc });
 });
 // @desc    Update specific product

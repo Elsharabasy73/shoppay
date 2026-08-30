@@ -20,10 +20,8 @@ const ChoosePaymentMethod = () => {
 
     const handelPay = () => {
         if (type === "CARD") {
-            console.log('order card')
             handelCreateOrderCARD()
         } else if (type === "CASH") {
-            console.log('order cash')
             handelCreateOrderCash();
         } else {
             notify("من فضلك اختر طريقة دفع", "warn")

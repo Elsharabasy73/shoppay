@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import mobile from '../../assets/images/mobile.png'
 const AdminAllOrdersItem = ({ orderItem }) => {
 
-    console.log(orderItem)
     return (
         <div className="w-full px-2">
             <Link to={`/admin/orders/${orderItem._id}`}

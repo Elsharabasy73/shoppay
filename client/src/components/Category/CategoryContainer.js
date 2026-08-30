@@ -10,19 +10,16 @@ const CategoryContainer = ({ data, loading }) => {
     return (
         <div className="max-w-[1400px] mx-auto px-5">
             <div className="admin-content-text mt-2 ">كل التصنيفات</div>
-            <div className='my-2 flex flex-wrap justify-between'>
-
+            <div className='my-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6'>
                 {
                     loading === false ? (
                         data ? (
                             data.map((item, index) => {
-                                return (<CategoryCard key={index} id={item._id} title={item.name} img={item.image} background={colors[Math.floor(Math.random() * 5) + 1]} />)
+                                return (<CategoryCard key={index} id={item._id} title={item.name} img={item.image} background={colors[index % colors.length]} />)
                             })
                         ) : <h4>لا يوجد تصنيفات</h4>
-                    ) : <TwSpinner />
-
+                    ) : <div className="col-span-full flex justify-center"><TwSpinner /></div>
                 }
-
             </div>
         </div>
     )

@@ -61,7 +61,6 @@ const ProfileHook = () => {
     const res = useSelector(state => state.authReducer.userProfile)
     useEffect(() => {
         if (loading === false) {
-            console.log(res)
             if (res && res.status === 200) {
                 notify("تم الحديث بنجاح", "success")
 
@@ -118,7 +117,6 @@ const ProfileHook = () => {
     const resPass = useSelector(state => state.authReducer.userChangePassword)
     useEffect(() => {
         if (loadingPass === false) {
-            console.log(resPass)
             if (resPass && resPass.status === 200) {
                 notify("تم تغير كلمة المرور بنجاح", "success")
                 setTimeout(() => {

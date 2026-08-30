@@ -7,7 +7,6 @@ import { useInsertData, useInsertDataWithImage } from '../../hooks/common/useIns
 export const createOrderCash = (id, body) => async (dispatch) => {
     try {
         const response = await useInsertData(`/api/v1/orders/${id}`, body);
-        console.log(response)
         dispatch({
             type: CREATE_ORDER_CASH,
             payload: response,
@@ -25,7 +24,6 @@ export const createOrderCash = (id, body) => async (dispatch) => {
 export const createOrderCARD = (id) => async (dispatch) => {
     try {
         const response = await useGetDataToken(`/api/v1/orders/checkout-session/${id}`);
-        console.log(response)
         dispatch({
             type: CREATE_ORDER_CRAD,
             payload: response,

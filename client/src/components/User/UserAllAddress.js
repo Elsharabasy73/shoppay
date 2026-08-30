@@ -6,7 +6,6 @@ import UserAddressCard from './UserAddressCard'
 const UserAllAddress = () => {
     const [res] = ViewAddressesHook()
     if (res.data)
-        console.log(res)
     return (
         <div>
             <div className="admin-content-text pb-4">دفتر العنوانين</div>

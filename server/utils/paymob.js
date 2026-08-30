@@ -22,7 +22,6 @@ exports.toCents = (amount) => {
     throw new ApiError("Order has an invalid payment amount", 400);
   }
 
-  console.log("[Paymob] Order amount converted to cents", amountCents);
   return amountCents;
 };
 
@@ -40,11 +39,6 @@ exports.createIntention = async ({
   }
 
   try {
-    console.log("[Paymob] Sending intention request", {
-      orderId,
-      amountCents,
-      integrationId,
-    });
     const response = await axios.post(
       PAYMOB_INTENTION_URL,
       {
@@ -75,7 +69,6 @@ exports.createIntention = async ({
       },
     );
 
-    console.log("[Paymob] Intention request completed", response.status);
     return response.data;
   } catch (error) {
     if (error instanceof ApiError) throw error;

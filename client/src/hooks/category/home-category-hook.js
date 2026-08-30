@@ -13,7 +13,6 @@ const HomeCategoryHook = () => {
     const category = useSelector(state => state.allCategory.category)
     //get last loading state from redux
     const loading = useSelector(state => state.allCategory.loading)
-    console.log("category hook",category);
    
     const colors = ["#FFD3E8", "#F4DBA5", "#55CFDF", "#FF6262", "#0034FF", "#FFD3E8"]
 

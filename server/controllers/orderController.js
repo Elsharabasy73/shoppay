@@ -75,7 +75,6 @@ exports.filterOrdersForLoggedUser = asyncHandler(async (req, res, next) => {
   let filter = {};
   if (req.user.role === "user") filter = { user: req.user._id };
   req.filterObj = filter;
-  console.log("filterObj",req.filterObj);
   next();
 });
 
@@ -141,7 +140,6 @@ exports.checkoutSession = asyncHandler(async (req, res, next) => {
   }
 
   const totalPrice = cart.totalPriceAfterDiscount || cart.totalPrice;
-  console.log("cart.",cart);
   const session = await stripe.checkout.sessions.create({
     line_items: [
       {
@@ -215,7 +213,6 @@ const createCardOrder = async (session) => {
 // @access  Private/user
 exports.webhookCheckout = asyncHandler(async (req, res, next) => {
   let event;
-  console.log("webhookCheckout starting...");
   // if (process.env.STRIPE_WEBHOOK_SECRET) {
   // Get the signature sent by Stripe
   const signature = req.headers["stripe-signature"];
@@ -226,11 +223,9 @@ exports.webhookCheckout = asyncHandler(async (req, res, next) => {
       process.env.STRIPE_WEBHOOK_SECRET,
     );
   } catch (err) {
-    console.log(`⚠️ Webhook signature verification failed.`, err.message);
     return res.sendStatus(400);
   }
   if (event.type === "checkout.session.completed") {
-    console.log(`create stripe order here ${event.data.object.id}`);
     createCardOrder(event.data.object);
   }
   res.status(201).json({

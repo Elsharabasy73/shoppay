@@ -90,20 +90,21 @@ const NavBarLogin = () => {
                                     ) : (
                                         <Link to="/user/profile" className="hidden lg:flex items-center gap-1 bg-white border border-[#1A3F60] text-[#1A3F60] px-3 py-1.5 rounded-full text-xs font-bold hover:bg-[#1A3F60] hover:text-white no-underline leading-none">حسابي</Link>
                                     )}
-                                    <div ref={dropdownRef} className="relative flex items-center bg-[#1A3F60] rounded-full px-2.5 py-0.5 shadow-sm leading-none h-7">
-                                        <button onClick={() => setDropdownOpen(!dropdownOpen)} className="font-bold text-[11px] text-white cursor-pointer bg-transparent border-none">
-                                            {user.name}
+                                    <div ref={dropdownRef} className="relative flex items-center bg-[#1A3F60] hover:bg-[#206EA9] transition-colors rounded-full px-3 py-1.5 shadow-sm leading-none">
+                                        <button onClick={() => setDropdownOpen(!dropdownOpen)} className="font-bold text-xs text-white cursor-pointer bg-transparent border-none outline-none flex items-center gap-1">
+                                            <span>{user.name}</span>
+                                            <span className={`text-[10px] transition-transform duration-200 ${dropdownOpen ? 'rotate-180' : ''}`}>▼</span>
                                         </button>
                                         {dropdownOpen && (
-                                            <div className="absolute top-full right-0 mt-1 bg-[#212529] rounded-lg shadow-lg min-w-[160px] z-50 py-1">
+                                            <div className="absolute top-full left-0 md:right-0 md:left-auto mt-2 bg-white rounded-xl shadow-xl border border-slate-100 min-w-[170px] z-50 py-1.5 overflow-hidden">
                                                 {["admin", "manager"].includes(user.role) ? (
-                                                    <Link to="/admin/allproducts" onClick={() => setDropdownOpen(false)} className="block text-center text-white text-sm px-4 py-2 hover:bg-white hover:text-[#212529] no-underline font-[Almarai]">لوحة التحكم</Link>
+                                                    <Link to="/admin/allproducts" onClick={() => setDropdownOpen(false)} className="block text-right text-slate-700 hover:text-[#206EA9] hover:bg-slate-50 text-xs sm:text-sm px-4 py-2.5 no-underline font-bold font-[Almarai] transition-colors">لوحة التحكم</Link>
                                                 ) : (
-                                                    <Link to="/user/profile" onClick={() => setDropdownOpen(false)} className="block text-center text-white text-sm px-4 py-2 hover:bg-white hover:text-[#212529] no-underline font-[Almarai]">الصفحه الشخصية</Link>
+                                                    <Link to="/user/profile" onClick={() => setDropdownOpen(false)} className="block text-right text-slate-700 hover:text-[#206EA9] hover:bg-slate-50 text-xs sm:text-sm px-4 py-2.5 no-underline font-bold font-[Almarai] transition-colors">الصفحة الشخصية</Link>
                                                 )}
-                                                <Link to={["admin", "manager"].includes(user.role) ? "/admin/allproducts" : "/user/profile"} onClick={() => setDropdownOpen(false)} className="block text-center text-white text-sm px-4 py-2 hover:bg-white hover:text-[#212529] no-underline font-[Almarai]">الملف الشخصي</Link>
-                                                <div className="border-t border-gray-600 my-1"></div>
-                                                <button onClick={() => { setDropdownOpen(false); logOut() }} className="block w-full text-center text-white text-sm px-4 py-2 hover:bg-white hover:text-[#212529] bg-transparent border-none cursor-pointer font-[Almarai]">تسجيل خروج</button>
+                                                <Link to={["admin", "manager"].includes(user.role) ? "/admin/allproducts" : "/user/profile"} onClick={() => setDropdownOpen(false)} className="block text-right text-slate-700 hover:text-[#206EA9] hover:bg-slate-50 text-xs sm:text-sm px-4 py-2.5 no-underline font-bold font-[Almarai] transition-colors">الملف الشخصي</Link>
+                                                <div className="border-t border-slate-100 my-1"></div>
+                                                <button onClick={() => { setDropdownOpen(false); logOut() }} className="block w-full text-right text-red-500 hover:bg-red-50/50 text-xs sm:text-sm px-4 py-2.5 bg-transparent border-none cursor-pointer font-bold font-[Almarai] transition-colors">تسجيل خروج</button>
                                             </div>
                                         )}
                                     </div>

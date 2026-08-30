@@ -41,12 +41,10 @@ const OrderPayCardHook = (addressDetalis) => {
             const url = session?.url || resOrderCard?.data?.url || resOrderCard?.session?.url
             const isSuccess = !!(url || resOrderCard?.status === 200 || resOrderCard?.status === "success" || resOrderCard?.message?.includes("Checkout"))
             if (isSuccess && url) {
-                console.log(url)
                 window.open(url, "_blank")
             } else if (isSuccess && !url) {
                 // session created but url missing (edge)
                 notify("تم انشاء جلسة الدفع بنجاح", "success")
-                console.log(resOrderCard)
             } else {
                 // keep error details if available
                 const msg = resOrderCard?.data?.message || resOrderCard?.message
@@ -55,7 +53,6 @@ const OrderPayCardHook = (addressDetalis) => {
                 } else {
                     notify("فشل فى اكمال الطلب من فضلك حاول مره اخرى", "warn")
                 }
-                console.log(resOrderCard)
             }
         }
     }, [loading])

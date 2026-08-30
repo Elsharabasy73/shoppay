@@ -18,7 +18,6 @@ dotenv.config({ path: "config.env" });
 const ApiError = require("./utils/apiError");
 const globalError = require("./middlewares/errorMiddleware");
 const dbConnection = require("./config/database");
-const client = require("./config/redis");
 const mountRoutes = require("./routes");
 const { webhookCheckout } = require("./controllers/orderController");
 
@@ -27,14 +26,6 @@ dbConnection();
 
 // express app
 const app = express();
-
-async function connectRedis() {
-  if (client.isOpen) return;
-  await client.connect();
-  console.log("Connected to Redis");
-}
-
-connectRedis();
 
 //hpp
 app.use(
@@ -68,7 +59,6 @@ app.use(express.static(path.join(__dirname, "uploads")));
 
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
-  console.log(`mode: ${process.env.NODE_ENV}`);
 }
 
 const limiter = rateLimiter({
@@ -84,7 +74,6 @@ mountRoutes(app);
 
 //test route
 app.get("/test", (req, res) => {
-  console.log("test");
   res.json({ message: "Hello World" });
 });
 
@@ -97,7 +86,6 @@ app.use(globalError);
 
 const PORT = process.env.PORT || 8000;
 const server = app.listen(PORT, () => {
-  console.log(`App running running on port ${PORT}`);
 });
 
 // Handle rejection outside express

@@ -24,7 +24,6 @@ const sendEmail = async (options) => {
     if (error) {
       throw new Error("an error occure while trying to send the OTP email.");
     } else {
-      console.log(`Email sent: ${info.response}`);
     }
   });
 };

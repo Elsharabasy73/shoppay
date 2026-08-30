@@ -33,7 +33,6 @@ const VerifyPasswordHook = () => {
     useEffect(() => {
         if (loading === false) {
             if (res) {
-                console.log(res)
                 if (res.data.status === "Success") {
                     notify("كود التفعيل صحيح", "success")
                     setTimeout(() => {

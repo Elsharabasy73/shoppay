@@ -14,15 +14,15 @@ const BrandFeatured = ({ title, btntitle }) => {
 
 
             <SubTitle title={title} btntitle={btntitle} pathText="/allbrand" />
-            <div className='my-1 flex flex-wrap justify-between'>
+            <div className="my-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6">
                 {
                     loading === false ? (
                         brand ? (
-                            brand.data.slice(0, 5).map((item, index) => {
+                            brand.data.slice(0, 6).map((item, index) => {
                                 return (<BrandCard id={item._id} key={index} img={item.image} />)
                             })
                         ) : <h4>لا يوجد ماركات</h4>
-                    ) : <TwSpinner />
+                    ) : <div className="col-span-full flex justify-center"><TwSpinner /></div>
                 }
             </div>
 

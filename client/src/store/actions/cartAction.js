@@ -25,7 +25,6 @@ export const addProductToCart = (body) => async (dispatch) => {
 export const getAllUserCartItems = () => async (dispatch) => {
     try {
         const response = await useGetDataToken(`/api/v1/cart`);
-      //  console.log(response)
         dispatch({
             type: GET_ALL_USER_CART,
             payload: response,
@@ -77,7 +76,6 @@ export const deleteCartItem = (id) => async (dispatch) => {
 export const updateCartItem = (id, body) => async (dispatch) => {
     try {
         const response = await useInsUpdateData(`/api/v1/cart/${id}`, body);
-        //  console.log(response)
         dispatch({
             type: UPDATE_ITEM_FROMCART,
             payload: response,
@@ -96,7 +94,6 @@ export const updateCartItem = (id, body) => async (dispatch) => {
 export const applayCoupnCart = (body) => async (dispatch) => {
     try {
         const response = await useInsUpdateData(`/api/v1/cart/applyCoupon`, body);
-       // console.log(response)
         dispatch({
             type: APPALY_COUPON_CART,
             payload: response,

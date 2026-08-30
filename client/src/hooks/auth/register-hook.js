@@ -93,7 +93,6 @@ const RegisterHook = () => {
     useEffect(() => {
         if (loading === false) {
             if (res) {
-                console.log(res)
                 // success: axios response has data.token
                 if (res.data && res.data.token) {
                     localStorage.setItem("token", res.data.token)

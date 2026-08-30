@@ -28,7 +28,6 @@ const useAddSubcategory = () => {
 
     //on change dropdown menu
     const handelChange = (e) => {
-        console.log(e.target.value)
         setID(e.target.value)
     }
 
