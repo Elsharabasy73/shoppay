@@ -19,7 +19,7 @@ const ApiError = require("./utils/apiError");
 const globalError = require("./middlewares/errorMiddleware");
 const dbConnection = require("./config/database");
 const mountRoutes = require("./routes");
-const { webhookCheckout } = require("./controllers/orderController");
+// const { webhookCheckout } = require("./controllers/orderController");
 const { startOrphanCleanupSchedule } = require("./utils/cleanupOrphanImages");
 
 // Connect with db
@@ -44,11 +44,11 @@ app.use(mongosanitize());
 app.use(xss());
 
 //Stripe webhook
-app.post(
-  "/webhook-checkout",
-  express.raw({ type: "application/json" }),
-  webhookCheckout,
-);
+// app.post(
+//   "/webhook-checkout",
+//   express.raw({ type: "application/json" }),
+//   webhookCheckout,
+// );
 
 // Middlewares
 // CORS_ORIGIN is a comma-separated allowlist; leave it unset in development.
