@@ -7,9 +7,9 @@ const {
   getOrder,
   updateOrderToDelivered,
   updateOrderToPaid,
-  checkoutSession,
+  // checkoutSession, // DISABLED: Stripe - uncomment when STRIPE_SECRET is set
 } = require("../controllers/orderController");
-const { createPaymobPayment } = require("../controllers/paymobController");
+// const { createPaymobPayment } = require("../controllers/paymobController"); // DISABLED: Paymob - uncomment when PAYMOB_* env is set
 
 const router = express.Router();
 

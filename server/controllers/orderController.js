@@ -1,5 +1,5 @@
 const asyncHandler = require("express-async-handler");
-const stripe = require("stripe")(process.env.STRIPE_SECRET);
+// const stripe = require("stripe")(process.env.STRIPE_SECRET); // DISABLED: requires STRIPE_SECRET - uncomment and set env to enable Stripe
 const dotenv = require("dotenv");
 
 const ApiError = require("../utils/apiError");
@@ -133,7 +133,7 @@ exports.updateOrderToDelivered = asyncHandler(async (req, res, next) => {
 // @desc    get checkout session for stripe and send it as response
 // @route   GET /api/v1/orders/checkout-session/:cartId
 // @access  Private/user
-exports.checkoutSession = asyncHandler(async (req, res, next) => {
+const checkoutSession = asyncHandler(async (req, res, next) => {
   const cart = await Cart.findById(req.params.cartId);
   if (!cart) {
     return next(new ApiError("Cart not found", 404));
