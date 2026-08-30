@@ -18,7 +18,7 @@ const ensureDirExists = (dirPath) => {
  * @param {Buffer} buffer - image buffer (already resized if needed)
  * @param {string} filename - e.g. product-xxx.jpg (extension will be stripped for public_id)
  * @param {string} folder - cloudinary folder e.g. "products", "categories"
- * @returns {Promise<string>} secure_url
+ * @returns {Promise<string>} filename (DB stores filename, URL built via FILES_STORAGE_URL without version)
  */
 const uploadImageCloudinary = (buffer, filename, folder) => {
   const publicId = filename.replace(/\.[^/.]+$/, ""); // strip extension
@@ -34,7 +34,9 @@ const uploadImageCloudinary = (buffer, filename, folder) => {
       },
       (error, result) => {
         if (error) return reject(error);
-        resolve(result.secure_url);
+        // Return filename only - no version. FILES_STORAGE_URL builds version-free URL:
+        // https://res.cloudinary.com/<cloud>/image/upload/shoppay/<folder>/<filename>
+        resolve(filename);
       },
     );
     stream.end(buffer);
@@ -61,7 +63,7 @@ const uploadImageLocal = async (buffer, filename, folder) => {
  * @param {Buffer} buffer - raw buffer from multer (or already sharp processed)
  * @param {string} filename - desired filename with extension
  * @param {string} folder - subfolder: products | categories | brands | user
- * @returns {Promise<string>} stored identifier (filename for local, secure_url for cloudinary)
+ * @returns {Promise<string>} stored identifier (filename for both local and cloudinary - version-free)
  */
 const uploadImage = async (buffer, filename, folder) => {
   if (isCloudinary()) {
