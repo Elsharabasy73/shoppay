@@ -18,7 +18,7 @@ const { protect, allowTo } = require("../middlewares/authMiddleware");
 router.use(protect);
 
 // stripe checkout must be before `/:id` else it is captured as an id
-router.get("/checkout-session/:cartId", allowTo(["user"]), checkoutSession);
+// router.get("/checkout-session/:cartId", allowTo(["user"]), checkoutSession);
 
 router.get(
   "/",
@@ -30,7 +30,7 @@ router.get("/:id", allowTo(["user", "admin", "manager"]), getOrder);
 
 router.route("/:cartId").post(allowTo(["user"]), createCashOrder);
 
-router.post("/:id/paymob", allowTo(["user"]), createPaymobPayment);
+// router.post("/:id/paymob", allowTo(["user"]), createPaymobPayment);
 router.put(
   "/:id/deliver",
   allowTo(["admin", "manager"]),

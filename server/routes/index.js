@@ -10,7 +10,7 @@ const addressRouter = require("./addressRouter");
 const couponRouter = require("./couponRouter");
 const cartRouter = require("./cartRouter");
 const orderRouter = require("./orderRouter");
-const paymobRouter = require("./paymobRouter");
+// const paymobRouter = require("./paymobRouter");
 
 const mountRoutes = (app) => {
   app.use("/api/v1/categories", categoryRoute);
@@ -26,7 +26,7 @@ const mountRoutes = (app) => {
   app.use("/api/v1/cart", cartRouter);
   app.use("/api/v1/orders", orderRouter);
   // This path matches PAYMOB_NOTIFICATION_URL in config.env.
-  app.use("/api/paymob", paymobRouter);
+  // app.use("/api/paymob", paymobRouter);
 };
 
 module.exports = mountRoutes;
