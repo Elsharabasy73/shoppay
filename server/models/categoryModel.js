@@ -21,9 +21,7 @@ const categorySchema = new mongoose.Schema(
 
 const setImageURL = (doc) => {
   if (doc.image) {
-    // If already a full URL (cloudinary), keep as is; otherwise prefix for local storage
-    if (doc.image.startsWith("http://") || doc.image.startsWith("https://")) return;
-    const imageUrl = `${process.env.BASE_URL}/categories/${doc.image}`;
+    const imageUrl = `${process.env.FILES_STORAGE_URL}/categories/${doc.image}`;
     doc.image = imageUrl;
   }
 };

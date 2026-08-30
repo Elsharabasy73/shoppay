@@ -20,9 +20,14 @@ const globalError = require("./middlewares/errorMiddleware");
 const dbConnection = require("./config/database");
 const mountRoutes = require("./routes");
 const { webhookCheckout } = require("./controllers/orderController");
+const { startOrphanCleanupSchedule } = require("./utils/cleanupOrphanImages");
 
 // Connect with db
 dbConnection();
+
+// Orphan image cleanup – runs every 4h, deletes files in uploads/* that are no longer
+// referenced in DB (products/brands/categories/user). See utils/cleanupOrphanImages.js
+startOrphanCleanupSchedule(4 * 60 * 60 * 1000);
 
 // express app
 const app = express();

@@ -71,8 +71,8 @@ const userSchema = new mongoose.Schema(
 
 const setImageURL = (doc) => {
   if (doc.profileImg) {
-    if (doc.profileImg.startsWith("http://") || doc.profileImg.startsWith("https://")) return;
-    doc.profileImg = `${process.env.BASE_URL}/user/${doc.profileImg}`;
+    const imageUrl = `${process.env.FILES_STORAGE_URL}/user/${doc.profileImg}`;
+    doc.profileImg = imageUrl;
   }
 };
 // apply for find queries and save

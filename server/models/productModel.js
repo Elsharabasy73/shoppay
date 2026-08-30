@@ -97,20 +97,14 @@ productSchema.pre(/^find/, function (next) {
 
 const setImageURL = (doc) => {
   if (doc.imageCover) {
-    if (!doc.imageCover.startsWith("http://") && !doc.imageCover.startsWith("https://")) {
-      const imageUrl = `${process.env.BASE_URL}/products/${doc.imageCover}`;
-      doc.imageCover = imageUrl;
-    }
+    const imageUrl = `${process.env.FILES_STORAGE_URL}/products/${doc.imageCover}`;
+    doc.imageCover = imageUrl;
   }
   if (doc.images) {
     const imagesList = [];
     doc.images.forEach((image) => {
-      if (image.startsWith("http://") || image.startsWith("https://")) {
-        imagesList.push(image);
-      } else {
-        const imageUrl = `${process.env.BASE_URL}/products/${image}`;
-        imagesList.push(imageUrl);
-      }
+      const imageUrl = `${process.env.FILES_STORAGE_URL}/products/${image}`;
+      imagesList.push(imageUrl);
     });
     doc.images = imagesList;
   }

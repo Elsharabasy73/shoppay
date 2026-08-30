@@ -20,8 +20,7 @@ const brandSchema = new mongoose.Schema(
 
 const setImageURL = (doc) => {
   if (doc.image) {
-    if (doc.image.startsWith("http://") || doc.image.startsWith("https://")) return;
-    const imageUrl = `${process.env.BASE_URL}/brands/${doc.image}`;
+    const imageUrl = `${process.env.FILES_STORAGE_URL}/brands/${doc.image}`;
     doc.image = imageUrl;
   }
 };
