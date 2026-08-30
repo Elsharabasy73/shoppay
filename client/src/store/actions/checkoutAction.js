@@ -1,6 +1,6 @@
 import { CREATE_ORDER_CASH,CREATE_ORDER_CRAD } from '../type'
-import { useGetData, useGetDataToken } from '../../hooks/common/useGetData'
-import { useInsertData, useInsertDataWithImage } from '../../hooks/common/useInsertData'
+import { useGetDataToken } from '../../hooks/common/useGetData'
+import { useInsertData } from '../../hooks/common/useInsertData'
 
 
 //create order cash fro user

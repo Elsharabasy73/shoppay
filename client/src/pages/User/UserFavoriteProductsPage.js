@@ -1,7 +1,6 @@
 import React from 'react'
 import UserSideBar from '../../components/User/UserSideBar'
 import UserFavoriteProduct from '../../components/User/UserFavoriteProduct'
-import { useNavigate } from 'react-router-dom';
 const UserFavoriteProductsPage = () => {
    
     return (

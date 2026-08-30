@@ -1,5 +1,5 @@
 import { ADD_TO_CART,APPALY_COUPON_CART, GET_ALL_USER_CART, UPDATE_ITEM_FROMCART, DELETE_ITEM_FROMCART, CLEAR_ALL_USER_CART } from '../type'
-import { useGetData, useGetDataToken } from '../../hooks/common/useGetData'
+import { useGetDataToken } from '../../hooks/common/useGetData'
 import { useInsertData } from '../../hooks/common/useInsertData';
 import useDeleteData from './../../hooks/common/useDeleteData';
 import { useInsUpdateData } from './../../hooks/common/useUpdateData'

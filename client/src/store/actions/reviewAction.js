@@ -1,5 +1,5 @@
 import { CREATE_REVIEW,UPDATE_REVIEW, DELETE_REVIEW, ALL_REVIEW_PRODUCT } from '../type'
-import { useGetData, useGetDataToken } from '../../hooks/common/useGetData'
+import { useGetDataToken } from '../../hooks/common/useGetData'
 import { useInsertData } from '../../hooks/common/useInsertData'
 import useDeleteData from './../../hooks/common/useDeleteData';
 import { useInsUpdateData } from '../../hooks/common/useUpdateData';

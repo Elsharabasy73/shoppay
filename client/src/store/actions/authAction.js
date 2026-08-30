@@ -2,7 +2,7 @@
 import { CREATE_NEW_USER, RESET_PASSWORD, UPDATE_USER_PROFILE, VERIFY_PASSWORD, FOREGT_PASSWORD, GET_CURERNT_USER, LOGIN_USER, UPDATE_USER_PASSWORD } from '../type'
 
 import { useInsertData } from '../../hooks/common/useInsertData'
-import { useGetData, useGetDataToken } from './../../hooks/common/useGetData';
+import { useGetDataToken } from './../../hooks/common/useGetData';
 import { useInsUpdateData } from '../../hooks/common/useUpdateData';
 
 //create new user 
