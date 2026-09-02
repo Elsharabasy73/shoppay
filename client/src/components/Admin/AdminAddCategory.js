@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import AddCategoryHook from '../../hooks/category/add-category-hook'
 import { ToastContainer } from 'react-toastify';
 import AdminCategoryCard from './AdminCategoryCard';
@@ -6,6 +6,8 @@ import TwSpinner from '../common/TwSpinner';
 const AdminAddCategory = () => {
 
     const [img, name, loading, isPress, handelSubmit, onImageChange, onChangeName, categories] = AddCategoryHook();
+    const [btnLoading, setBtnLoading] = useState(false);
+    const handleBtnWithLoading = async (e) => { setBtnLoading(true); try { await handelSubmit(e); } finally { setTimeout(() => setBtnLoading(false), 900); } };
 
 
 
@@ -52,10 +54,11 @@ const AdminAddCategory = () => {
                 {/* Save button */}
                 <div className="flex justify-start pt-2">
                     <button
-                        onClick={handelSubmit}
-                        className="px-6 py-2.5 bg-[#3F96D2] hover:bg-[#206EA9] text-white font-bold rounded-xl transition duration-150 ease-in-out shadow-sm text-sm border-none cursor-pointer"
+                        onClick={handleBtnWithLoading}
+                        disabled={btnLoading}
+                        className={`px-6 py-2.5 font-bold rounded-xl transition duration-150 ease-in-out shadow-sm text-sm border-none cursor-pointer ${btnLoading ? 'bg-slate-400 text-white cursor-not-allowed is-loading' : 'bg-[#3F96D2] hover:bg-[#206EA9] text-white'}`}
                     >
-                        حفظ
+                        {btnLoading ? 'جاري الحفظ...' : 'حفظ'}
                     </button>
                 </div>
             </div>

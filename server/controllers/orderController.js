@@ -1,7 +1,5 @@
-const asyncHandler = require("express-async-handler");
-// const stripe = require("stripe")(process.env.STRIPE_SECRET); // DISABLED: requires STRIPE_SECRET - uncomment and set env to enable Stripe
+// const stripe = require("stripe")(process.env.STRIPE_SECRET);
 const dotenv = require("dotenv");
-
 const ApiError = require("../utils/apiError");
 const Cart = require("../models/cartModel");
 const Order = require("../models/orderModel");
@@ -79,12 +77,12 @@ exports.filterOrdersForLoggedUser = asyncHandler(async (req, res, next) => {
 });
 
 // @desc    Get  orders
-// @route   GET /api/v1/orders  
+// @route   GET /api/v1/orders
 // @access  Private/user-manager-admin
 exports.getOrders = factory.getAll(Order);
 
 // @desc    Get  spacific order
-// @route   GET /api/v1/orders/:id  
+// @route   GET /api/v1/orders/:id
 // @access  Private/user-manager-admin
 exports.getOrder = factory.getOne(Order);
 

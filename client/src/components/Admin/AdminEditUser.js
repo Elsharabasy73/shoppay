@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import AdminEditUserHook from '../../hooks/user/edit-user-hook'
@@ -6,6 +6,8 @@ import AdminEditUserHook from '../../hooks/user/edit-user-hook'
 const AdminEditUser = () => {
   const { id } = useParams()
   const [img, name, email, phone, role, password, passwordConfirm, onChangeName, onChangeEmail, onChangePhone, onChangeRole, onChangePassword, onChangePasswordConfirm, onImageChange, handelSubmit] = AdminEditUserHook(id)
+  const [btnLoading, setBtnLoading] = useState(false);
+  const handleBtnWithLoading = async (e) => { setBtnLoading(true); try { await handelSubmit(e); } finally { setTimeout(() => setBtnLoading(false), 900); } };
 
   return (
     <div>
@@ -21,7 +23,7 @@ const AdminEditUser = () => {
           </div>
           <input onChange={onChangeName} value={name} type="text" className="input-form d-block mt-3 px-3" placeholder="اسم المستخدم" />
           <input onChange={onChangeEmail} value={email} type="email" className="input-form d-block mt-3 px-3" placeholder="البريد الالكتروني" />
-          <input onChange={onChangePhone} value={phone} type="text" className="input-form d-block mt-3 px-3" placeholder="رقم الهاتف" />
+          <input onChange={onChangePhone} value={phone} type="text" className="input-form d-block mt-3 px-3" placeholder="01026025804" />
           <select value={role} onChange={onChangeRole} className="select input-form-area mt-3 px-2">
             <option value="user">مستخدم</option>
             <option value="manager">مدير</option>
@@ -33,7 +35,7 @@ const AdminEditUser = () => {
       </div>
       <div className="flex flex-wrap">
         <div className="w-full sm:w-2/3 flex justify-end px-2">
-          <button onClick={handelSubmit} className="btn-save d-inline mt-2 ">حفظ التعديلات</button>
+          <button onClick={handleBtnWithLoading} disabled={btnLoading} className={`btn-save d-inline mt-2 ${btnLoading ? 'is-loading' : ''}`}>{btnLoading ? 'جاري الحفظ...' : 'حفظ التعديلات'}</button>
         </div>
       </div>
       <ToastContainer />

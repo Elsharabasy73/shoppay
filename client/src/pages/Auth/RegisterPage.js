@@ -27,7 +27,7 @@ const RegisterPage = () => {
           <input
             value={phone}
             onChange={onChangePhone}
-            placeholder="الهاتف..."
+            placeholder="01026025804"
             type="phone"
             className="user-input  text-center mx-auto"
           />

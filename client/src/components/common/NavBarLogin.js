@@ -49,7 +49,7 @@ const NavBarLogin = () => {
                     {/* Logo */}
                     <Link to="/" className="flex items-center gap-2 shrink-0 no-underline">
                         <img src={logo} alt="logo" className="h-14 w-auto object-contain" />
-                        <span className="hidden md:block font-extrabold text-[#1A3F60] text-xl tracking-tighter">ShopPay</span>
+                        <span className="hidden md:block font-extrabold text-[#1A3F60] text-xl tracking-tighter">MAX TECH</span>
                     </Link>
 
                     {/* Search - responsive */}
@@ -147,7 +147,7 @@ const NavBarLogin = () => {
                 </form>
             </div>
 
-            {/* Category strip - ShopPay categories (was Sigma PC names - fixed) */}
+            {/* Category strip - MAX TECH categories */}
             <div className="bg-[#1A3F60] text-white">
                 <div className="max-w-[1400px] mx-auto px-5 lg:px-10 py-2.5 flex items-center gap-3 overflow-x-auto scrollbar-hide">
                     <Link to="/allcategory" className="shrink-0 bg-white text-[#1A3F60] px-4 py-2 rounded-full font-bold text-sm flex items-center gap-2 hover:shadow-lg hover:scale-[1.02] transition no-underline">

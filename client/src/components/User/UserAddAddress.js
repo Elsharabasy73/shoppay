@@ -1,11 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import AddAddressHook from '../../hooks/user/add-address-hook'
 import { ToastContainer } from 'react-toastify';
 
 const UserAddAddress = () => {
 
-
     const [alias, detalis, phone, onChangeAlias, onChangeDetalis, onChangePhone, onSubmit] = AddAddressHook()
+    const [btnLoading, setBtnLoading] = useState(false);
+    const handleBtnWithLoading = async (e) => { setBtnLoading(true); try { await onSubmit(e); } finally { setTimeout(() => setBtnLoading(false), 900); } };
     return (
         <div>
             <div className="flex flex-wrap justify-start ">
@@ -31,13 +32,13 @@ const UserAddAddress = () => {
                         onChange={onChangePhone}
                         type="text"
                         className="input-form d-block mt-3 px-3"
-                        placeholder="رقم الهاتف"
+                        placeholder="01026025804"
                     />
                 </div>
             </div>
             <div className="flex flex-wrap">
                 <div className="sm:w-2/3 flex justify-end px-2">
-                    <button onClick={onSubmit} className="btn-save d-inline mt-2 ">اضافة عنوان</button>
+                    <button onClick={handleBtnWithLoading} disabled={btnLoading} className={`btn-save d-inline mt-2 ${btnLoading ? 'is-loading' : ''}`}>{btnLoading ? 'جاري الحفظ...' : 'اضافة عنوان'}</button>
                 </div>
             </div>
             <ToastContainer />
