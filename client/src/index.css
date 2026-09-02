@@ -43,6 +43,258 @@
 }
 
 @layer components {
+  /* Legacy form & button styles - restored and updated to sigma blue theme */
+  .user-input {
+    box-sizing: border-box;
+    height: 42px;
+    width: 375px;
+    max-width: 100%;
+    border: 1px solid #DAEBF7;
+    border-radius: 12px;
+    padding: 6px 12px;
+    background: #ffffff;
+    font-family: "Almarai", sans-serif;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .user-input:focus {
+    outline: none;
+    border-color: #3F96D2;
+    box-shadow: 0 0 0 3px rgba(63, 150, 210, 0.15);
+  }
+  .title-login {
+    color: #1A3F60;
+    font-family: Almarai;
+    font-size: 21px;
+    font-weight: 800;
+    letter-spacing: 0;
+    line-height: 28px;
+    text-align: right;
+  }
+  .btn-login {
+    height: 46px;
+    width: 374px;
+    max-width: 100%;
+    border-radius: 12px;
+    border: none;
+    color: white;
+    background-color: #3F96D2;
+    font-family: "Almarai", sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.15s, box-shadow 0.2s;
+    box-shadow: 0 4px 12px rgba(63, 150, 210, 0.25);
+  }
+  .btn-login:hover {
+    background-color: #1A3F60;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(26, 63, 96, 0.3);
+  }
+  .btn-login:active {
+    transform: translateY(0);
+  }
+
+  .text-form {
+    color: #1A3F60;
+    font-family: "Almarai";
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 20px;
+    text-align: right;
+  }
+  .input-form {
+    height: 42px;
+    width: 100%;
+    border: 1px solid #DAEBF7;
+    border-radius: 12px;
+    background-color: #ffffff;
+    padding: 0 12px;
+    font-family: "Almarai", sans-serif;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .input-form:focus {
+    outline: none;
+    border-color: #3F96D2;
+    box-shadow: 0 0 0 3px rgba(63, 150, 210, 0.15);
+  }
+  .input-form-area {
+    width: 100%;
+    border: 1px solid #DAEBF7;
+    border-radius: 12px;
+    background-color: #ffffff;
+    padding: 10px 12px;
+    font-family: "Almarai", sans-serif;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .input-form-area:focus {
+    outline: none;
+    border-color: #3F96D2;
+    box-shadow: 0 0 0 3px rgba(63, 150, 210, 0.15);
+  }
+  .select {
+    box-sizing: border-box;
+    height: 42px;
+    color: #1E293B;
+    width: 100%;
+    border: 1px solid #DAEBF7;
+    border-radius: 12px;
+    background: #ffffff;
+  }
+  .select:focus {
+    outline: none;
+    border-color: #3F96D2;
+    box-shadow: 0 0 0 3px rgba(63, 150, 210, 0.15);
+  }
+  .btn-save {
+    border: none;
+    color: white;
+    height: 46px;
+    min-width: 150px;
+    padding: 0 24px;
+    border-radius: 12px;
+    background-color: #3F96D2;
+    font-family: "Almarai", sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.15s, box-shadow 0.2s;
+    box-shadow: 0 4px 12px rgba(63, 150, 210, 0.25);
+  }
+  .btn-save:hover {
+    background-color: #1A3F60;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(26, 63, 96, 0.3);
+  }
+  .btn-save:active {
+    transform: translateY(0);
+  }
+  .btn-save:disabled,
+  .btn-save.is-loading {
+    opacity: 0.85;
+    cursor: not-allowed;
+    pointer-events: none;
+    transform: none !important;
+    box-shadow: 0 2px 8px rgba(63, 150, 210, 0.2) !important;
+  }
+  .btn-save.is-loading {
+    position: relative;
+    color: transparent !important;
+  }
+  .btn-save.is-loading::after {
+    content: "";
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    top: 50%;
+    left: 50%;
+    margin-top: -9px;
+    margin-left: -9px;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: btn-spin 0.7s linear infinite;
+  }
+  @keyframes btn-spin {
+    to { transform: rotate(360deg); }
+  }
+  .btn-save .btn-spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: btn-spin 0.7s linear infinite;
+    vertical-align: middle;
+    margin-inline-end: 8px;
+  }
+  .btn-a {
+    border: none;
+    color: white;
+    height: 45px;
+    padding: 0 20px;
+    border-radius: 12px;
+    background-color: #3F96D2;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  .btn-a:hover {
+    background-color: #1A3F60;
+    color: white;
+  }
+  .admin-content-text {
+    color: #1A3F60;
+    font-family: Almarai;
+    font-size: 21px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 28px;
+    text-align: right;
+  }
+  .item-delete-edit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-family: "Almarai", sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 1;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid #DAEBF7;
+    background-color: #F2F8FD;
+    color: #1A3F60;
+    text-decoration: none;
+    min-width: 60px;
+  }
+  .item-delete-edit:hover {
+    background-color: #3F96D2;
+    border-color: #3F96D2;
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(63, 150, 210, 0.25);
+  }
+  /* Separate hover for delete (first item) to hint red on hover */
+  .item-delete-edit:first-child:hover {
+    background-color: #EF4444;
+    border-color: #EF4444;
+    color: #ffffff;
+  }
+  .color {
+    cursor: pointer;
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: transform 0.15s, box-shadow 0.15s;
+    flex-shrink: 0;
+  }
+  .color:hover {
+    transform: scale(1.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.22);
+  }
+
+  /* Color picker overlay */
+  .color-picker-wrapper {
+    position: absolute;
+    top: 42px;
+    left: 0;
+    z-index: 50;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 8px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+    border: 1px solid #E2E8F0;
+  }
+
   /* Third-party library overrides: react-image-gallery & react-paginate */
   .image-gallery-slide {
     width: 100% !important;

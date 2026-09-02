@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { ToastContainer } from 'react-toastify';
 import AddCouponHook from '../../hooks/coupon/add-coupon-hook';
 import AdminCouponCard from './AdminCouponCard';
@@ -6,6 +6,8 @@ import AdminCouponCard from './AdminCouponCard';
 const AdminAddCoupon = () => {
     const dateRef = useRef();
     const [coupnName, couponDate, couponValue, onChangeName, onChangeDate, onChangeValue, onSubmit, coupons] = AddCouponHook()
+    const [btnLoading, setBtnLoading] = useState(false);
+    const handleBtnWithLoading = async (e) => { setBtnLoading(true); try { await onSubmit(e); } finally { setTimeout(() => setBtnLoading(false), 900); } };
     return (
         <div>
             <div className="flex flex-wrap justify-start ">
@@ -41,7 +43,7 @@ const AdminAddCoupon = () => {
             </div>
             <div className="flex flex-wrap">
                 <div className="w-full sm:w-2/3 flex justify-end px-2">
-                    <button onClick={onSubmit} className="btn-save d-inline mt-2 ">حفظ</button>
+                    <button onClick={handleBtnWithLoading} disabled={btnLoading} className={`btn-save d-inline mt-2 ${btnLoading ? 'is-loading' : ''}`}>{btnLoading ? 'جاري الحفظ...' : 'حفظ'}</button>
                 </div>
             </div>
 

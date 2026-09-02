@@ -52,7 +52,7 @@ const UserProfile = () => {
                             onChange={onChangePhone}
                             type="phone"
                             className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-[#3F96D2] focus:ring-2 focus:ring-[#3F96D2]/10 outline-none transition duration-200 text-sm text-slate-800"
-                            placeholder="الهاتف"
+                            placeholder="01026025804"
                         />
                     </div>
                 </div>

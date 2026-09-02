@@ -38,11 +38,11 @@ const AdminAllProductsCard = ({ item }) => {
                     border: "none",
                     backgroundColor: "#FFFFFF",
                 }}>
-                <div className="flex justify-center px-2">
-                    <div className="flex justify-between w-full">
-                        <div onClick={handleShow} className="d-inline item-delete-edit">ازاله</div>
+                <div className="flex justify-center px-2 pt-2">
+                    <div className="flex justify-between w-full gap-2">
+                        <div onClick={handleShow} className="item-delete-edit !bg-red-50 !text-red-600 !border-red-200 hover:!bg-red-600 hover:!text-white hover:!border-red-600">ازاله</div>
                         <Link to={`/admin/editproduct/${item._id}`} style={{ textDecoration: "none" }}>
-                            <div className="d-inline item-delete-edit">تعديل</div>
+                            <div className="item-delete-edit !bg-[#3F96D2] !text-white !border-[#3F96D2] hover:!bg-[#1A3F60] hover:!border-[#1A3F60]">تعديل</div>
                         </Link>
                     </div>
                 </div>

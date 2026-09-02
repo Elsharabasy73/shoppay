@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import EditSubCategoryHook from '../../hooks/subcategory/edit-subcategory-hook'
@@ -6,6 +6,8 @@ import EditSubCategoryHook from '../../hooks/subcategory/edit-subcategory-hook'
 const AdminEditSubCategory = () => {
   const { id } = useParams()
   const [name, categoryId, category, onChangeName, onChangeCategory, handelSubmit] = EditSubCategoryHook(id)
+  const [btnLoading, setBtnLoading] = useState(false);
+  const handleBtnWithLoading = async (e) => { setBtnLoading(true); try { await handelSubmit(e); } finally { setTimeout(() => setBtnLoading(false), 900); } };
 
   return (
     <div>
@@ -21,7 +23,7 @@ const AdminEditSubCategory = () => {
       </div>
       <div className="flex flex-wrap">
         <div className="w-full sm:w-2/3 flex justify-end px-2">
-          <button onClick={handelSubmit} className="btn-save d-inline mt-2 ">حفظ التعديلات</button>
+          <button onClick={handleBtnWithLoading} disabled={btnLoading} className={`btn-save d-inline mt-2 ${btnLoading ? 'is-loading' : ''}`}>{btnLoading ? 'جاري الحفظ...' : 'حفظ التعديلات'}</button>
         </div>
       </div>
       <ToastContainer />

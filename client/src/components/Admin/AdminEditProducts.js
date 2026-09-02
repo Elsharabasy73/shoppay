@@ -11,9 +11,15 @@ import AdminEditProductsHook from '../../hooks/products/edit-products-hook';
 
 const AdminEditProducts = () => {
     const { id } = useParams();
+    const [btnLoading, setBtnLoading] = React.useState(false);
 
     const [CatID, BrandID, onChangeDesName, onChangeQty, onChangeColor, onChangePriceAfter, onChangePriceBefor, onChangeProdName, onChangeImageCover, showColor, category, brand, priceAftr, images, setImages, onSelect, onRemove, options, handelChangeComplete, removeColor, onSeletCategory, handelSubmit, onSeletBrand, colors, priceBefore, qty, prodDescription, prodName, imageCoverURL] =
         AdminEditProductsHook(id);
+
+    const handleSave = async (e) => {
+        setBtnLoading(true);
+        try { await handelSubmit(e); } finally { setTimeout(() => setBtnLoading(false), 900); }
+    };
 
     return (
         <div>
@@ -22,7 +28,7 @@ const AdminEditProducts = () => {
                 <div className="w-full sm:w-2/3 px-2">
                     <div className="text-form pb-2"> صورة الغلاف</div>
                     <div>
-                        <label for="upload-cover-edit" style={{ cursor: "pointer" }}>
+                        <label htmlFor="upload-cover-edit" style={{ cursor: "pointer" }}>
                             <img
                                 src={imageCoverURL || avatar}
                                 alt="cover"
@@ -128,14 +134,15 @@ const AdminEditProducts = () => {
                         }
                     </select>
                     <div className="text-form mt-3 "> الالوان المتاحه للمنتج</div>
-                    <div className="mt-1 flex">
+                    <div className="mt-1 flex flex-wrap items-center gap-2 relative min-h-[36px]">
                         {
                             colors && colors.length >= 1 ? (
                                 colors.map((color, index) => {
                                     return (
                                         <div key={index}
                                             onClick={() => removeColor(color)}
-                                            className="color ms-2 border  mt-1"
+                                            title="اضغط لإزالة اللون"
+                                            className="color ms-1 mt-1"
                                             style={{ backgroundColor: color }}></div>
                                     )
                                 })
@@ -143,17 +150,19 @@ const AdminEditProducts = () => {
                             ) : null
                         }
 
-                        <img onClick={onChangeColor} src={add} alt="" width="30px" height="35px" style={{ cursor: 'pointer' }} />
-                        {
-                            showColor === true ? <CompactPicker onChangeComplete={handelChangeComplete} /> : null
-                        }
+                        <div className="relative">
+                            <img onClick={onChangeColor} src={add} alt="" width="32px" height="32px" className="rounded-full border border-slate-200 p-1 bg-white hover:bg-slate-50 transition" style={{ cursor: 'pointer' }} />
+                            {
+                                showColor === true ? <div className="color-picker-wrapper"><CompactPicker onChangeComplete={handelChangeComplete} /></div> : null
+                            }
+                        </div>
 
                     </div>
                 </div>
             </div>
             <div className="flex flex-wrap">
                 <div className="w-full sm:w-2/3 flex justify-end px-2">
-                    <button onClick={handelSubmit} className="btn-save d-inline mt-2 ">حفظ التعديلات</button>
+                    <button onClick={handleSave} disabled={btnLoading} className={`btn-save d-inline mt-2 ${btnLoading ? 'is-loading' : ''}`}>{btnLoading ? 'جاري الحفظ...' : 'حفظ التعديلات'}</button>
                 </div>
             </div>
             <ToastContainer />

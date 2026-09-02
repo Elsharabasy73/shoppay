@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { ToastContainer } from 'react-toastify';
 import AdminAddUserHook from '../../hooks/user/add-user-hook'
 import TwSpinner from '../common/TwSpinner';
 
 const AdminAddUser = () => {
     const [img, name, email, phone, password, passwordConfirm, role, loading, isPress, handelSubmit, onImageChange, onChangeName, onChangeEmail, onChangePhone, onChangePassword, onChangePasswordConfirm, onChangeRole] = AdminAddUserHook();
+    const [btnLoading, setBtnLoading] = useState(false);
+    const handleBtnWithLoading = async (e) => { setBtnLoading(true); try { await handelSubmit(e); } finally { setTimeout(() => setBtnLoading(false), 900); } };
 
     return (
         <div>
@@ -49,7 +51,7 @@ const AdminAddUser = () => {
                         value={phone}
                         type="text"
                         className="input-form d-block mt-3 px-3"
-                        placeholder="رقم الهاتف (اختياري)"
+                        placeholder="01026025804"
                     />
                     <input
                         onChange={onChangePassword}
@@ -76,7 +78,7 @@ const AdminAddUser = () => {
             </div>
             <div className="flex flex-wrap">
                 <div className="w-full sm:w-2/3 flex justify-end px-2">
-                    <button onClick={handelSubmit} className="btn-save d-inline mt-2 ">حفظ</button>
+                    <button onClick={handleBtnWithLoading} disabled={btnLoading} className={`btn-save d-inline mt-2 ${btnLoading ? 'is-loading' : ''}`}>{btnLoading ? 'جاري الحفظ...' : 'حفظ'}</button>
                 </div>
             </div>
 

@@ -1,5 +1,5 @@
 const asyncHandler = require("express-async-handler");
-const stripe = require("stripe")(process.env.STRIPE_SECRET);
+// const stripe = require("stripe")(process.env.STRIPE_SECRET);
 const dotenv = require("dotenv");
 
 const ApiError = require("../utils/apiError");

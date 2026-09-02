@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { ToastContainer } from 'react-toastify';
 import EditCouponHook from '../../hooks/coupon/edit-coupon-hook';
 import { useParams } from 'react-router-dom';
@@ -8,6 +8,8 @@ const AdminEditCoupon = () => {
     const { id } = useParams();
     const dateRef = useRef();
     const [coupnName, couponDate, couponValue, onChangeName, onChangeDate, onChangeValue, onSubmit] = EditCouponHook(id)
+    const [btnLoading, setBtnLoading] = useState(false);
+    const handleBtnWithLoading = async (e) => { setBtnLoading(true); try { await onSubmit(e); } finally { setTimeout(() => setBtnLoading(false), 900); } };
 
     return (
         <div>
@@ -44,7 +46,7 @@ const AdminEditCoupon = () => {
             </div>
             <div className="flex flex-wrap">
                 <div className="w-full sm:w-2/3 flex justify-end px-2">
-                    <button onClick={onSubmit} className="btn-save d-inline mt-2 ">حفظ التعديلات</button>
+                    <button onClick={handleBtnWithLoading} disabled={btnLoading} className={`btn-save d-inline mt-2 ${btnLoading ? 'is-loading' : ''}`}>{btnLoading ? 'جاري الحفظ...' : 'حفظ التعديلات'}</button>
                 </div>
             </div>
 
