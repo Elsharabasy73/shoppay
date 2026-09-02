@@ -351,4 +351,37 @@
     opacity: 0.5;
     cursor: not-allowed;
   }
+
+  /* Category header - horizontal pill bar (fixes plain-text look) */
+  .cat-header {
+    background-color: #ffffff;
+    border-bottom: 1px solid #F1F5F9;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  }
+  .cat-text-header {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 16px;
+    border-radius: 9999px;
+    background-color: #F2F8FD;
+    border: 1px solid #DAEBF7;
+    color: #1A3F60;
+    font-family: "Almarai", sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.2;
+    white-space: nowrap;
+    flex-shrink: 0;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .cat-text-header:hover {
+    background-color: #3F96D2;
+    border-color: #3F96D2;
+    color: #ffffff;
+    box-shadow: 0 4px 10px rgba(63, 150, 210, 0.25);
+    transform: translateY(-1px);
+  }
 }
